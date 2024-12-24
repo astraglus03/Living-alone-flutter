@@ -4,64 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="base">
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/fonts/SUIT-Bold.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/fonts/SUIT-Medium.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/fonts/SUIT-SemiBold.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/active_home.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/chat.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/fullCheck.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/inactive_home.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/like.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/map.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/my.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/neighbor.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/nothingBell.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/nothingChat.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/nothingCheck.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/remainsBell.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/remainsChat.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/splashLogo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/splash_logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/unlike.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/chat/view/chat_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/const/const.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/const/text_styles.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/dio/dio.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/layout/default_layout.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/secure_storage/secure_storage.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/utils/data_utils.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/view/root_tab.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/view/splash_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/view/home_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/map/view/map_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/mypage/view/mypage_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/neighbor/view/neighbor_communication_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/ios/Flutter/Debug.xcconfig" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Flutter/Debug.xcconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/ios/Flutter/Release.xcconfig" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Flutter/Release.xcconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner.xcworkspace/contents.xcworkspacedata" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner.xcworkspace/contents.xcworkspacedata" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/AppDelegate.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/const/color.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/const/colors.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/const/textstyle.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/models/user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/models/user_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/services/api_service.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/view_models/user_viewmodel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view_models/user_me_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/views/home_page.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/views/navigation/main_navigation.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/views/profile_page.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/views/settings_page.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/views/users_page.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/linux/flutter/generated_plugins.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/macos/Flutter/Flutter-Debug.xcconfig" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/macos/Flutter/Flutter-Debug.xcconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/macos/Flutter/Flutter-Release.xcconfig" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/macos/Flutter/Flutter-Release.xcconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugins.cmake" afterDir="false" />
-    </list>
+    <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="base" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -91,12 +34,12 @@
     &quot;assignee&quot;: &quot;mstagon&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/astraglus03/Living-alone-flutter.git",
-    "accountId": "9b9455cf-bc5b-4562-8232-556450a3ee2b"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/astraglus03/Living-alone-flutter.git&quot;,
+    &quot;accountId&quot;: &quot;9b9455cf-bc5b-4562-8232-556450a3ee2b&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -119,22 +62,24 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "bugfix/fix__fundamental",
+    "git-widget-placeholder": "feature/signupscreen",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/astraglus/StudioProjects/Living-alone-flutter/livingalone/assets/image",
+    "last_opened_file_path": "/Users/astraglus/StudioProjects/Living-alone-flutter/livingalone/assets",
     "settings.editor.selected.configurable": "dart.settings",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/livingalone/assets" />
       <recent name="$PROJECT_DIR$/livingalone/assets/image" />
       <recent name="$PROJECT_DIR$/livingalone/assets/fonts" />
       <recent name="$PROJECT_DIR$/livingalone/lib/common/secure_storage" />
       <recent name="$PROJECT_DIR$/livingalone/lib/common/layout" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/livingalone/assets/image" />
       <recent name="$PROJECT_DIR$/livingalone/lib/common" />
       <recent name="$PROJECT_DIR$/livingalone/lib/user" />
       <recent name="C:\Users\kn055\AndroidStudioProjects\livingalone\livingalone\lib\theme" />

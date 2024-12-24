@@ -9,7 +9,7 @@ import 'package:livingalone/neighbor/view/neighbor_communication_screen.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class RootTab extends StatelessWidget {
-  static String get routeName => 'RootTab';
+  static String get routeName => 'rootTab';
 
   const RootTab({super.key});
 
@@ -18,62 +18,38 @@ class RootTab extends StatelessWidget {
     return PersistentTabView(
       tabs: [
         PersistentTabConfig(
-          screen: HomeScreen(),
-          item: ItemConfig(
-            activeForegroundColor: BLUE400_COLOR,
-            inactiveForegroundColor: GRAY400_COLOR,
-            icon: Image.asset('assets/image/active_home.png',),
-            inactiveIcon:  Image.asset('assets/image/inactive_home.png',),
-            title: "홈",
-            textStyle: AppTextStyles.body2,
+          screen: const HomeScreen(),
+          item: _buildTabItem(
+            imagePath: 'assets/image/inactive_home.png',
+            title: '홈',
           ),
         ),
         PersistentTabConfig(
-          screen: MapScreen(),
-          item: ItemConfig(
-            activeForegroundColor: BLUE400_COLOR,
-            inactiveForegroundColor: GRAY400_COLOR,
-            icon: Image.asset('assets/image/map.png',),
-            // TODO: 활성화 되었을때 파란색 되는 이미지 서은님이 주면 추가 필요
-            inactiveIcon:  Image.asset('assets/image/inactive_home.png',),
-            title: "지도",
-            textStyle: AppTextStyles.body2,
+          screen: const MapScreen(),
+          item: _buildTabItem(
+            imagePath: 'assets/image/map.png',
+            title: '지도',
           ),
         ),
         PersistentTabConfig(
-          screen: NeighborCommunicationScreen(),
-          item: ItemConfig(
-            activeForegroundColor: BLUE400_COLOR,
-            inactiveForegroundColor: GRAY400_COLOR,
-            icon: Image.asset('assets/image/neighbor.png',),
-            // TODO: 활성화 되었을때 파란색 되는 이미지 서은님이 주면 추가 필요
-            inactiveIcon:  Image.asset('assets/image/inactive_home.png',),
+          screen: const NeighborCommunicationScreen(),
+          item: _buildTabItem(
+            imagePath: 'assets/image/neighbor.png',
             title: '이웃소통',
-            textStyle: AppTextStyles.body2,
           ),
         ),
         PersistentTabConfig(
-          screen: ChatScreen(),
-          item: ItemConfig(
-            activeForegroundColor: BLUE400_COLOR,
-            inactiveForegroundColor: GRAY400_COLOR,
-            icon: Image.asset('assets/image/chat.png',),
-            // TODO: 활성화 되었을때 파란색 되는 이미지 서은님이 주면 추가 필요
-            inactiveIcon:  Image.asset('assets/image/inactive_home.png',),
-            title: "채팅",
-            textStyle: AppTextStyles.body2,
+          screen: const ChatScreen(),
+          item: _buildTabItem(
+            imagePath: 'assets/image/chat.png',
+            title: '채팅',
           ),
         ),
         PersistentTabConfig(
-          screen: MyPageScreen(),
-          item: ItemConfig(
-            activeForegroundColor: BLUE400_COLOR,
-            inactiveForegroundColor: GRAY400_COLOR,
-            icon: Image.asset('assets/image/my.png',),
-            // TODO: 활성화 되었을때 파란색 되는 이미지 서은님이 주면 추가 필요
-            inactiveIcon:  Image.asset('assets/image/inactive_home.png',),
-            title: "마이",
-            textStyle: AppTextStyles.body2,
+          screen: const MyPageScreen(),
+          item: _buildTabItem(
+            imagePath: 'assets/image/my.png',
+            title: '마이',
           ),
         ),
       ],
@@ -81,6 +57,42 @@ class RootTab extends StatelessWidget {
           Style1BottomNavBar(
             navBarConfig: navBarConfig,
           ),
+    );
+  }
+
+  static ItemConfig _buildTabItem({
+    required String imagePath,
+    required String title,
+  }) {
+    return ItemConfig(
+      activeForegroundColor: BLUE400_COLOR,
+      inactiveForegroundColor: GRAY400_COLOR,
+      icon: _ColoredIcon(imagePath: imagePath, isActive: true),
+      inactiveIcon: _ColoredIcon(imagePath: imagePath, isActive: false),
+      title: title,
+      textStyle: AppTextStyles.body2,
+    );
+  }
+}
+
+class _ColoredIcon extends StatelessWidget {
+  final String imagePath;
+  final bool isActive;
+
+  const _ColoredIcon({
+    Key? key,
+    required this.imagePath,
+    required this.isActive,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ColorFiltered(
+      colorFilter: ColorFilter.mode(
+        isActive ? BLUE400_COLOR : GRAY400_COLOR,
+        BlendMode.srcIn,
+      ),
+      child: Image.asset(imagePath),
     );
   }
 }
