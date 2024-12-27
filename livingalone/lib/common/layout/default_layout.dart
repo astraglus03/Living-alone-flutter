@@ -23,7 +23,8 @@ class DefaultLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor ?? Colors.white,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: backgroundColor ?? WHITE100_COLOR,
       body: child,
       appBar: renderAppBar(context),
       bottomNavigationBar: bottomNavigationBar,
@@ -40,6 +41,7 @@ class DefaultLayout extends StatelessWidget {
         titleTextStyle: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        scrolledUnderElevation: 0,
         leading: isFirstScreen
             ? null
             : IconButton(
@@ -49,7 +51,7 @@ class DefaultLayout extends StatelessWidget {
           },
         ),
         backgroundColor: WHITE100_COLOR,
-        shape: Border(
+        shape: const Border(
           bottom: BorderSide(
             width: 1,
             color: GRAY200_COLOR,

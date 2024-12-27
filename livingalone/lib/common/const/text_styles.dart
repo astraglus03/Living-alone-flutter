@@ -64,3 +64,8 @@ class AppTextStyles {
     color: WHITE100_COLOR,
   );
 }
+
+const baseBorder = BorderSide(
+  width: 1,
+  color: GRAY400_COLOR,
+);

@@ -26,11 +26,13 @@ class CustomButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onTap,
           style: ElevatedButton.styleFrom(
-              backgroundColor: backgroundColor,
-              foregroundColor: foregroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              )),
+            backgroundColor: backgroundColor,
+            foregroundColor: foregroundColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            shadowColor: Colors.transparent,
+          ),
           child: Text(
             text,
             style: textStyle,

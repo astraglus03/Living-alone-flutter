@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:livingalone/common/component/common_button.dart';
-import 'package:livingalone/common/component/custom_input_field.dart';
-import 'package:livingalone/common/component/find_signup_button.dart';
+import 'package:livingalone/user/component/custom_input_field.dart';
+import 'package:livingalone/user/component/find_signup_button.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
@@ -17,8 +17,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final idController = TextEditingController();
-  final pwController = TextEditingController();
+  String userId='';
+  String userPw='';
   bool _isChecked = false;
 
   @override
@@ -35,14 +35,19 @@ class _LoginScreenState extends State<LoginScreen> {
             Text('회원 로그인', style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),),
             SizedBox(height: 16,),
             CustomInputField(
-                controller: idController,
                 hintText: '학교 이메일을 입력해 주세요',
-                obscureText: false),
+              onChanged: (String value){
+                  userId = value;
+              },
+            ),
             SizedBox(height: 12,),
             CustomInputField(
-                controller: pwController,
                 hintText: '비밀번호를 입력해 주세요',
-                obscureText: true),
+                onChanged: (String value){
+                  userPw = value;
+                },
+                obscureText: true,
+            ),
             // Container(
             //   width: 148,
             //   height: 40,
