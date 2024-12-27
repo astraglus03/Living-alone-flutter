@@ -62,6 +62,7 @@ dev_dependencies:
   riverpod_lint: ^2.3.13
   modal_bottom_sheet: ^3.0.0
   email_validator: ^3.0.0
+  flutter_svg: ^2.0.16
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

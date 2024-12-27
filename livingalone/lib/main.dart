@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/view/root_tab.dart';
 import 'package:livingalone/common/view/splash_screen.dart';
+import 'package:livingalone/user/view/complete_screen.dart';
 import 'package:livingalone/user/view/login_screen.dart';
 import 'package:livingalone/user/view/phone_verify_screen.dart';
 import 'package:livingalone/user/view/setting_password_screen.dart';
@@ -31,7 +32,7 @@ class MyApp extends ConsumerWidget {
         fontFamily: 'SUIT',
       ),
       debugShowCheckedModeBanner: false,
-      home: PhoneVerifyScreen(),
+      home: CompleteScreen(),
     );
   }
 }

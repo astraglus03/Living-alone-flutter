@@ -24,11 +24,10 @@ class SplashScreen extends StatelessWidget {
                 text: '믿을 수 있는 양도의 시작, ',
                 style: AppTextStyles.splashTitle,
                 children: <TextSpan>[
-                  // TODO: 피그마상으로는 800강조인데 900해야 피그마처럼 두드러져서 서은님이랑 대화 필요.
                   TextSpan(
                     text: '모양',
                     style: AppTextStyles.splashTitle.copyWith(
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 ],
