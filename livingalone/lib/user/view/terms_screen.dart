@@ -99,7 +99,7 @@ class TermsScreen extends StatelessWidget {
           ),
           CustomButton(
             backgroundColor: GRAY200_COLOR,
-            foregroundColor: GRAY800_COLOR,
+            foregroundColor: GRAY800_COLOR, // 택스트 색상
             text: '다음',
             textStyle: AppTextStyles.title,
             onTap: () {

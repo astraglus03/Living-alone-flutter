@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:livingalone/common/component/common_button.dart';
 
 class CustomButton extends StatelessWidget {
   final Color backgroundColor;
@@ -21,9 +22,7 @@ class CustomButton extends StatelessWidget {
     return Positioned(
       bottom: 50,
       left: 24,
-      child: SizedBox(
-        width: 345,
-        height: 50,
+      child: CommonButton(
         child: ElevatedButton(
           onPressed: onTap,
           style: ElevatedButton.styleFrom(

@@ -28,7 +28,7 @@ class MyApp extends ConsumerWidget {
         fontFamily: 'SUIT',
       ),
       debugShowCheckedModeBanner: false,
-      home: RootTab(),
+      home: LoginScreen(),
     );
   }
 }
