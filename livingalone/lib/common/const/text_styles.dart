@@ -67,5 +67,5 @@ class AppTextStyles {
 
 const baseBorder = BorderSide(
   width: 1,
-  color: GRAY400_COLOR,
+  color: GRAY200_COLOR,
 );

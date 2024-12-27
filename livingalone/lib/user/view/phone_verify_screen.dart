@@ -5,23 +5,23 @@ import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class PhoneVerifyScreen extends StatefulWidget {
+  const PhoneVerifyScreen({super.key});
 
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  _PhoneVerifyScreenState createState() => _PhoneVerifyScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
   final _formKey = GlobalKey<FormState>();
-  String? selectedSchool;
-  final TextEditingController schoolEmailController = TextEditingController();
+  String? selectedMobileCarrier;
+  final TextEditingController mobileNumController = TextEditingController();
   final TextEditingController verifyNumController = TextEditingController();
-  final FocusNode emailFocus = FocusNode();
+  final FocusNode phoneFocus = FocusNode();
   final FocusNode verifyFocus = FocusNode();
 
   final _scrollController = ScrollController();
-  final _emailKey = GlobalKey();
+  final _phoneKey = GlobalKey();
   final _verifyKey = GlobalKey();
 
   void _scrollToField(GlobalKey key) {
@@ -38,17 +38,17 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   final List<String> _schools = [
-    '상명대학교 천안 캠퍼스',
-    '호서대학교 천안 캠퍼스',
-    '단국대학교 천안 캠퍼스',
-    '백석대학교 천안 캠퍼스',
+    'SKT',
+    'KT',
+    'LGU+',
+    '알뜰폰',
   ];
 
   @override
   void dispose() {
-    schoolEmailController.dispose();
+    mobileNumController.dispose();
     verifyNumController.dispose();
-    emailFocus.dispose();
+    phoneFocus.dispose();
     verifyFocus.dispose();
     super.dispose();
   }
@@ -78,10 +78,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
-                      const Text('대학생 인증을 해주세요', style: AppTextStyles.heading1,),
+                      const Text('휴대폰 번호를 입력해주세요', style: AppTextStyles.heading1,),
                       const SizedBox(height: 82,),
                       Text(
-                        '학교',
+                        '통신사',
                         style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
                       ),
                       const SizedBox(height: 10),
@@ -89,25 +89,28 @@ class _SignupScreenState extends State<SignupScreen> {
                         width: 345,
                         height: 56,
                         child: DropdownButtonFormField<String>(
+                          hint: Align(
+                            alignment: Alignment.center,
+                            child: Text('통신사를 선택해 주세요', style: AppTextStyles.subtitle.copyWith(color: GRAY400_COLOR),),
+                          ),
                           icon: const Visibility(visible: false, child: Icon(Icons.arrow_downward)),
                           // 아래 화살표 지우기
                           dropdownColor: WHITE100_COLOR,
                           decoration: InputDecoration(
+                            // isDense: true,
                             suffixIcon: IconButton(
                               style: ButtonStyle(
                                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                               ),
                               onPressed:(){
                                 setState(() {
-                                  selectedSchool = null;
-                                  schoolEmailController.clear();
+                                  selectedMobileCarrier = null;
+                                  mobileNumController.clear();
                                   verifyNumController.clear();
                                 });
                               },
                               icon: Image.asset('assets/image/suffix_delete.png'),
                             ),
-                            labelText: '학교를 선택해 주세요',
-                            labelStyle: AppTextStyles.subtitle.copyWith(color: GRAY400_COLOR),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 borderSide: baseBorder),
@@ -120,20 +123,19 @@ class _SignupScreenState extends State<SignupScreen> {
                               borderSide: baseBorder,
                             ),
                           ),
-                          value: selectedSchool,
+                          value: selectedMobileCarrier,
                           items: _schools.map((String school) {
                             return DropdownMenuItem(
                               value: school,
                               child: Text(
                                 school,
-                                style: AppTextStyles.subtitle
-                                    .copyWith(color: GRAY800_COLOR),
+                                style: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
                               ),
                             );
                           }).toList(),
                           onChanged: (String? value) {
                             setState(() {
-                              selectedSchool = value!;
+                              selectedMobileCarrier = value!;
                               // _showEmailField = newValue != null;
                               // 학교가 변경되면 이메일과 인증 필드 초기화
                               // if (selectedSchool != newValue) {
@@ -144,7 +146,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return '학교를 선택해주세요';
+                              return '통신사를 선택해주세요';
                             }
                             return null;
                           },
@@ -152,16 +154,16 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       const SizedBox(height: 24),
                       CustomSignupField(
-                        controller: schoolEmailController,
-                        onTextFieldTap: () => _scrollToField(_emailKey),
-                        key: _emailKey,
-                        focusNode: emailFocus,
-                        hintText: '학교 이메일을 입력해주세요',
-                        type: TextInputType.emailAddress,
-                        validateText: '이메일을',
-                        subTitle: '학교 이메일',
+                        controller: mobileNumController,
+                        onTextFieldTap: () => _scrollToField(_phoneKey),
+                        key: _phoneKey,
+                        focusNode: phoneFocus,
+                        hintText: '휴대폰 번호를 입력해 주세요',
+                        type: TextInputType.phone,
+                        validateText: '휴대폰 번호를',
+                        subTitle: '휴대폰 번호',
                         submitButtonTitle: '인증 번호 발송',
-                        onPressed: schoolEmailController.clear,
+                        onPressed: mobileNumController.clear,
                         // TODO: 인증 번호 눌렀을때의 함수
                         onTap: () {},
                       ),
@@ -180,7 +182,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         onPressed: verifyNumController.clear,
                         // TODO: 확인 버튼 눌렀을때의 함수
                         onTap: () {
-                          print('${verifyNumController.text} ${schoolEmailController.text} $selectedSchool');
+                          print('${verifyNumController.text} ${mobileNumController.text} $selectedMobileCarrier');
                         },
 
                       ),

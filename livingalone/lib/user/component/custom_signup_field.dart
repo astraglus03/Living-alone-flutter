@@ -13,6 +13,7 @@ class CustomSignupField extends StatelessWidget {
   final VoidCallback onTap;
   final FocusNode? focusNode;
   final VoidCallback onTextFieldTap;
+  final VoidCallback onPressed;
 
 
   const CustomSignupField({
@@ -27,6 +28,7 @@ class CustomSignupField extends StatelessWidget {
     required this.onTap,
     this.focusNode,
     required this.onTextFieldTap,
+    required this.onPressed,
   });
 
   @override
@@ -34,7 +36,7 @@ class CustomSignupField extends StatelessWidget {
     return SizedBox(
       width: 345,
       // FIXME: 피그마 128인데 유효성 검사를 통해서 오류 띄우게 되면 20정도의 추가 공간이 필요한데 늘려도 괜찮을지. 20이면 딱 맞음.
-      height: 128,
+      height: 148,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,8 +55,7 @@ class CustomSignupField extends StatelessWidget {
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),
-                onPressed:(){
-                },
+                onPressed:onPressed,
                 icon: Image.asset('assets/image/suffix_delete.png'),
               ),
               border: OutlineInputBorder(
