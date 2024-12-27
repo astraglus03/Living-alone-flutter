@@ -71,7 +71,7 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
               child: Form(
                 key: _formKey,
                 child: Container(
-                  height: MediaQuery.of(context).size.height,
+                  height: MediaQuery.of(context).size.height-50,
                   padding: const EdgeInsets.only(left: 24),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -79,7 +79,7 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
                     children: [
                       const SizedBox(height: 20),
                       const Text('휴대폰 번호를 입력해주세요', style: AppTextStyles.heading1,),
-                      const SizedBox(height: 82,),
+                      const SizedBox(height: 40,),
                       Text(
                         '통신사',
                         style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
@@ -87,7 +87,7 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
                       const SizedBox(height: 10),
                       SizedBox(
                         width: 345,
-                        height: 56,
+                        // height: 56,
                         child: DropdownButtonFormField<String>(
                           hint: Align(
                             alignment: Alignment.center,
@@ -97,7 +97,7 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
                           // 아래 화살표 지우기
                           dropdownColor: WHITE100_COLOR,
                           decoration: InputDecoration(
-                            // isDense: true,
+                            // contentPadding: EdgeInsets.only(left: 16.0),
                             suffixIcon: IconButton(
                               style: ButtonStyle(
                                 overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -180,11 +180,42 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
                         submitButtonTitle: '확인',
                         width: 49,
                         onPressed: verifyNumController.clear,
-                        // TODO: 확인 버튼 눌렀을때의 함수
-                        onTap: () {
-                          print('${verifyNumController.text} ${mobileNumController.text} $selectedMobileCarrier');
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '인증번호를 입력해주세요';
+                          }
+                          // TODO: 인증번호와 입력번호가 일치하는지 유효성 검사 로직 추후 필요
+                          return null;
                         },
-
+                        // TODO: 확인 버튼 눌렀을때의 함수 -> 인증번호가 다를경우 스낵바 띄우기 정상이라면 정상루트로 진행
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: GRAY400_COLOR,
+                                duration: const Duration(seconds: 2),
+                              padding: EdgeInsets.symmetric(horizontal: 12.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              // width: 345,
+                              behavior: SnackBarBehavior.floating,
+                              //FIXME: 실제로 크기를 맞추려고하는데 해당 위젯의 크기가 조금씩 달라서 크기를 조절했음.
+                              margin: EdgeInsets.only(left: 24, right: 24, bottom: 60),
+                              elevation: 0,
+                              // animation: _animation,
+                              content: SizedBox(
+                                height: 48,
+                                child: Row(
+                                  children: [
+                                    Image.asset('assets/image/x.png'),
+                                    SizedBox(width: 10,),
+                                    Text('인증 번호가 불일치 합니다. 다시 시도해 주세요', style: AppTextStyles.body1.copyWith(color: WHITE100_COLOR),)
+                                  ],
+                                ),
+                              )
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

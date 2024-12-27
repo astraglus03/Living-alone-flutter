@@ -12,8 +12,10 @@ class CustomSignupField extends StatelessWidget {
   final double width;
   final VoidCallback onTap;
   final FocusNode? focusNode;
-  final VoidCallback onTextFieldTap;
+  final VoidCallback? onTextFieldTap;
   final VoidCallback onPressed;
+  final bool obscureText;
+  final String? Function(String?)? validator;  // 추가된 부분
 
 
   const CustomSignupField({
@@ -27,16 +29,16 @@ class CustomSignupField extends StatelessWidget {
     this.width = 106, // FIXME: 피그마 기준 104인데 106으로 설정해야함.
     required this.onTap,
     this.focusNode,
-    required this.onTextFieldTap,
+    this.onTextFieldTap,
     required this.onPressed,
+    this.obscureText = false, this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 345,
-      // FIXME: 피그마 128인데 유효성 검사를 통해서 오류 띄우게 되면 20정도의 추가 공간이 필요한데 늘려도 괜찮을지. 20이면 딱 맞음.
-      height: 148,
+      // height: 148,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,40 +48,38 @@ class CustomSignupField extends StatelessWidget {
             style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
           ),
           const SizedBox(height: 10),
-          TextFormField(
-            controller: controller,
-            onTap: onTextFieldTap,
-            cursorColor: BLUE400_COLOR,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+          SizedBox(
+            width: 345,
+            child: TextFormField(
+              controller: controller,
+              onTap: onTextFieldTap,
+              cursorColor: BLUE400_COLOR,
+              obscureText: obscureText,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  ),
+                  onPressed:onPressed,
+                  icon: Image.asset('assets/image/suffix_delete.png'),
                 ),
-                onPressed:onPressed,
-                icon: Image.asset('assets/image/suffix_delete.png'),
-              ),
-              border: OutlineInputBorder(
-                borderSide: baseBorder,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              focusedBorder: OutlineInputBorder(
+                border: OutlineInputBorder(
+                  borderSide: baseBorder,
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: baseBorder),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: baseBorder,
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: baseBorder),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: baseBorder,
+                ),
+                hintText: hintText,
+                hintStyle: AppTextStyles.subtitle.copyWith(color: GRAY400_COLOR),
               ),
-              hintText: hintText,
-              hintStyle: AppTextStyles.subtitle.copyWith(color: GRAY400_COLOR),
+              keyboardType: type,
+              validator: validator
             ),
-            keyboardType: type,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return '$validateText 입력해주세요';
-              }
-              // 이메일 형식 검증 로직 추가 가능
-              return null;
-            },
           ),
           const SizedBox(height: 10),
           SizedBox(

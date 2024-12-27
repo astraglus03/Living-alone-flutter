@@ -20,7 +20,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 50,
+      bottom: 34,
       left: 24,
       child: CommonButton(
         child: ElevatedButton(
