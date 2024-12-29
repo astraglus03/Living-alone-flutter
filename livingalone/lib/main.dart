@@ -9,7 +9,7 @@ import 'package:livingalone/user/view/setting_password_screen.dart';
 import 'package:livingalone/user/view/signup_screen.dart';
 import 'package:livingalone/user/view/terms_detail_screen.dart';
 import 'package:livingalone/user/view/terms_screen.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -27,12 +27,22 @@ class MyApp extends ConsumerWidget {
     //     routerConfig: MyApp()._router,
     //     title: 'Living Alone',
     // );
-    return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'SUIT',
-      ),
-      debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+    return ScreenUtilInit(
+      designSize: const Size(393, 852),
+      minTextAdapt: true,  // 텍스트 크기 자동 조정
+      splitScreenMode: true,  // 분할 화면 모드
+      builder:(_ ,child){
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: MaterialApp(
+            theme: ThemeData(
+              fontFamily: 'SUIT',
+            ),
+            debugShowCheckedModeBanner: false,
+            home: SettingPasswordScreen(),
+          ),
+        );
+      }
     );
   }
 }

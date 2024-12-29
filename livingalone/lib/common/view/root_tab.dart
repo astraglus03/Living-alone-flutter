@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:livingalone/chat/view/chat_screen.dart';
+import 'package:livingalone/common/component/colored_image.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/home/view/home_screen.dart';
@@ -20,35 +21,35 @@ class RootTab extends StatelessWidget {
         PersistentTabConfig(
           screen: const HomeScreen(),
           item: _buildTabItem(
-            imagePath: 'assets/image/inactive_home.png',
+            imagePath: 'assets/image/home.svg',
             title: '홈',
           ),
         ),
         PersistentTabConfig(
           screen: const MapScreen(),
           item: _buildTabItem(
-            imagePath: 'assets/image/map.png',
+            imagePath: 'assets/image/map.svg',
             title: '지도',
           ),
         ),
         PersistentTabConfig(
           screen: const NeighborCommunicationScreen(),
           item: _buildTabItem(
-            imagePath: 'assets/image/neighbor.png',
+            imagePath: 'assets/image/neighbor.svg',
             title: '이웃소통',
           ),
         ),
         PersistentTabConfig(
           screen: const ChatScreen(),
           item: _buildTabItem(
-            imagePath: 'assets/image/chat.png',
+            imagePath: 'assets/image/chat.svg',
             title: '채팅',
           ),
         ),
         PersistentTabConfig(
           screen: const MyPageScreen(),
           item: _buildTabItem(
-            imagePath: 'assets/image/my.png',
+            imagePath: 'assets/image/my.svg',
             title: '마이',
           ),
         ),
@@ -67,32 +68,11 @@ class RootTab extends StatelessWidget {
     return ItemConfig(
       activeForegroundColor: BLUE400_COLOR,
       inactiveForegroundColor: GRAY400_COLOR,
-      icon: _ColoredIcon(imagePath: imagePath, isActive: true),
-      inactiveIcon: _ColoredIcon(imagePath: imagePath, isActive: false),
+      icon: ColoredIcon(imagePath: imagePath, isActive: true),
+      inactiveIcon: ColoredIcon(imagePath: imagePath, isActive: false),
       title: title,
       textStyle: AppTextStyles.body2,
     );
   }
 }
 
-class _ColoredIcon extends StatelessWidget {
-  final String imagePath;
-  final bool isActive;
-
-  const _ColoredIcon({
-    Key? key,
-    required this.imagePath,
-    required this.isActive,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ColorFiltered(
-      colorFilter: ColorFilter.mode(
-        isActive ? BLUE400_COLOR : GRAY400_COLOR,
-        BlendMode.srcIn,
-      ),
-      child: Image.asset(imagePath),
-    );
-  }
-}

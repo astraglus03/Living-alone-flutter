@@ -4,6 +4,7 @@ import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingPasswordScreen extends StatefulWidget {
   const SettingPasswordScreen({super.key});
@@ -34,6 +35,7 @@ class _SettingPasswordScreenState extends State<SettingPasswordScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       backgroundColor: WHITE100_COLOR,
+      actionString: '3',
       title: '회원가입',
       child: Stack(
         children: [
@@ -48,14 +50,14 @@ class _SettingPasswordScreenState extends State<SettingPasswordScreen> {
                 key: _formKey,
                 child: Container(
                   height: MediaQuery.of(context).size.height-100,
-                  padding: const EdgeInsets.only(left: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 24.0.w),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
-                      const Text('비밀번호를 설정해주세요', style: AppTextStyles.heading1,),
-                      const SizedBox(height: 40,),
+                      20.verticalSpace,
+                      Text('비밀번호를 설정해주세요', style: AppTextStyles.heading1,),
+                      40.verticalSpace,
                       CustomSignupField(
                         controller: mobileNumController,
                         focusNode: passwordFocus,
@@ -66,7 +68,8 @@ class _SettingPasswordScreenState extends State<SettingPasswordScreen> {
                         subTitle: '비밀번호',
                         submitButtonTitle: isLooking ? '비밀번호 보기' : '비밀번호 숨기기',
                         onPressed: mobileNumController.clear,
-                        width: isLooking ? 101 : 113,
+                        // FIXME: 피그마 101 113
+                        width: isLooking ? 102.w : 114.w,
                         onTap: () {
                           setState(() {
                             isLooking = !isLooking;

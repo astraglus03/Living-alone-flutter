@@ -4,6 +4,7 @@ import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CompleteScreen extends StatelessWidget {
   const CompleteScreen({super.key});
@@ -21,7 +22,7 @@ class CompleteScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SvgPicture.asset('assets/image/Check.svg'),
-                const SizedBox(height: 16),
+                16.verticalSpace,
                 Text('회원가입 완료',style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR))],
             ),
             CustomButton(

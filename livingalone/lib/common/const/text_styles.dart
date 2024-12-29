@@ -1,66 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:livingalone/common/const/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTextStyles {
-  static const TextStyle heading1 = TextStyle(
+  static TextStyle heading1 = TextStyle(
     fontFamily: 'SUIT',
     fontWeight: FontWeight.bold,
-    fontSize: 30,
+    fontSize: 30.sp,
     height: 42 / 30,
   );
 
-  static const TextStyle heading2 = TextStyle(
+  static TextStyle heading2 = TextStyle(
     fontFamily: 'SUIT',
     fontWeight: FontWeight.bold,
-    fontSize: 24,
+    fontSize: 24.sp,
     height: 34 / 24,
   );
 
-  static const TextStyle title = TextStyle(
+  static TextStyle title = TextStyle(
     fontFamily: 'SUIT',
     fontWeight: FontWeight.bold,
-    fontSize: 20,
+    fontSize: 20.sp,
     height: 28 / 20,
   );
 
-  static const TextStyle subtitle = TextStyle(
+  static TextStyle subtitle = TextStyle(
     fontFamily: 'SUIT',
     fontWeight: FontWeight.bold,
-    fontSize: 16,
+    fontSize: 16.sp,
     height: 22 / 16,
   );
 
-  static const TextStyle body1 = TextStyle(
+  static TextStyle body1 = TextStyle(
     fontFamily: 'SUIT',
     fontWeight: FontWeight.bold,
-    fontSize: 14,
+    fontSize: 14.sp,
     height: 20 / 14,
   );
 
-  static const TextStyle body2 = TextStyle(
+  static TextStyle body2 = TextStyle(
     fontFamily: 'SUIT',
     fontWeight: FontWeight.w600,
-    fontSize: 14,
+    fontSize: 14.sp,
     height: 18 / 14,
   );
 
-  static const TextStyle caption1 = TextStyle(
+  static TextStyle caption1 = TextStyle(
     fontFamily: 'SUIT',
     fontWeight: FontWeight.w500,
-    fontSize: 14,
+    fontSize: 14.sp,
     height: 18 / 14,
   );
 
-  static const TextStyle caption2 = TextStyle(
+  static TextStyle caption2 = TextStyle(
     fontFamily: 'SUIT',
     fontWeight: FontWeight.w600,
-    fontSize: 12,
+    fontSize: 12.sp,
     height: 16 / 12,
   );
 
-  static const TextStyle splashTitle = TextStyle(
+  static TextStyle splashTitle = TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 20,
+    fontSize: 20.sp,
     color: WHITE100_COLOR,
   );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DefaultLayout extends StatelessWidget {
   final Color? backgroundColor;
@@ -10,6 +11,8 @@ class DefaultLayout extends StatelessWidget {
   final Widget? floatingActionButton;
   final String? title;
   final bool isFirstScreen;
+  final Color appbarBorderColor;
+  final String? actionString;
 
   const DefaultLayout({
     this.backgroundColor,
@@ -19,7 +22,8 @@ class DefaultLayout extends StatelessWidget {
     this.floatingActionButton,
     this.title,
     this.isFirstScreen = false,
-    super.key,
+    super.key, this.appbarBorderColor=GRAY200_COLOR,
+    this.actionString,
   });
 
   @override
@@ -43,6 +47,13 @@ class DefaultLayout extends StatelessWidget {
         titleTextStyle: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        actions: [
+          if(actionString != null)
+          Padding(
+            padding: const EdgeInsets.only(right: 24).r,
+            child: Text('$actionString/4', style: AppTextStyles.caption2.copyWith(color: BLUE400_COLOR),),
+          )
+        ],
         scrolledUnderElevation: 0,
         leading: isFirstScreen
             ? null
@@ -53,10 +64,10 @@ class DefaultLayout extends StatelessWidget {
           },
         ),
         backgroundColor: appbarTitleBackgroundColor,
-        shape: isFirstScreen ?  null : const Border(
+        shape: Border(
           bottom: BorderSide(
             width: 1,
-            color: GRAY200_COLOR,
+            color: appbarBorderColor,
           ),
         ),
       );

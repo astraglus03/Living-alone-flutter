@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CommonButton extends StatelessWidget {
   final Widget child;
@@ -11,8 +12,8 @@ class CommonButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 345,
-      height: 50,
+      width: 345.w,
+      height: 50.h,
       child: child,
     );
   }

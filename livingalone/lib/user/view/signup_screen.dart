@@ -5,6 +5,8 @@ import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -58,6 +60,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       backgroundColor: WHITE100_COLOR,
+      actionString: '1',
       title: '회원가입',
       child: Stack(
         children: [
@@ -73,26 +76,26 @@ class _SignupScreenState extends State<SignupScreen> {
                 key: _formKey,
                 child: Container(
                   height: MediaQuery.of(context).size.height-50,
-                  padding: const EdgeInsets.only(left: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
-                      const Text('대학생 인증을 해주세요', style: AppTextStyles.heading1,),
-                      const SizedBox(height: 40,),
+                      20.verticalSpace,
+                      Text('대학생 인증을 해주세요', style: AppTextStyles.heading1,),
+                      40.verticalSpace,
                       Text(
                         '학교',
                         style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
                       ),
-                      const SizedBox(height: 10),
+                      10.verticalSpace,
                       SizedBox(
-                        width: 345,
-                        // height: 56,
+                        width: 345.w,
+                        height: 56.h,
                         child: DropdownButtonFormField<String>(
                           hint: Align(
                             alignment: Alignment.center,
-                            child: Text('헉교를 선택해 주세요', style: AppTextStyles.subtitle.copyWith(color: GRAY400_COLOR),),
+                            child: Text('학교를 선택해 주세요', style: AppTextStyles.subtitle.copyWith(color: GRAY400_COLOR),),
                           ),
                           icon: const Visibility(visible: false, child: Icon(Icons.arrow_downward)),
                           // 아래 화살표 지우기
@@ -109,17 +112,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                   verifyNumController.clear();
                                 });
                               },
-                              icon: Image.asset('assets/image/suffix_delete.png'),
+                              icon: SvgPicture.asset('assets/image/signupDelete.svg'),
                             ),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(10.r),
                                 borderSide: baseBorder),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(10.r),
                               borderSide: baseBorder,
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(10.r),
                               borderSide: baseBorder,
                             ),
                           ),
@@ -137,23 +140,17 @@ class _SignupScreenState extends State<SignupScreen> {
                           onChanged: (String? value) {
                             setState(() {
                               selectedSchool = value!;
-                              // _showEmailField = newValue != null;
-                              // 학교가 변경되면 이메일과 인증 필드 초기화
-                              // if (selectedSchool != newValue) {
-                              //   _showVerificationField = false;
-                              //   _isEmailSent = false;
-                              // }
                             });
                           },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return '학교를 선택해주세요';
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value == null || value.isEmpty) {
+                          //     return '학교를 선택해주세요';
+                          //   }
+                          //   return null;
+                          // },
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      24.verticalSpace,
                       CustomSignupField(
                         controller: schoolEmailController,
                         onTextFieldTap: () => _scrollToField(_emailKey),
@@ -164,21 +161,23 @@ class _SignupScreenState extends State<SignupScreen> {
                         validateText: '이메일을',
                         subTitle: '학교 이메일',
                         submitButtonTitle: '인증 번호 발송',
+                        // FIXME: 피그마 104 105여야 안짤림.
+                        width: 105.w,
                         onPressed: schoolEmailController.clear,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '이메일을 입력해주세요';
-                          }
-
-                          if (EmailValidator.validate(value)) {
-                            return '유효한 이메일 주소를 입력해주세요';
-                          }
-                          return null;
-                        },
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return '이메일을 입력해주세요';
+                        //   }
+                        //
+                        //   if (EmailValidator.validate(value)) {
+                        //     return '유효한 이메일 주소를 입력해주세요';
+                        //   }
+                        //   return null;
+                        // },
                         // TODO: 인증 번호 눌렀을때의 함수
                         onTap: () {},
                       ),
-                      const SizedBox(height: 24),
+                      24.verticalSpace,
                       CustomSignupField(
                         controller: verifyNumController,
                         onTextFieldTap: () => _scrollToField(_verifyKey),
@@ -189,15 +188,15 @@ class _SignupScreenState extends State<SignupScreen> {
                         validateText: '인증번호를',
                         subTitle: '인증 번호',
                         submitButtonTitle: '확인',
-                        width: 49,
+                        width: 49.w,
                         onPressed: verifyNumController.clear,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '인증번호를 입력해주세요';
-                          }
-                          // TODO: 인증번호와 입력번호가 일치하는지 유효성 검사 로직 추후 필요
-                          return null;
-                        },
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return '인증번호를 입력해주세요';
+                        //   }
+                        //   // TODO: 인증번호와 입력번호가 일치하는지 유효성 검사 로직 추후 필요
+                        //   return null;
+                        // },
                         // TODO: 확인 버튼 눌렀을때의 함수
                         onTap: () {},
                       ),
