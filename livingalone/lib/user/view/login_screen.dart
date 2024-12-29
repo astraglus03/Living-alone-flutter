@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:livingalone/common/component/common_button.dart';
@@ -6,8 +7,11 @@ import 'package:livingalone/user/component/find_signup_button.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
-import 'package:livingalone/user/component/custom_button.dart';
-import 'package:livingalone/user/view/terms_screen.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:flutter_keychain/flutter_keychain.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+//FIXME: 생체인증에 관련된 코드는 아래에 모두 주석처리해 놓았음. 현재는 아이디 비밀번호 입력으로 진행. or flutter secure storage에 토큰 + 키체인 내용 둘다 저장하고 불러오기.
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,129 +21,269 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String userId='';
-  String userPw='';
-  bool _isChecked = false;
+  final LocalAuthentication auth = LocalAuthentication();
+  final TextEditingController idController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  // String userId='';
+  // String userPw='';
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
       backgroundColor: BLUE100_COLOR,
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        margin: EdgeInsets.fromLTRB(24, 492, 0, 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('회원 로그인', style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),),
-            SizedBox(height: 16,),
-            CustomInputField(
+      appbarTitleBackgroundColor: BLUE100_COLOR,
+      title: '로그인',
+      isFirstScreen: true,
+      child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          margin: EdgeInsets.fromLTRB(24, 48, 0, 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomInputField(
+                controller: idController,
                 hintText: '학교 이메일을 입력해 주세요',
-              onChanged: (String value){
-                  userId = value;
-              },
-            ),
-            SizedBox(height: 12,),
-            CustomInputField(
+              ),
+              SizedBox(height: 16,),
+              CustomInputField(
+                controller: passwordController,
                 hintText: '비밀번호를 입력해 주세요',
-                onChanged: (String value){
-                  userPw = value;
-                },
                 obscureText: true,
-            ),
-            // Container(
-            //   width: 148,
-            //   height: 40,
-            //   padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            //   decoration: BoxDecoration(
-            //     borderRadius:
-            //   ),
-            // )
-            Container(
-              width: 345,
-              height: 40,
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isChecked = !_isChecked;
-                  });
-                },
+              ),
+              SizedBox(height: 16,),
+              CommonButton(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: BLUE400_COLOR,
+                      foregroundColor: WHITE100_COLOR,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      )),
+                  onPressed: () {
+                    // TODO: go router 나중에 적용하기.
+                  },
+                  child: Text('로그인', style: AppTextStyles.title),
+                ),
+              ),
+              SizedBox(height: 16.0,),
+              Container(
+                width: 345,
+                height: 36,
                 child: Row(
                   children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: _isChecked ? BLUE300_COLOR : BLUE300_COLOR,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                        color: WHITE100_COLOR,
-                      ),
-                      child: _isChecked
-                          ? Center(
-                              child: Container(
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  color: BLUE300_COLOR,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            )
-                          : null,
+                    FindSignupButton(
+                        onTap: () {
+                          // TODO: 비밀번호 찾기 페이지 라우팅
+                        },
+                        text: '비밀번호 찾기'
                     ),
-                    SizedBox(width: 11),
-                    Text(
-                      '간편로그인 정보 저장',
-                      style: AppTextStyles.body1.copyWith(color: BLUE400_COLOR),
+                    SizedBox(width: 9,),
+                    FindSignupButton(
+                        onTap: () {
+                          // TODO: 회원가입 페이지 라우팅
+                        },
+                        text: '회원가입'
                     ),
                   ],
                 ),
-              ),
-            ),
-            CommonButton(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: BLUE400_COLOR,
-                    foregroundColor: WHITE100_COLOR,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    )),
-                onPressed: () {
-                  // TODO: go router 나중에 적용하기.
-                },
-                child: Text('로그인', style: AppTextStyles.title),
-              ),
-            ),
-            SizedBox(height: 12.0,),
-            Container(
-              width: 345,
-              height: 36,
-              child: Row(
-                children: [
-                  FindSignupButton(
-                      onTap: () {
-                        // TODO: 비밀번호 찾기 페이지 라우팅
-                      },
-                      text: '비밀번호 찾기'
-                  ),
-                  SizedBox(width: 9,),
-                  FindSignupButton(
-                      onTap: () {
-                        // TODO: 회원가입 페이지 라우팅
-                      },
-                      text: '회원가입'
-                  ),
-                ],
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+
+
+// class LoginScreen extends StatefulWidget {
+//   const LoginScreen({super.key});
+//
+//   @override
+//   State<LoginScreen> createState() => _LoginScreenState();
+// }
+//
+// class _LoginScreenState extends State<LoginScreen> {
+//   final LocalAuthentication auth = LocalAuthentication();
+//   final TextEditingController idController = TextEditingController();
+//   final TextEditingController passwordController = TextEditingController();
+//   bool CheckBiometrics = false;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     checkBiometrics();
+//   }
+//
+//   @override
+//   void dispose() {
+//     idController.dispose();
+//     passwordController.dispose();
+//     super.dispose();
+//   }
+//
+//   Future<void> checkBiometrics() async {
+//     try {
+//       final canCheckBiometrics = await auth.canCheckBiometrics;
+//       setState(() {
+//         CheckBiometrics = canCheckBiometrics;
+//       });
+//     } catch (e) {
+//       _showError('생체 인증 확인 중 오류가 발생했습니다. 디바이스 설정을 확인해주세요.');
+//     }
+//   }
+//
+//   Future<void> authenticateAndLogin() async {
+//     try {
+//       final isAuthenticated = await auth.authenticate(
+//         localizedReason: '생체 인증을 통해 로그인해주세요',
+//         options: const AuthenticationOptions(
+//           biometricOnly: true,
+//           stickyAuth: true,
+//         ),
+//       );
+//
+//       if (isAuthenticated) {
+//         final credentialsString = await FlutterKeychain.get(key: 'SECURE_CREDENTIALS');
+//         if (credentialsString != null) {
+//           final credentials = Map<String, String>.from(
+//             Map<String, dynamic>.from(
+//               jsonDecode(credentialsString),
+//             ),
+//           );
+//           idController.text = credentials['email']!;
+//           passwordController.text = credentials['password']!;
+//           login();
+//         } else {
+//           _showError('저장된 자격증명을 찾을 수 없습니다. 이메일과 비밀번호를 입력해주세요.');
+//         }
+//       } else {
+//         _showError('생체 인증이 실패했습니다. 비밀번호를 입력하거나 생체 인증 설정을 확인하세요.');
+//       }
+//     } catch (e) {
+//       _showError('생체 인증 오류 발생: ${e.toString()}');
+//     }
+//   }
+//
+//   Future<void> login() async {
+//     try {
+//       final email = idController.text.trim();
+//       final password = passwordController.text.trim();
+//
+//       if (email.isEmpty || password.isEmpty) {
+//         _showError('이메일과 비밀번호를 모두 입력해주세요.');
+//         return;
+//       }
+//
+//       // TODO: 백엔드 API 통신을 구현해야하는 부분 ( 현재 코드 무의미 나중에 리팩토링 필요)
+//       // 로그인 성공 가정
+//       final isSuccess = true;
+//       if (isSuccess) {
+//         await FlutterKeychain.put(
+//           key: 'SECURE_CREDENTIALS',
+//           value: jsonEncode({'email': email, 'password': password}),
+//         );
+//       }
+//     } catch (e) {
+//       _showError('로그인 처리 중 오류가 발생했습니다: ${e.toString()}');
+//     }
+//   }
+//
+//   void _showError(String message) {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(content: Text(message)),
+//     );
+//   }
+//
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return DefaultLayout(
+//       backgroundColor: BLUE100_COLOR,
+//       appbarTitleBackgroundColor: BLUE100_COLOR,
+//       title: '로그인',
+//       isFirstScreen: true,
+//       child: SingleChildScrollView(
+//         child: Container(
+//           height: MediaQuery.of(context).size.height,
+//           margin: const EdgeInsets.fromLTRB(24, 48, 0, 0),
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.start,
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               CustomInputField(
+//                 controller: idController,
+//                 hintText: '학교 이메일을 입력해 주세요',
+//               ),
+//               const SizedBox(height: 16),
+//               CustomInputField(
+//                 controller: passwordController,
+//                 hintText: '비밀번호를 입력해 주세요',
+//                 obscureText: true,
+//               ),
+//               const SizedBox(height: 16),
+//               CommonButton(
+//                 child: ElevatedButton(
+//                   style: ElevatedButton.styleFrom(
+//                     backgroundColor: BLUE400_COLOR,
+//                     foregroundColor: WHITE100_COLOR,
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(8.0),
+//                     ),
+//                   ),
+//                   onPressed: login,
+//                   child: Text('로그인', style: AppTextStyles.title),
+//                 ),
+//               ),
+//               const SizedBox(height: 16.0),
+//               Container(
+//                 width: 345,
+//                 height: 36,
+//                 child: Row(
+//                   children: [
+//                     FindSignupButton(
+//                       onTap: () {
+//                         // 비밀번호 찾기 기능 구현
+//                       },
+//                       text: '비밀번호 찾기',
+//                     ),
+//                     const SizedBox(width: 9),
+//                     FindSignupButton(
+//                       onTap: () {
+//                         // 회원가입 기능 구현
+//                       },
+//                       text: '회원가입',
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               if (CheckBiometrics)
+//                 Padding(
+//                   padding: const EdgeInsets.symmetric(vertical: 8.0),
+//                   child: CommonButton(
+//                     child: ElevatedButton(
+//                       style: ElevatedButton.styleFrom(
+//                         backgroundColor: BLUE300_COLOR,
+//                         foregroundColor: WHITE100_COLOR,
+//                         shape: RoundedRectangleBorder(
+//                           borderRadius: BorderRadius.circular(8.0),
+//                         ),
+//                       ),
+//                       onPressed: authenticateAndLogin,
+//                       child: Text('생체 인증으로 로그인', style: AppTextStyles.title),
+//                     ),
+//                   ),
+//                 ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -4,6 +4,7 @@ import 'package:livingalone/common/const/text_styles.dart';
 
 class DefaultLayout extends StatelessWidget {
   final Color? backgroundColor;
+  final Color appbarTitleBackgroundColor;
   final Widget child;
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
@@ -12,6 +13,7 @@ class DefaultLayout extends StatelessWidget {
 
   const DefaultLayout({
     this.backgroundColor,
+    this.appbarTitleBackgroundColor = WHITE100_COLOR,
     required this.child,
     this.bottomNavigationBar,
     this.floatingActionButton,
@@ -50,8 +52,8 @@ class DefaultLayout extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: WHITE100_COLOR,
-        shape: const Border(
+        backgroundColor: appbarTitleBackgroundColor,
+        shape: isFirstScreen ?  null : const Border(
           bottom: BorderSide(
             width: 1,
             color: GRAY200_COLOR,

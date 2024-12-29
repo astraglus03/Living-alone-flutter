@@ -5,15 +5,15 @@ import 'package:livingalone/common/const/text_styles.dart';
 class CustomInputField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
-  final ValueChanged<String>? onChanged;
   final String? errorText;
+  final controller;
 
   const CustomInputField({
     super.key,
     required this.hintText,
     this.obscureText = false,
-    required this.onChanged,
     this.errorText,
+    required this.controller,
   });
 
   @override
@@ -22,6 +22,7 @@ class CustomInputField extends StatelessWidget {
       width: 345,
       height: 56,
       child: TextFormField(
+        controller: controller,
         cursorColor: BLUE400_COLOR,
         obscureText: obscureText,
         decoration: InputDecoration(
@@ -32,11 +33,11 @@ class CustomInputField extends StatelessWidget {
           enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.white)),
           focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: BLUE400_COLOR)),
+              borderSide: BorderSide(color: WHITE100_COLOR)),
           fillColor: WHITE100_COLOR,
           filled: true,
           hintText: hintText,
-          hintStyle: AppTextStyles.subtitle.copyWith(color: BLUE400_COLOR),
+          hintStyle: AppTextStyles.subtitle.copyWith(color: GRAY400_COLOR),
           errorText: errorText,
         ),
       ),

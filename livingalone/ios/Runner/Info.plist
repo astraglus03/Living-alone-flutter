@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+    <string>생체 인증을 통한 로그인을 위해 Face ID 접근 권한이 필요합니다.</string>
 </dict>
 </plist>

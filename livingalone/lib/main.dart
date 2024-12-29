@@ -32,7 +32,7 @@ class MyApp extends ConsumerWidget {
         fontFamily: 'SUIT',
       ),
       debugShowCheckedModeBanner: false,
-      home: CompleteScreen(),
+      home: LoginScreen(),
     );
   }
 }

@@ -5,12 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="base">
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/Check.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/view/complete_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/repository/token_manager.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/view/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/view/splash_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/layout/default_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/layout/default_layout.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/component/custom_input_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_input_field.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/login_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugins.cmake" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +76,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "feature/completescreen",
+    "git-widget-placeholder": "develop",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/astraglus/StudioProjects/Living-alone-flutter/livingalone/assets/image",
