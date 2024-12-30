@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomSignupField extends StatelessWidget {
-  final controller;
+  final TextEditingController? controller;
   final String hintText;
   final TextInputType type;
-  final String validateText;
+  // final String validateText;
   final String subTitle;
   final String submitButtonTitle;
   final double width;
   final VoidCallback onTap;
   final FocusNode? focusNode;
-  final VoidCallback? onTextFieldTap;
+  final VoidCallback? onTextFieldTap; // 키보드 화면 애니메이션을 위해 사용
   final VoidCallback onPressed;
   final bool obscureText;
-  final String? Function(String?)? validator;  // 추가된 부분
-
+  final String? Function(String?)? validator;
+  final String? errorText;
+  final ValueChanged<String>? onChanged;
 
   const CustomSignupField({
-    required this.controller,
+    this.controller,
     required this.hintText,
     required this.type,
     super.key,
-    required this.validateText,
+    // required this.validateText,
     required this.subTitle,
     required this.submitButtonTitle,
     required this.width, // FIXME: 피그마 기준 104인데 106으로 설정해야함.
@@ -33,7 +35,8 @@ class CustomSignupField extends StatelessWidget {
     this.focusNode,
     this.onTextFieldTap,
     required this.onPressed,
-    this.obscureText = false, this.validator,
+    this.obscureText = false,
+    this.validator, this.errorText, this.onChanged,
   });
 
   @override
@@ -58,6 +61,7 @@ class CustomSignupField extends StatelessWidget {
               onTap: onTextFieldTap,
               cursorColor: BLUE400_COLOR,
               obscureText: obscureText,
+              onChanged: onChanged,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 16.0).r,
                 suffixIcon: IconButton(
@@ -85,6 +89,12 @@ class CustomSignupField extends StatelessWidget {
               validator: validator
             ),
           ),
+          10.verticalSpace,
+          if(errorText != null)
+            Text(
+                errorText!,
+                style: AppTextStyles.caption2.copyWith(color: ERROR_TEXT_COLOR)
+            ),
           10.verticalSpace,
           SizedBox(
             width: width.w,

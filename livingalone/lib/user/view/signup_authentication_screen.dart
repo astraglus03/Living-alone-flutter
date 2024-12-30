@@ -8,14 +8,15 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class SignupAuthenticationScreen extends StatefulWidget {
+  static String get routeName => 'signupAuthentication';
+  const SignupAuthenticationScreen({super.key});
 
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  _SignupAuthenticationScreenState createState() => _SignupAuthenticationScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupAuthenticationScreenState extends State<SignupAuthenticationScreen> {
   final _formKey = GlobalKey<FormState>();
   String? selectedSchool;
   final TextEditingController schoolEmailController = TextEditingController();
@@ -158,7 +159,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         focusNode: emailFocus,
                         hintText: '학교 이메일을 입력해주세요',
                         type: TextInputType.emailAddress,
-                        validateText: '이메일을',
+                        // validateText: '이메일을',
                         subTitle: '학교 이메일',
                         submitButtonTitle: '인증 번호 발송',
                         // FIXME: 피그마 104 105여야 안짤림.
@@ -185,7 +186,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         focusNode: verifyFocus,
                         hintText: '인증번호를 입력해주세요',
                         type: TextInputType.number,
-                        validateText: '인증번호를',
+                        // validateText: '인증번호를',
                         subTitle: '인증 번호',
                         submitButtonTitle: '확인',
                         width: 49.w,

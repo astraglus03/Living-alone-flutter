@@ -3,21 +3,22 @@ import 'package:livingalone/common/component/colored_image.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/user/component/custom_agree_button.dart';
 import 'package:livingalone/user/component/custom_button.dart';
-import 'package:livingalone/user/view/signup_screen.dart';
-import 'package:livingalone/user/view/terms_detail_screen.dart';
+import 'package:livingalone/user/view/signup_authentication_screen.dart';
+import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class TermsScreen extends StatefulWidget {
+class SignupTermsScreen extends StatefulWidget {
   static String get routeName => 'terms';
 
-  const TermsScreen({super.key});
+  const SignupTermsScreen({super.key});
 
   @override
-  State<TermsScreen> createState() => _TermsScreenState();
+  State<SignupTermsScreen> createState() => _SignupTermsScreenState();
 }
 
-class _TermsScreenState extends State<TermsScreen> {
+class _SignupTermsScreenState extends State<SignupTermsScreen> {
   bool isAllAgreedSelected = false;
   bool firstAgreedSelected = false;
 
@@ -68,9 +69,7 @@ class _TermsScreenState extends State<TermsScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        if(isAllAgreedSelected)
-                          ColoredIcon(imagePath: 'assets/image/nothingCheck.svg', isActive: true)
-                        else ColoredIcon(imagePath: 'assets/image/nothingCheck.svg', isActive: false),
+                        CustomAgreeButton(isActive: isAllAgreedSelected, activeColor: BLUE400_COLOR, inactiveColor: GRAY400_COLOR),
                         12.horizontalSpace,
                         Text(
                           '전체 동의하기',
@@ -98,9 +97,7 @@ class _TermsScreenState extends State<TermsScreen> {
                           height: 24.h,
                           child: Row(
                             children: [
-                              if(isAllAgreedSelected || firstAgreedSelected)
-                                const ColoredIcon(imagePath: 'assets/image/nothingCheck.svg', isActive: true)
-                              else const ColoredIcon(imagePath: 'assets/image/nothingCheck.svg', isActive: false),
+                              CustomAgreeButton(isActive: isAllAgreedSelected && firstAgreedSelected, activeColor: BLUE400_COLOR, inactiveColor: GRAY400_COLOR),
                               12.horizontalSpace,
                               Text(
                                 '[필수]개인정보 수집 및 이용 동의',
@@ -112,7 +109,7 @@ class _TermsScreenState extends State<TermsScreen> {
                         8.horizontalSpace,
                         IconButton(
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (_) => TermsDetailScreen()));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (_) => SignupTermsDetailScreen()));
                           },
                           padding: EdgeInsets.zero,
                           constraints: BoxConstraints(
@@ -143,7 +140,7 @@ class _TermsScreenState extends State<TermsScreen> {
             isEnabled: isAllAgreedSelected,
             onTap: () {
               // TODO: 나중에 go router 적용할 것. 임시로 넣어둠.
-              Navigator.of(context).push(MaterialPageRoute(builder: (_) => SignupScreen()));
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) => SignupAuthenticationScreen()));
             },
           ),
         ],

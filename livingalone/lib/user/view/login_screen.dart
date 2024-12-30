@@ -8,7 +8,7 @@ import 'package:livingalone/user/component/find_signup_button.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
-import 'package:livingalone/user/view/signup_screen.dart';
+import 'package:livingalone/user/view/signup_authentication_screen.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_keychain/flutter_keychain.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -17,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 //FIXME: 생체인증에 관련된 코드는 아래에 모두 주석처리해 놓았음. 현재는 아이디 비밀번호 입력으로 진행. or flutter secure storage에 토큰 + 키체인 내용 둘다 저장하고 불러오기.
 
 class LoginScreen extends StatefulWidget {
+  static String get routeName => 'login';
   const LoginScreen({super.key});
 
   @override

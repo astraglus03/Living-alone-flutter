@@ -14,12 +14,12 @@ class ColoredIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColorFiltered(
+    return SvgPicture.asset(
+      imagePath,
       colorFilter: ColorFilter.mode(
         isActive ? BLUE400_COLOR : GRAY400_COLOR,
         BlendMode.srcIn,
       ),
-      child: SvgPicture.asset(imagePath),
     );
   }
 }

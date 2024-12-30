@@ -8,26 +8,30 @@ class CustomInputField extends StatelessWidget {
   final bool obscureText;
   final String? errorText;
   final controller;
-  final Iterable<String> autofillHint;
+  final Iterable<String>? autofillHint;
   // final TextInputAction? textInputAction;
   final VoidCallback? function;
+  final ValueChanged<String>? onChanged;
+  final double? width;
+  final double? height;
 
-  const CustomInputField({
+   CustomInputField({
     super.key,
     required this.hintText,
     this.obscureText = false,
     this.errorText,
-    required this.controller,
-    required this.autofillHint,
+    this.controller,
+    this.autofillHint,
     // this.textInputAction,
     this.function,
+    this.onChanged, this.width, this.height,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 345.w,
-      height: 56.h,
+      width: width ?? 345.w,
+      height: height ?? 56.h,
       child: TextFormField(
         controller: controller,
         // 여기부분에도 암호가 생기도록 제작.
@@ -36,8 +40,9 @@ class CustomInputField extends StatelessWidget {
         onEditingComplete: function,
         cursorColor: BLUE400_COLOR,
         obscureText: obscureText,
+        onChanged: onChanged,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(left: 16.0),
+          contentPadding: const EdgeInsets.only(left: 16.0).r,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.r),
           ),

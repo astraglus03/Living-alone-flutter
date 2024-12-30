@@ -6,15 +6,17 @@ import 'package:livingalone/user/component/custom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:livingalone/user/component/custom_snackbar.dart';
 
-class PhoneVerifyScreen extends StatefulWidget {
-  const PhoneVerifyScreen({super.key});
+class SignupPhoneVerifyScreen extends StatefulWidget {
+  static String get routeName => 'phoneVerify';
+  const SignupPhoneVerifyScreen({super.key});
 
   @override
-  _PhoneVerifyScreenState createState() => _PhoneVerifyScreenState();
+  _SignupPhoneVerifyScreenState createState() => _SignupPhoneVerifyScreenState();
 }
 
-class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
+class _SignupPhoneVerifyScreenState extends State<SignupPhoneVerifyScreen> {
   final _formKey = GlobalKey<FormState>();
   String? selectedMobileCarrier;
   final TextEditingController mobileNumController = TextEditingController();
@@ -163,14 +165,20 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
                         focusNode: phoneFocus,
                         hintText: '휴대폰 번호를 입력해 주세요',
                         type: TextInputType.phone,
-                        validateText: '휴대폰 번호를',
+                        // validateText: '휴대폰 번호를',
                         subTitle: '휴대폰 번호',
                         submitButtonTitle: '인증 번호 발송',
                         // FIXME: 피그마 104 but 105 필요
                         width: 105.w,
                         onPressed: mobileNumController.clear,
                         // TODO: 인증 번호 눌렀을때의 함수
-                        onTap: () {},
+                        onTap: () {
+                          CustomSnackBar.show(
+                              context: context,
+                              message: '인증 메일이 전송되었습니다.',
+                              imagePath: 'assets/image/authentication_check.svg'
+                          );
+                        },
                       ),
                       24.verticalSpace,
                       CustomSignupField(
@@ -180,7 +188,7 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
                         focusNode: verifyFocus,
                         hintText: '인증번호를 입력해주세요',
                         type: TextInputType.number,
-                        validateText: '인증번호를',
+                        // validateText: '인증번호를',
                         subTitle: '인증 번호',
                         submitButtonTitle: '확인',
                         width: 49.w,
@@ -194,31 +202,10 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
                         },
                         // TODO: 확인 버튼 눌렀을때의 함수 -> 인증번호가 다를경우 스낵바 띄우기 정상이라면 정상루트로 진행
                         onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: GRAY400_COLOR,
-                                duration: const Duration(seconds: 2),
-                              padding: EdgeInsets.symmetric(horizontal: 12.0.h),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0.r),
-                              ),
-                              // width: 345,
-                              behavior: SnackBarBehavior.floating,
-                              //FIXME: 실제로 크기를 맞추려고하는데 해당 위젯의 크기가 조금씩 달라서 크기를 조절했음.
-                              margin: EdgeInsets.only(left: 24.w, right: 24.h, bottom: 60.h),
-                              elevation: 0,
-                              // animation: _animation,
-                              content: SizedBox(
-                                height: 48.h,
-                                child: Row(
-                                  children: [
-                                    Image.asset('assets/image/x.png'),
-                                    10.horizontalSpace,
-                                    Text('인증 번호가 불일치 합니다. 다시 시도해 주세요', style: AppTextStyles.body1.copyWith(color: WHITE100_COLOR),)
-                                  ],
-                                ),
-                              )
-                            ),
+                          CustomSnackBar.show(
+                            context: context,
+                            message: '인증 번호가 불일치합니다. 다시 시도해 주세요.',
+                            imagePath: 'assets/image/x.svg'
                           );
                         },
                       ),

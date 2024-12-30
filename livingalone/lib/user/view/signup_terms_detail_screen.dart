@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 
-class TermsDetailScreen extends StatelessWidget {
-  const TermsDetailScreen({super.key});
+class SignupTermsDetailScreen extends StatelessWidget {
+  static String get routeName => 'termsDetail';
+  const SignupTermsDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

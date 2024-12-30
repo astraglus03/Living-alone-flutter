@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/view/root_tab.dart';
 import 'package:livingalone/common/view/splash_screen.dart';
-import 'package:livingalone/user/view/complete_screen.dart';
+import 'package:livingalone/user/view/find_password_screen.dart';
+import 'package:livingalone/user/view/signup_complete_screen.dart';
 import 'package:livingalone/user/view/login_screen.dart';
-import 'package:livingalone/user/view/phone_verify_screen.dart';
-import 'package:livingalone/user/view/setting_password_screen.dart';
-import 'package:livingalone/user/view/signup_screen.dart';
-import 'package:livingalone/user/view/terms_detail_screen.dart';
-import 'package:livingalone/user/view/terms_screen.dart';
+import 'package:livingalone/user/view/signup_nickname_screen.dart';
+import 'package:livingalone/user/view/signup_phone_verify_screen.dart';
+import 'package:livingalone/user/view/signup_setting_password_screen.dart';
+import 'package:livingalone/user/view/signup_authentication_screen.dart';
+import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
+import 'package:livingalone/user/view/signup_terms_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
@@ -39,7 +41,7 @@ class MyApp extends ConsumerWidget {
               fontFamily: 'SUIT',
             ),
             debugShowCheckedModeBanner: false,
-            home: SettingPasswordScreen(),
+            home: FindPasswordScreen(),
           ),
         );
       }
