@@ -5,30 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="base">
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/authentication_check.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/nothing_check.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/x.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_agree_button.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_snackbar.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/view/find_password_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_nickname_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/view_models/setting_pw_provider.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/like_full.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/share.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/smu_mascort1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/smu_mascort2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/smu_mascort3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/smu_mascort4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/smu_mascort5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/component/rent_info_card.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/view/living_detail_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/component/colored_image.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/component/colored_image.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/const/colors.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/const/colors.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/view_models/go_router.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/view_models/go_router.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/likestar.svg" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/assets/image/like_border.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/layout/default_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/layout/default_layout.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/component/custom_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/component/custom_input_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_input_field.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/component/custom_signup_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_signup_field.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/complete_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_complete_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/login_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/phone_verify_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_phone_verify_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/setting_password_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_setting_password_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/signup_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_authentication_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/terms_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_terms_detail_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/terms_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_terms_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/signup_authentication_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_authentication_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/signup_terms_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_terms_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +80,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "feature/signupnickname",
+    "git-widget-placeholder": "feature/roomdetailscreen",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/astraglus/StudioProjects/Living-alone-flutter/livingalone/assets/image",

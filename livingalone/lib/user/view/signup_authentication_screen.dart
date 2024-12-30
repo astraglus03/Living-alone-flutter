@@ -4,7 +4,6 @@ import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

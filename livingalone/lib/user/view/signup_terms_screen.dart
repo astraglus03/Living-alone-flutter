@@ -40,14 +40,14 @@ class _SignupTermsScreenState extends State<SignupTermsScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '이용동의',
-      isFirstScreen: true,
+      isNotFirstScreen: true,
       actionString: '1',
       child: Stack(
         children: [
           Container(
             // width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            margin: EdgeInsets.fromLTRB(24, 60, 0, 0).r,
+            margin: EdgeInsets.fromLTRB(24, 48, 0, 0).r,
             child: Column(
               children: [
                 GestureDetector(

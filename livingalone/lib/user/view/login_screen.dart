@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appbarBorderColor: BLUE200_COLOR,
       actionString: '1',
       title: '로그인',
-      isFirstScreen: true,
+      isNotFirstScreen: true,
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Container(

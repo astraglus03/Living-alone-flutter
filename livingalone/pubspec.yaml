@@ -66,6 +66,9 @@ dev_dependencies:
   local_auth: ^2.3.0
   flutter_keychain: ^2.5.0
   flutter_screenutil: ^5.9.3
+  smooth_page_indicator: ^1.2.0+3
+  ticket_clippers: ^0.0.8
+  dotted_line: ^3.2.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
