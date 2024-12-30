@@ -1,39 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
-import 'view_models/user_viewmodel.dart';
-import 'views/home_page.dart';
-import 'views/users_page.dart';
-import 'views/settings_page.dart';
-import 'views/profile_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/common/view/root_tab.dart';
+import 'package:livingalone/common/view/splash_screen.dart';
+import 'package:livingalone/user/view/complete_screen.dart';
+import 'package:livingalone/user/view/login_screen.dart';
+import 'package:livingalone/user/view/phone_verify_screen.dart';
+import 'package:livingalone/user/view/setting_password_screen.dart';
+import 'package:livingalone/user/view/signup_screen.dart';
+import 'package:livingalone/user/view/terms_detail_screen.dart';
+import 'package:livingalone/user/view/terms_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  final GoRouter _router = GoRouter(
-    routes: [
-      GoRoute(path: '/', builder: (context, state) => const HomePage()),
-      GoRoute(path: '/users', builder: (context, state) => const UsersPage()),
-      GoRoute(path: '/settings', builder: (context, state) => const SettingsPage()),
-      GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
-    ],
-    initialLocation: '/',
-  );
+class MyApp extends ConsumerWidget {
 
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => UserViewModel()),
-      ],
-      child: MaterialApp.router(
-        routerConfig: MyApp()._router,
-        title: 'Living Alone',
-      ),
+  Widget build(BuildContext context,ref) {
+    // final router = ref.watch(routerProvider);
+    // return MaterialApp.router(
+    //     debugShowCheckedModeBanner: false,
+    //     routerConfig: MyApp()._router,
+    //     title: 'Living Alone',
+    // );
+    return ScreenUtilInit(
+      designSize: const Size(393, 852),
+      minTextAdapt: true,  // 텍스트 크기 자동 조정
+      splitScreenMode: true,  // 분할 화면 모드
+      builder:(_ ,child){
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: MaterialApp(
+            theme: ThemeData(
+              fontFamily: 'SUIT',
+            ),
+            debugShowCheckedModeBanner: false,
+            home: SettingPasswordScreen(),
+          ),
+        );
+      }
     );
   }
 }
