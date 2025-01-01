@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Livingalone</string>
+	<string>모양</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -47,5 +47,15 @@
 	<true/>
 	<key>NSFaceIDUsageDescription</key>
     <string>생체 인증을 통한 로그인을 위해 Face ID 접근 권한이 필요합니다.</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <!--앱의 URL 스킴 추후 진행하기  -->
+                <string>yourapp</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>

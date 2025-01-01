@@ -4,11 +4,13 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:livingalone/user/component/component_button.dart';
 
 class CustomSignupField extends StatelessWidget {
   final TextEditingController? controller;
   final String hintText;
   final TextInputType type;
+
   // final String validateText;
   final String subTitle;
   final String submitButtonTitle;
@@ -21,22 +23,32 @@ class CustomSignupField extends StatelessWidget {
   final String? Function(String?)? validator;
   final String? errorText;
   final ValueChanged<String>? onChanged;
+  final Color? buttonBackground;
+  final Color? formFieldBackground;
+  final bool? timer;
+  final String? timerText;
 
   const CustomSignupField({
     this.controller,
     required this.hintText,
     required this.type,
-    super.key,
     // required this.validateText,
     required this.subTitle,
     required this.submitButtonTitle,
     required this.width, // FIXME: 피그마 기준 104인데 106으로 설정해야함.
+    required this.onPressed,
     required this.onTap,
     this.focusNode,
     this.onTextFieldTap,
-    required this.onPressed,
     this.obscureText = false,
-    this.validator, this.errorText, this.onChanged,
+    this.validator,
+    this.errorText,
+    this.onChanged,
+    this.buttonBackground,
+    this.formFieldBackground,
+    this.timer,
+    this.timerText,
+    super.key,
   });
 
   @override
@@ -53,55 +65,29 @@ class CustomSignupField extends StatelessWidget {
             style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
           ),
           10.verticalSpace,
-          SizedBox(
-            width: 345.w,
-            height: 56.h,
-            child: TextFormField(
-              controller: controller,
-              onTap: onTextFieldTap,
-              cursorColor: BLUE400_COLOR,
-              obscureText: obscureText,
-              onChanged: onChanged,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(left: 16.0).r,
-                suffixIcon: IconButton(
-                  style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  ),
-                  onPressed:onPressed,
-                  icon: SvgPicture.asset('assets/image/signupDelete.svg'),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: baseBorder,
-                  borderRadius: BorderRadius.circular(10.0.r),
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0.r),
-                    borderSide: baseBorder),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0.r),
-                  borderSide: baseBorder,
-                ),
-                hintText: hintText,
-                hintStyle: AppTextStyles.subtitle.copyWith(color: GRAY400_COLOR),
-              ),
-              keyboardType: type,
-              validator: validator
-            ),
+          ComponentButton(
+            controller: controller,
+            onChanged: onChanged,
+            hintText: hintText,
+            type: type,
+            onTextFieldTap: onTextFieldTap,
+            onPressed: onPressed,
+            obscureText: obscureText,
+            formFieldBackground: formFieldBackground,
+            showTimer: timer ?? false,
+            timerText: timerText,
           ),
           10.verticalSpace,
-          if(errorText != null)
-            Text(
-                errorText!,
-                style: AppTextStyles.caption2.copyWith(color: ERROR_TEXT_COLOR)
-            ),
-          10.verticalSpace,
+          if (errorText != null)
+            Text(errorText!,
+                style:
+                    AppTextStyles.caption2.copyWith(color: ERROR_TEXT_COLOR)),
           SizedBox(
             width: width.w,
             height: 32.h,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: BLUE100_COLOR,
+                backgroundColor: buttonBackground ?? BLUE100_COLOR,
                 foregroundColor: BLUE400_COLOR,
                 padding: EdgeInsets.fromLTRB(12.w, 4.h, 12.w, 4.h),
                 shape: RoundedRectangleBorder(
@@ -110,9 +96,11 @@ class CustomSignupField extends StatelessWidget {
                 shadowColor: Colors.transparent,
               ),
               onPressed: onTap,
-              child: Text(submitButtonTitle,
-              style: AppTextStyles.body1.copyWith(color: BLUE400_COLOR),
-            ),),
+              child: Text(
+                submitButtonTitle,
+                style: AppTextStyles.body1.copyWith(color: BLUE400_COLOR),
+              ),
+            ),
           ),
         ],
       ),

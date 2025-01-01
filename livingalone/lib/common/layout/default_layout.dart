@@ -15,6 +15,7 @@ class DefaultLayout extends StatelessWidget {
   final String? actionString;
   final Widget? actions;
   final double? height;
+  final PreferredSizeWidget? bottom;
 
   const DefaultLayout({
     this.backgroundColor,
@@ -28,6 +29,7 @@ class DefaultLayout extends StatelessWidget {
     this.actionString,
     this.actions,
     this.height,
+    this.bottom,
   });
 
   @override
@@ -47,7 +49,7 @@ class DefaultLayout extends StatelessWidget {
       return null;
     } else {
       return  PreferredSize(
-        preferredSize: Size.fromHeight(height ?? 48.h),
+        preferredSize: Size.fromHeight((height ?? 48.h) + (bottom?.preferredSize.height ?? 0)),
         child: AppBar(
           title: Text(title!),
           titleTextStyle: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
@@ -70,6 +72,7 @@ class DefaultLayout extends StatelessWidget {
               color: appbarBorderColor,
             ),
           ),
+          bottom: bottom,
         ),
       );
     }

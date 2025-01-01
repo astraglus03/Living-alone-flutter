@@ -68,8 +68,8 @@ class RootTab extends StatelessWidget {
     return ItemConfig(
       activeForegroundColor: BLUE400_COLOR,
       inactiveForegroundColor: GRAY400_COLOR,
-      icon: ColoredIcon(imagePath: imagePath, isActive: true),
-      inactiveIcon: ColoredIcon(imagePath: imagePath, isActive: false),
+      icon: ColoredImage(imagePath: imagePath, isActive: true),
+      inactiveIcon: ColoredImage(imagePath: imagePath, isActive: false),
       title: title,
       textStyle: AppTextStyles.body2,
     );

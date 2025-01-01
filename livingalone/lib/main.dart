@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/view/root_tab.dart';
 import 'package:livingalone/common/view/splash_screen.dart';
+import 'package:livingalone/home/models/post_type.dart';
 import 'package:livingalone/home/view/living_detail_screen.dart';
+import 'package:livingalone/user/view/find_password_auth_screen.dart';
 import 'package:livingalone/user/view/find_password_screen.dart';
+import 'package:livingalone/user/view/redesign_password_screen.dart';
+import 'package:livingalone/user/view/reset_password_complete_screen.dart';
 import 'package:livingalone/user/view/signup_complete_screen.dart';
 import 'package:livingalone/user/view/login_screen.dart';
 import 'package:livingalone/user/view/signup_nickname_screen.dart';
@@ -42,7 +46,7 @@ class MyApp extends ConsumerWidget {
               fontFamily: 'SUIT',
             ),
             debugShowCheckedModeBanner: false,
-            home: LivingDetailScreen(),
+            home: LivingDetailScreen(postType: PostType.TICKET,),
           ),
         );
       }
