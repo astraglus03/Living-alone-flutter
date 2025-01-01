@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Container(
           height: MediaQuery.of(context).size.height,
-          margin: EdgeInsets.fromLTRB(24.w, 48.h, 24.w, 0),
+          margin: EdgeInsets.fromLTRB(24.w, 42.h, 24.w, 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -118,10 +118,7 @@ class _SignupTermsScreenState extends State<SignupTermsScreen> {
                             maxWidth: 24,
                             maxHeight: 24,
                           ).w,
-                          icon: Image.asset(
-                            'assets/image/right_24.png',
-                            fit: BoxFit.contain,
-                          ),
+                          icon: Icon(Icons.keyboard_arrow_right, size: 24,color: GRAY300_COLOR,)
                         ),
                       ],
                     ),

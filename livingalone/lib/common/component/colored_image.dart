@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ColoredIcon extends StatelessWidget {
+class ColoredImage extends StatelessWidget {
   final String imagePath;
   final bool isActive;
 
-  const ColoredIcon({
+  const ColoredImage({
     super.key,
     required this.imagePath,
     required this.isActive,

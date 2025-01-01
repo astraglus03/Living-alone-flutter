@@ -5,23 +5,103 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="base">
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/like_full.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/share.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/smu_mascort1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/smu_mascort2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/smu_mascort3.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/smu_mascort4.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/smu_mascort5.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/component/rent_info_card.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/view/living_detail_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/drawable-hdpi/ic_launcher_foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/drawable-mdpi/ic_launcher_foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/drawable-xhdpi/ic_launcher_foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/drawable-xxhdpi/ic_launcher_foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/drawable-xxxhdpi/ic_launcher_foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-anydpi-v26/launcher_icon.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-hdpi/launcher_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-mdpi/launcher_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-xhdpi/launcher_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-xxhdpi/launcher_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-xxxhdpi/launcher_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/applogo/main_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/cafe.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/convenience.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/hospital.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/mart.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/pharmacy.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/transportation.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-50x50@1x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-50x50@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-57x57@1x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-57x57@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-72x72@1x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-72x72@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/component/colored_image_fill.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/component/common_divider.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/component/comments_section.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/component/facilities_card.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/component/info_detail_card.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/component/location_info_card.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/component/location_info_card_temporary.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/component/room_info_card.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/component/stat_item.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/component/ticket_info_card.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/models/comment_model.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/models/comment_model.g.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/models/detail_section.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/models/post_type.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/view_models/living_detail_screen_provider.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/component/component_button.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/component/component_button2.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/view/find_password_auth_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/view/redesign_password_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/view/reset_password_complete_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/user/view_models/timer_provider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/likestar.svg" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/assets/image/like_border.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/inactive_home.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/left_24.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/right_16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/right_24.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/component/colored_image.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/component/colored_image.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/common/layout/default_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/layout/default_layout.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/utils/data_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/utils/data_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/view/root_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/view/root_tab.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/component/rent_info_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/component/rent_info_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view/living_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/view/living_detail_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/component/custom_signup_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_signup_field.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/component/custom_snackbar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_snackbar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/find_password_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/find_password_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/login_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/signup_authentication_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_authentication_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/signup_setting_password_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_setting_password_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/signup_terms_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_terms_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/linux/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/windows/flutter/generated_plugins.cmake" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +160,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "feature/roomdetailscreen",
+    "git-widget-placeholder": "feature/roomlivingdetail2",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/astraglus/StudioProjects/Living-alone-flutter/livingalone/assets/image",
@@ -91,17 +171,17 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/livingalone/assets/image" />
+      <recent name="$PROJECT_DIR$/livingalone/lib/home/component" />
+      <recent name="$PROJECT_DIR$/livingalone/lib/user/view_models" />
+      <recent name="$PROJECT_DIR$/livingalone/assets/applogo" />
       <recent name="$PROJECT_DIR$/livingalone/assets" />
-      <recent name="$PROJECT_DIR$/livingalone/assets/fonts" />
-      <recent name="$PROJECT_DIR$/livingalone/lib/common/secure_storage" />
-      <recent name="$PROJECT_DIR$/livingalone/lib/common/layout" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/livingalone/lib/home/models" />
       <recent name="$PROJECT_DIR$/livingalone/lib/user/component" />
       <recent name="$PROJECT_DIR$/livingalone/assets/image" />
       <recent name="$PROJECT_DIR$/livingalone/lib/common" />
       <recent name="$PROJECT_DIR$/livingalone/lib/user" />
-      <recent name="C:\Users\kn055\AndroidStudioProjects\livingalone\livingalone\lib\theme" />
     </key>
   </component>
   <component name="RunManager">

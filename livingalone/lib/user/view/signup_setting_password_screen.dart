@@ -86,7 +86,12 @@ class _SignupSettingPasswordScreenState extends State<SignupSettingPasswordScree
                       // validateText: '6자 이상의 비밀번호를',
                       subTitle: '비밀번호',
                       submitButtonTitle: isLooking ? '비밀번호 보기' : '비밀번호 숨기기',
-                      onPressed: mobileNumController.clear,
+                      onPressed: (){
+                        mobileNumController.clear();
+                        setState(() {
+                          isPwValid = false;
+                        });
+                      },
                       // FIXME: 피그마 101 113
                       width: isLooking ? 102.w : 114.w,
                       errorText: errorMessage,

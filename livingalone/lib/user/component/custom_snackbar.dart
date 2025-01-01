@@ -9,7 +9,7 @@ class CustomSnackBar {
     required BuildContext context,
     required String message,
     required String imagePath,
-    Color backgroundColor = GRAY400_COLOR,
+    Color backgroundColor = GRAY500_COLOR,
     Duration duration = const Duration(seconds: 2),
     EdgeInsetsGeometry? margin,
   }) {
