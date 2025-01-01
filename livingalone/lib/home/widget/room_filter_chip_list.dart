@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../component/filterchip.dart';
+import 'bottom_filter_modal.dart';
 
 
 class RoomFilterChipList extends StatelessWidget {
@@ -14,8 +15,10 @@ class RoomFilterChipList extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Row(
-          children: [
-            SvgPicture.asset('assets/image/FilterButton.svg'),
+          children: [GestureDetector(
+            child: SvgPicture.asset('assets/image/FilterButton.svg'),
+            onTap: () => showFilterBottomSheet(context),
+          ),
             SizedBox(width: 4),
             CustomFilterButton(
               label: '지역',
