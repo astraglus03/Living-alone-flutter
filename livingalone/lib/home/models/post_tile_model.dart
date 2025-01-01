@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'post_tile_model.g.dart';
 
 @JsonSerializable()
@@ -10,6 +11,7 @@ class Post {
   final String subTitle2;
   final String subTitle3;
   final String subTitle4;
+  final String subTitle5;
   final int likes;
   final int comments;
   final int scraps;
@@ -23,12 +25,15 @@ class Post {
     required this.subTitle2,
     required this.subTitle3,
     required this.subTitle4,
+    required this.subTitle5,
     required this.likes,
     required this.comments,
     required this.scraps,
     required this.createdAt,
   });
 
-  factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
+  factory Post.fromJson(Map<String, dynamic> json) =>
+      _$PostFromJson(json);
+
   Map<String, dynamic> toJson() => _$PostToJson(this);
 }

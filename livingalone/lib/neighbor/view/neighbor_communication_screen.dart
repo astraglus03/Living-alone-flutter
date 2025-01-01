@@ -5,8 +5,14 @@ class NeighborCommunicationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('이웃소통 스크린'),
+    return Scaffold(
+      body: Center(
+        child: Container(
+          height: 80,
+          width: 80,
+          color: Colors.red,
+        ),
+      ),
     );
   }
 }
