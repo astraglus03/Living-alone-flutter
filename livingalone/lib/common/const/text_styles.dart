@@ -60,6 +60,13 @@ class AppTextStyles {
     height: 16 / 12,
   );
 
+  static const TextStyle caption3 = TextStyle(
+    fontFamily: 'SUIT',
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
+    height: 16 / 10,
+  );
+
   static TextStyle splashTitle = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 20.sp,

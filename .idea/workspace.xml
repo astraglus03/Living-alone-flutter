@@ -4,18 +4,27 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="base">
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/comment.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/like.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/models/post_tile_model.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/repository/post_tile_api.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/repository/post_tile_service.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/view_models/post_tile.dart" afterDir="false" />
+    <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="feat : 필터 UI 90%완료 #8&#10;&#10;todo&#10;UI 마무리 및 상태관리">
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/Filter_Reset.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/XS.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/homemini.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/refresh.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/reset.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/ticket.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/widget/room_filter_modal.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/home/widget/ticket_filter_modal.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/view/root_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/view/root_tab.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/component/checkbox_likeradio.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/component/checkbox_likeradio.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/component/filterchip.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/component/filterchip.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/component/radio.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/component/radio.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/repository/post_tile_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/repository/room_post_repository.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/view/home_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view_models/post_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/view_models/room_post_tile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/widget/board_filter_chip_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/widget/ticket_filter_chip_list.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/widget/bottom_filter_modal.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/widget/room_filter_chip_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/widget/room_filter_chip_list.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/widget/room_post_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/widget/room_post_list.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -75,18 +84,18 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "feature/board/#8",
+    "git-widget-placeholder": "feature/board/filter/8",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/cms/StudioProjects/Living-alone-flutter/livingalone/assets/image/listtile",
+    "last_opened_file_path": "/Users/cms/StudioProjects/Living-alone-flutter/livingalone/assets/image",
     "settings.editor.selected.configurable": "dart.settings",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/livingalone/assets/image/listtile" />
       <recent name="$PROJECT_DIR$/livingalone/assets/image" />
+      <recent name="$PROJECT_DIR$/livingalone/assets/image/listtile" />
       <recent name="$PROJECT_DIR$/livingalone/assets" />
       <recent name="$PROJECT_DIR$/livingalone/assets/fonts" />
       <recent name="$PROJECT_DIR$/livingalone/lib/common/secure_storage" />
@@ -122,11 +131,31 @@
       <option name="project" value="LOCAL" />
       <updated>1723469784011</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat : 필터 UI 90%완료 #8&#10;&#10;todo&#10;UI 마무리 및 상태관리">
+      <option name="closed" value="true" />
+      <created>1735759092075</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1735759092076</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="base" />
-    <option name="LAST_COMMIT_MESSAGE" value="base" />
+    <MESSAGE value="feat : 필터 UI 90%완료 #8&#10;&#10;todo&#10;UI 마무리 및 상태관리" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat : 필터 UI 90%완료 #8&#10;&#10;todo&#10;UI 마무리 및 상태관리" />
   </component>
 </project>

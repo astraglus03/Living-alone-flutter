@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../common/const/colors.dart';
 import '../../common/const/text_styles.dart';
 import '../models/post_tile_model.dart';
-import '../view_models/post_tile.dart';
+import '../view_models/room_post_tile.dart';
 
 String timeAgo(DateTime dateTime) {
   final now = DateTime.now();
