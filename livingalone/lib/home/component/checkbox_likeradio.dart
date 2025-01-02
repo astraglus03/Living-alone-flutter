@@ -1,7 +1,5 @@
 import 'package:dotted_line/dotted_line.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../common/const/colors.dart';
 import '../../common/const/text_styles.dart';
 
@@ -24,25 +22,40 @@ class CommonCheckboxOption extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          child: Row(
-            children: [
-              Radio<bool>(
-                value: true,
-                groupValue: value ? true : false,
-                onChanged: onChanged,
-                fillColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.selected)) {
-                      return BLUE400_COLOR;
-                    }
-                    return GRAY300_COLOR;
-                  },
+          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.065, vertical: 14),
+          child: InkWell(
+            onTap: () => onChanged(!value),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: value ? BLUE400_COLOR : GRAY300_COLOR,
+                        width: 2,
+                      ),
+                    ),
+                    child: value
+                        ? Center(
+                            child: Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: BLUE400_COLOR,
+                              ),
+                            ),
+                          )
+                        : null,
+                  ),
                 ),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              Text(text, style: AppTextStyles.body2),
-            ],
+                SizedBox(width: 8),
+                Text(text, style: AppTextStyles.body2),
+              ],
+            ),
           ),
         ),
         if (showDivider)

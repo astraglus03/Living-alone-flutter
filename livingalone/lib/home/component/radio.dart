@@ -7,6 +7,7 @@ import '../../common/const/text_styles.dart';
 
 class CommonRadioOption extends StatelessWidget {
   final String text;
+  final String value;
   final String groupValue;
   final ValueChanged<String?> onChanged;
   final bool showDivider;
@@ -14,6 +15,7 @@ class CommonRadioOption extends StatelessWidget {
   const CommonRadioOption({
     Key? key,
     required this.text,
+    required this.value,
     required this.groupValue,
     required this.onChanged,
     this.showDivider = true,
@@ -28,11 +30,11 @@ class CommonRadioOption extends StatelessWidget {
           child: Row(
             children: [
               Radio<String>(
-                value: text,
+                value: value,
                 groupValue: groupValue,
                 onChanged: onChanged,
                 fillColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
+                  (Set<MaterialState> states) {
                     if (states.contains(MaterialState.selected)) {
                       return BLUE400_COLOR;
                     }

@@ -2,7 +2,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/post_tile_model.dart';
-import '../repository/post_tile_service.dart';
+import '../repository/room_post_repository.dart';
 
 final postProvider = StateNotifierProvider<PostNotifier, AsyncValue<List<Post>>>((ref) {
   final repository = ref.watch(postRepositoryProvider);

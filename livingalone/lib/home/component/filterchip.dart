@@ -7,13 +7,11 @@ class CustomFilterButton extends StatelessWidget {
   final String label;
   final String? selectedValue;
   final VoidCallback onPressed;
-  final bool selected;
 
   const CustomFilterButton({
     required this.label,
     required this.onPressed,
     this.selectedValue,
-    this.selected = false,
     Key? key,
   }) : super(key: key);
 
@@ -23,7 +21,7 @@ class CustomFilterButton extends StatelessWidget {
       height: 28,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.black, backgroundColor: selected ? GRAY200_COLOR : Colors.white, elevation: 0,
+          foregroundColor: Colors.black, backgroundColor: Colors.white, elevation: 0,
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
