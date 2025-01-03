@@ -8,6 +8,9 @@ COPYRIGHT 2024 Moyang INC. ALL RIGHTS RESERVED.
 ### 📚 Tech Stack
 #### 💻 Development
 <img src="https://skillicons.dev/icons?i=flutter& perline="/>
+state management : Riverpod v2
+http network : Dio & Retrofit
+
 
 #### ⌛ Developed Period
 ##### 2024.12 ~
