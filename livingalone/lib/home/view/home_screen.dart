@@ -113,7 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             bottom: 0,
             right: 0,
             child: FloatingActionButton(
-              backgroundColor: BLUE400_COLOR,
+              backgroundColor: _isDialogVisible ? BLUE200_COLOR : BLUE400_COLOR,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),

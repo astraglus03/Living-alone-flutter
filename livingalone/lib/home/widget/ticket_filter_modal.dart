@@ -31,18 +31,26 @@ void showTicketFilterBottomSheet(BuildContext context) {
 }
 
 class TicketFilterBottomSheet extends ConsumerStatefulWidget {
+  final int initialTabIndex;
+
+  const TicketFilterBottomSheet({
+    Key? key,
+    this.initialTabIndex = 0,
+  }) : super(key: key);
+
   @override
   _TicketFilterBottomSheetState createState() => _TicketFilterBottomSheetState();
 }
 
 class _TicketFilterBottomSheetState extends ConsumerState<TicketFilterBottomSheet> {
-  int selectedTabIndex = 0;
+  late int selectedTabIndex;
   final List<String> tabs = ['지역', '이용권 종류'];
   late TicketFilterState currentFilter;
 
   @override
   void initState() {
     super.initState();
+    selectedTabIndex = widget.initialTabIndex;
     currentFilter = ref.read(ticketFilterProvider);
   }
 

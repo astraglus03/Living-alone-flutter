@@ -34,18 +34,26 @@ void showFilterBottomSheet(BuildContext context) {
 }
 
 class FilterBottomSheet extends ConsumerStatefulWidget {
+  final int initialTabIndex;
+
+  const FilterBottomSheet({
+    Key? key,
+    this.initialTabIndex = 0,
+  }) : super(key: key);
+
   @override
   _FilterBottomSheetState createState() => _FilterBottomSheetState();
 }
 
 class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
-  int selectedTabIndex = 0;
+  late int selectedTabIndex;
   final List<String> tabs = ['지역', '건물 유형', '매물 종류', '임대 방식', '가격', '시설', '조건'];
   late FilterState currentFilter;
-  
+
   @override
   void initState() {
     super.initState();
+    selectedTabIndex = widget.initialTabIndex;
     currentFilter = ref.read(filterProvider);
   }
 
@@ -118,7 +126,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
           Row(
             children: List.generate(
               tabs.length,
-              (index) => _buildTab(
+                  (index) => _buildTab(
                 tabs[index],
                 isSelected: selectedTabIndex == index,
                 onTap: () => setState(() => selectedTabIndex = index),
@@ -180,9 +188,9 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
   Widget _buildRefreshBottomButton() {
     return GestureDetector(
       child: Container(
-        width: 50,
-        height: 50,
-        child: SvgPicture.asset('assets/image/XS.svg')
+          width: 50,
+          height: 50,
+          child: SvgPicture.asset('assets/image/XS.svg')
       ),
       onTap: (){setState(() {
         currentFilter = FilterState();
@@ -198,7 +206,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
       width: 287,
       height: 50,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           ref.read(filterProvider.notifier).updateFilter(currentFilter);
           Navigator.pop(context);
         },
@@ -248,7 +256,7 @@ class _LocationFilterState extends ConsumerState<_LocationFilter> {
   @override
   Widget build(BuildContext context) {
     final locations = context.findAncestorStateOfType<_FilterBottomSheetState>()
-            ?.currentFilter.locations ?? {};
+        ?.currentFilter.locations ?? {};
 
     return Column(
       children: locations.entries.map((entry) {
@@ -278,7 +286,7 @@ class _BuildingTypeFilterState extends ConsumerState<_BuildingTypeFilter> {
   @override
   Widget build(BuildContext context) {
     final buildingTypes = context.findAncestorStateOfType<_FilterBottomSheetState>()
-            ?.currentFilter.buildingTypes ?? {};
+        ?.currentFilter.buildingTypes ?? {};
 
     return Column(
       children: buildingTypes.entries.map((entry) {
@@ -308,7 +316,7 @@ class _PropertyTypeFilterState extends ConsumerState<_PropertyTypeFilter> {
   @override
   Widget build(BuildContext context) {
     final propertyTypes = context.findAncestorStateOfType<_FilterBottomSheetState>()
-            ?.currentFilter.propertyTypes ?? {};
+        ?.currentFilter.propertyTypes ?? {};
 
     return Column(
       children: propertyTypes.entries.map((entry) {
@@ -338,7 +346,7 @@ class _RentalTypeFilterState extends ConsumerState<_RentalTypeFilter> {
   @override
   Widget build(BuildContext context) {
     final rentalTypes = context.findAncestorStateOfType<_FilterBottomSheetState>()
-            ?.currentFilter.rentalTypes ?? {};
+        ?.currentFilter.rentalTypes ?? {};
 
     return Column(
       children: rentalTypes.entries.map((entry) {
@@ -400,8 +408,8 @@ class _PriceRangeFilterState extends ConsumerState<_PriceRangeFilter> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    _getDepositRangeText(context.findAncestorStateOfType<_FilterBottomSheetState>()?.currentFilter.depositRange ?? RangeValues(0, 10000)),
-                                    style: AppTextStyles.caption2.copyWith(color: BLUE400_COLOR)
+                                      _getDepositRangeText(context.findAncestorStateOfType<_FilterBottomSheetState>()?.currentFilter.depositRange ?? RangeValues(0, 10000)),
+                                      style: AppTextStyles.caption2.copyWith(color: BLUE400_COLOR)
                                   ),
                                 ),
                               ),
@@ -469,8 +477,8 @@ class _PriceRangeFilterState extends ConsumerState<_PriceRangeFilter> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    _getMonthlyRangeText(context.findAncestorStateOfType<_FilterBottomSheetState>()?.currentFilter.monthlyRange ?? RangeValues(0, 100)),
-                                    style: AppTextStyles.caption2.copyWith(color: BLUE400_COLOR)
+                                      _getMonthlyRangeText(context.findAncestorStateOfType<_FilterBottomSheetState>()?.currentFilter.monthlyRange ?? RangeValues(0, 100)),
+                                      style: AppTextStyles.caption2.copyWith(color: BLUE400_COLOR)
                                   ),
                                 ),
                               ),
@@ -554,7 +562,7 @@ class _PriceRangeFilterState extends ConsumerState<_PriceRangeFilter> {
 
 class _FacilityFilter extends ConsumerStatefulWidget {
   const _FacilityFilter({Key? key}) : super(key: key);
-  
+
   @override
   _FacilityFilterState createState() => _FacilityFilterState();
 }
@@ -563,7 +571,7 @@ class _FacilityFilterState extends ConsumerState<_FacilityFilter> {
   @override
   Widget build(BuildContext context) {
     final facilities = context.findAncestorStateOfType<_FilterBottomSheetState>()?.currentFilter.facilities ?? {};
-    
+
     return Column(
       children: facilities.entries.map((entry) {
         return CommonCheckboxOption(
@@ -591,7 +599,7 @@ class _ConditionFilterState extends ConsumerState<_ConditionFilter> {
   @override
   Widget build(BuildContext context) {
     final conditions = context.findAncestorStateOfType<_FilterBottomSheetState>()
-            ?.currentFilter.conditions ?? {};
+        ?.currentFilter.conditions ?? {};
 
     return Column(
       children: conditions.entries.map((entry) {
