@@ -21,22 +21,21 @@ class FilterState {
     Map<String, bool>? conditions,
   }) : 
     this.locations = locations ?? {
-      '안심동': false,
+      '안서동': false,
       '신부동': false,
       '두정동': false,
     },
     this.buildingTypes = buildingTypes ?? {
+      '아파트': false,
       '빌라': false,
-      '원룸': false,
+      '주택': false,
       '오피스텔': false,
     },
     this.propertyTypes = propertyTypes ?? {
       '매물(신축)': false,
       '매물(구축)': false,
-      '인기매물': false,
     },
     this.rentalTypes = rentalTypes ?? {
-      '전체': false,
       '월세': false,
       '전세': false,
     },
@@ -44,11 +43,13 @@ class FilterState {
       '주차가능': false,
       '엘리베이터': false,
       'CCTV': false,
-      '애완동물': false,
+      '옥탑': false,
+      '복층': false,
     },
     this.conditions = conditions ?? {
       '즉시입주': false,
-      '공과금 포함': false,
+      '2인 거주 가능': false,
+      '여성 전용': false,
       '반려동물 가능': false,
     };
 
