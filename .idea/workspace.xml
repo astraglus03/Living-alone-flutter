@@ -5,6 +5,10 @@
   </component>
   <component name="ChangeListManager">
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> e3dfbd2a595d77c409a417f607f04fa4c364dbc2
     <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="base">
       <change afterPath="$PROJECT_DIR$/livingalone/lib/common/component/custom_multi_select_grid.dart" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/livingalone/lib/common/component/custom_price_field.dart" afterDir="false" />
@@ -37,7 +41,10 @@
       <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view_models/living_detail_screen_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/view_models/living_detail_screen_provider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/signup_nickname_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_nickname_screen.dart" afterDir="false" />
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> e3dfbd2a595d77c409a417f607f04fa4c364dbc2
     <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="fix : 검색창 곡률 수정, 필터 선택지 수정 #8">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Podfile.lock" afterDir="false" />
@@ -48,7 +55,11 @@
       <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/view/home_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view_models/room_post_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/view_models/room_post_tile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/livingalone/lib/home/widget/room_post_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/widget/room_post_list.dart" afterDir="false" />
+<<<<<<< HEAD
 >>>>>>> 0a187ca2e4c8968ba1a8d4282da3d2053d43b07b
+=======
+
+>>>>>>> e3dfbd2a595d77c409a417f607f04fa4c364dbc2
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,16 +119,23 @@
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> e3dfbd2a595d77c409a417f607f04fa4c364dbc2
     "git-widget-placeholder": "feature/handoverscreen",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/astraglus/StudioProjects/Living-alone-flutter/livingalone/lib/handover/view",
+<<<<<<< HEAD
 =======
     "git-widget-placeholder": "feature/board/8",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/cms/StudioProjects/Living-alone-flutter/livingalone/assets/image",
 >>>>>>> 0a187ca2e4c8968ba1a8d4282da3d2053d43b07b
+=======
+>>>>>>> e3dfbd2a595d77c409a417f607f04fa4c364dbc2
     "settings.editor.selected.configurable": "dart.settings",
     "show.migrate.to.gradle.popup": "false"
   }
@@ -128,6 +146,10 @@
       <recent name="$PROJECT_DIR$/livingalone/lib/handover/component" />
       <recent name="$PROJECT_DIR$/livingalone/assets/image" />
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> e3dfbd2a595d77c409a417f607f04fa4c364dbc2
       <recent name="$PROJECT_DIR$/livingalone/lib/home/component" />
       <recent name="$PROJECT_DIR$/livingalone/lib/user/view_models" />
     </key>
@@ -137,7 +159,10 @@
       <recent name="$PROJECT_DIR$/livingalone/lib/home/models" />
       <recent name="$PROJECT_DIR$/livingalone/lib/user/component" />
       <recent name="$PROJECT_DIR$/livingalone/assets/image" />
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> e3dfbd2a595d77c409a417f607f04fa4c364dbc2
       <recent name="$PROJECT_DIR$/livingalone/assets/image/listtile" />
       <recent name="$PROJECT_DIR$/livingalone/assets" />
       <recent name="$PROJECT_DIR$/livingalone/assets/fonts" />
@@ -149,7 +174,11 @@
       <recent name="$PROJECT_DIR$/livingalone/lib/common" />
       <recent name="$PROJECT_DIR$/livingalone/lib/user" />
       <recent name="C:\Users\kn055\AndroidStudioProjects\livingalone\livingalone\lib\theme" />
+<<<<<<< HEAD
 >>>>>>> 0a187ca2e4c8968ba1a8d4282da3d2053d43b07b
+=======
+
+>>>>>>> e3dfbd2a595d77c409a417f607f04fa4c364dbc2
     </key>
   </component>
   <component name="RunManager">
