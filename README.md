@@ -9,9 +9,9 @@ COPYRIGHT 2024 Moyang INC. ALL RIGHTS RESERVED.
 #### 💻 Development
 <img src="https://skillicons.dev/icons?i=flutter& perline="/>
 
-### state management : Riverpod v2
+#### state management : Riverpod v2
 
-### http network : Dio & Retrofit
+#### http network : Dio & Retrofit
 
 
 #### ⌛ Developed Period
