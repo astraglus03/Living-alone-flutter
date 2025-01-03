@@ -43,13 +43,20 @@ class DefaultLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: backgroundColor ?? WHITE100_COLOR,
-      body: child,
-      appBar: renderAppBar(context),
-      bottomNavigationBar: bottomNavigationBar,
-      floatingActionButton: floatingActionButton,
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textTheme: Theme.of(context).textTheme.apply(
+          fontFamily: 'SUIT',
+        ),
+      ),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: backgroundColor ?? WHITE100_COLOR,
+        body: child,
+        appBar: renderAppBar(context),
+        bottomNavigationBar: bottomNavigationBar,
+        floatingActionButton: floatingActionButton,
+      ),
     );
   }
 

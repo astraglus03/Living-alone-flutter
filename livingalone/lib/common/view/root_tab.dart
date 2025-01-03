@@ -19,7 +19,7 @@ class RootTab extends StatelessWidget {
     return PersistentTabView(
       tabs: [
         PersistentTabConfig(
-          screen: const HomeScreen(),
+          screen: HomeScreen(),
           item: _buildTabItem(
             imagePath: 'assets/image/home.svg',
             title: '홈',
