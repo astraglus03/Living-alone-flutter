@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'post_tile_model.dart';
+import 'room_post_model.dart';
 
 part 'ticket_post_model.g.dart';
 

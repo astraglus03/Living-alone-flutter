@@ -1,7 +1,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/post_tile_model.dart';
+import '../models/room_post_model.dart';
 import '../repository/room_post_repository.dart';
 
 final postProvider = StateNotifierProvider<PostNotifier, AsyncValue<List<Post>>>((ref) {

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../common/const/colors.dart';
 import '../../common/const/text_styles.dart';
-import '../models/post_tile_model.dart';
+import '../models/room_post_model.dart';
 import '../view_models/room_post_tile.dart';
 
 String timeAgo(DateTime dateTime) {

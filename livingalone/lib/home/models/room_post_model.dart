@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'post_tile_model.g.dart';
+part 'room_post_model.g.dart';
 
 @JsonSerializable()
 class Post {
