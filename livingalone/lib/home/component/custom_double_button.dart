@@ -64,7 +64,7 @@ class CustomDoubleButton extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(8)).r),
                       shadowColor: Colors.transparent,
                     ),
-                    child: Text('다음', style: AppTextStyles.title),
+                    child: Text('완료', style: AppTextStyles.title),
                   ),
                 ),
               ],

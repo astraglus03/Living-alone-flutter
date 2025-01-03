@@ -59,32 +59,20 @@ class LivingDetailScreenNotifier extends StateNotifier<LivingDetailScreenState> 
   }));
 
   void updateTabBarVisibility(double scrollOffset) {
-    final threshold = 580.0;
-    final opacity = ((scrollOffset - (threshold - 100)) / 100).clamp(0.0, 1.0);
+    final threshold = 620.0;
+    final transitionDistance = 150.0;
+    
+    final rawOpacity = ((scrollOffset - (threshold - transitionDistance)) / transitionDistance)
+        .clamp(0.0, 1.0);
+    final opacity = Curves.easeInOut.transform(rawOpacity);
 
-    if (opacity != state.tabBarOpacity) {
+    if ((opacity - state.tabBarOpacity).abs() > 0.01) {
       state = state.copyWith(
         tabBarOpacity: opacity,
-        showTabBar: opacity > 0,
+        showTabBar: opacity > 0.01,
       );
     }
   }
-
-  // void updateTabBarVisibility(double scrollOffset) {
-  //   final threshold = 620.0;
-  //   final transitionDistance = 150.0;
-  //
-  //   final rawOpacity = ((scrollOffset - (threshold - transitionDistance)) / transitionDistance)
-  //       .clamp(0.0, 1.0);
-  //   final opacity = Curves.easeInOut.transform(rawOpacity);
-  //
-  //   if ((opacity - state.tabBarOpacity).abs() > 0.01) {
-  //     state = state.copyWith(
-  //       tabBarOpacity: opacity,
-  //       showTabBar: opacity > 0.01,
-  //     );
-  //   }
-  // }
 
   void scrollToSection(String title, ScrollController scrollController) {
     final key = state.sectionKeys[title];

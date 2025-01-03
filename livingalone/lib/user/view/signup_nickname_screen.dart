@@ -32,7 +32,7 @@ class _SignupNicknameScreenState extends State {
 
   void checkNicknameDuplicate() {
     final nickname = nicknameController.text;
-
+    
     if (nickname.isEmpty) {
       setState(() {
         errorMessage = '닉네임을 입력해주세요';
@@ -41,7 +41,7 @@ class _SignupNicknameScreenState extends State {
       });
       return;
     }
-
+    
     if (!isValidNickname(nickname)) {
       setState(() {
         errorMessage = '한글, 영어, 숫자 조합으로 2~8자로 입력해주세요';
@@ -50,13 +50,15 @@ class _SignupNicknameScreenState extends State {
       });
       return;
     }
-
+    
     // TODO: 임의로 duplicate는 중복 되도록 설정. api를 통해 중복확인 수정 필요.
     setState(() {
       isDuplicateChecked = true;
       isDuplicateValid = nickname != "duplicate";
       if (!isDuplicateValid) {
         errorMessage = '이미 사용중인 닉네임입니다';
+      } else {
+        errorMessage = null;
       }
     });
   }

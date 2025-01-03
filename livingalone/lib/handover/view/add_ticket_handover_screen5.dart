@@ -11,25 +11,23 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-class AddRoomHandoverScreen8 extends ConsumerStatefulWidget {
-  const AddRoomHandoverScreen8({super.key});
+class AddTicketHandoverScreen5 extends ConsumerStatefulWidget {
+  const AddTicketHandoverScreen5({super.key});
 
   @override
-  ConsumerState<AddRoomHandoverScreen8> createState() => _AddRoomHandoverScreen1State();
+  ConsumerState<AddTicketHandoverScreen5> createState() => _AddRoomHandoverScreen1State();
 }
 
-class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8> {
-  final titleController = TextEditingController();
+class _AddRoomHandoverScreen1State extends ConsumerState<AddTicketHandoverScreen5> {
+  final detailAddressController = TextEditingController();
   final titleFocus = FocusNode();
-  final detailAddressFocus = FocusNode();
   final List<File> _images = [];
   final Set<int> _selectedImages = {};
   final _scrollController = ScrollController();
   final _introduceController = TextEditingController();
-  final _introduceFocus = FocusNode();
+  final introduceFocus = FocusNode();
   final _introduceKey = GlobalKey();
   final _titleKey = GlobalKey();
-  final introduceFocus = FocusNode();
 
   Future<void> _pickImage() async {
     if (_images.length >= 10) {
@@ -78,12 +76,10 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
 
   @override
   void dispose() {
-    titleController.dispose();
+    detailAddressController.dispose();
     titleFocus.dispose();
-    detailAddressFocus.dispose();
     _scrollController.dispose();
     _introduceController.dispose();
-    _introduceFocus.dispose();
     introduceFocus.dispose();
     super.dispose();
   }
@@ -191,8 +187,8 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
     return DefaultLayout(
       title: '자취방 양도하기',
       showCloseButton: true,
-      currentStep: 8,
-      totalSteps: 8,
+      currentStep: 4,
+      totalSteps: 4,
       child: Stack(
         children: [
           GestureDetector(
@@ -204,15 +200,15 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
                 padding: EdgeInsets.only(
                   left: 24.w,
                   right: 24.w,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 45,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 90,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     20.verticalSpace,
-                    Text('양도할 방의 사진과\n소개 글을 올려주세요', style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR),),
+                    Text('양도할 이용권의 시설을', style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR),),
                     4.verticalSpace,
-                    Text('사진과 소개 글은 자세히 올릴수록 효과적 이에요.', style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),),
+                    Text('소개하는 사진과 글을 올려주세요.', style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),),
                     20.verticalSpace,
                     Row(
                       children: [
@@ -251,18 +247,18 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
                       ),
                       child: TextFormField(
                         key: _titleKey,
-                        controller: titleController,
-                        focusNode: detailAddressFocus,
+                        controller: detailAddressController,
+                        focusNode: titleFocus,
                         onTap: () => _scrollToField(_titleKey),
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
                             style: ButtonStyle(
                               overlayColor: MaterialStateProperty.all(Colors.transparent),
                             ),
-                            onPressed: titleController.clear,
+                            onPressed: detailAddressController.clear,
                             icon: SvgPicture.asset('assets/image/signupDelete.svg',fit: BoxFit.cover,),
                           ),
-                          hintText: '모양아파트 101동, 모양빌라',
+                          hintText: '예) 모양헬스 강남점, 모양독서실 압구정점',
                           hintStyle: AppTextStyles.subtitle.copyWith(
                             color: GRAY400_COLOR,
                           ),
@@ -301,13 +297,13 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
                       child: TextFormField(
                         key: _introduceKey,
                         controller: _introduceController,
-                        focusNode: _introduceFocus,
+                        focusNode: introduceFocus,
                         onTap: (){
                           _scrollToField(_introduceKey);
                         },
                         maxLines: null,
                         decoration: InputDecoration(
-                          hintText: '방의 특징과 장점을 소개해 주세요. 자세한 정보를\n제공하면 더 많은 관심을 받을 수 있어요.',
+                          hintText: '이용권의 종류와 특징을 자세히 소개해 주세요. 양도 수수료 무담 주체 등 추가 정보를 제공하면 더 많은 관심을 받을 수 있어요.',
                           hintStyle: AppTextStyles.subtitle.copyWith(
                             color: GRAY400_COLOR,
                           ),

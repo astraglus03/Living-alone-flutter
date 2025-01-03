@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/view/root_tab.dart';
 import 'package:livingalone/common/view/splash_screen.dart';
-import 'package:livingalone/home/component/post_type.dart';
+import 'package:livingalone/handover/view/add_room_handover_screen3.dart';
+import 'package:livingalone/handover/view/add_room_handover_screen6.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen7.dart';
-import 'package:livingalone/handover/view/add_ticket_handover_screen1.dart';
+import 'package:livingalone/handover/view/add_room_handover_screen8.dart';
+import 'package:livingalone/handover/view/add_ticket_handover_screen2.dart';
+import 'package:livingalone/handover/view/add_ticket_handover_screen4.dart';
+import 'package:livingalone/handover/view/add_ticket_handover_screen5.dart';
+import 'package:livingalone/handover/view/check_room_handover_screen.dart';
+import 'package:livingalone/handover/view/check_ticket_handover_screen.dart';
+import 'package:livingalone/home/component/post_type.dart';
 import 'package:livingalone/home/view/living_detail_screen.dart';
 import 'package:livingalone/user/view/find_password_auth_screen.dart';
 import 'package:livingalone/user/view/find_password_screen.dart';
@@ -20,6 +27,8 @@ import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
 import 'package:livingalone/user/view/signup_terms_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
+import 'handover/view/add_ticket_handover_screen3.dart';
 
 void main() {
   initializeDateFormatting('ko_KR').then((_) => runApp(ProviderScope(child:MyApp())));
@@ -49,8 +58,8 @@ class MyApp extends ConsumerWidget {
               fontFamily: 'SUIT',
             ),
             debugShowCheckedModeBanner: false,
-            home: LivingDetailScreen(postType: PostType.room),
-            // home: LoginScreen(),
+            // home: LivingDetailScreen(postType: PostType.room),
+            home: AddTicketHandoverScreen5(),
           ),
         );
       }

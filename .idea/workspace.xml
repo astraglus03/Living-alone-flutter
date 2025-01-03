@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="base">
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/component/custom_multi_select_grid.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/component/custom_price_field.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/component/custom_select_list.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_handover_base_screen1.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_room_handover_screen1.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_room_handover_screen2.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_room_handover_screen3.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_room_handover_screen4.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_room_handover_screen5.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_room_handover_screen6.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/check_handover_base_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/check_room_handover_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/check_ticket_handover_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/handover/view/add_room_handover_screen7.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_room_handover_screen7.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/handover/view/add_room_handover_screen8.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_room_handover_screen8.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/handover/view/add_ticket_handover_screen1.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_ticket_handover_screen1.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/handover/view/add_ticket_handover_screen2.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_ticket_handover_screen2.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/handover/view/add_ticket_handover_screen3.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_ticket_handover_screen3.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/handover/view/add_ticket_handover_screen4.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_ticket_handover_screen4.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/handover/view/check_handover_screen.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/component/custom_double_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/component/custom_double_button.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view/add_room_handover_screen1.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view/add_room_handover_screen2.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/handover/view/add_ticket_handover_screen5.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view/add_room_handover_screen3.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view/add_room_handover_screen4.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view/add_room_handover_screen5.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view/add_room_handover_screen6.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view_models/living_detail_screen_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/view_models/living_detail_screen_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/signup_nickname_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_nickname_screen.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feature" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;mstagon&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/astraglus03/Living-alone-flutter.git&quot;,
+    &quot;accountId&quot;: &quot;9b9455cf-bc5b-4562-8232-556450a3ee2b&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2kYkcfbFBjpp2ABuAXRUiA9J6w6" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Flutter.main.dart.executor": "Run",
+    "Flutter.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "feature/handoverscreen",
+    "io.flutter.reload.alreadyRun": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/astraglus/StudioProjects/Living-alone-flutter/livingalone/lib/handover/view",
+    "settings.editor.selected.configurable": "dart.settings",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/livingalone/lib/handover/view" />
+      <recent name="$PROJECT_DIR$/livingalone/lib/handover/component" />
+      <recent name="$PROJECT_DIR$/livingalone/assets/image" />
+      <recent name="$PROJECT_DIR$/livingalone/lib/home/component" />
+      <recent name="$PROJECT_DIR$/livingalone/lib/user/view_models" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/livingalone/lib/common/component" />
+      <recent name="$PROJECT_DIR$/livingalone/lib/handover/view" />
+      <recent name="$PROJECT_DIR$/livingalone/lib/home/models" />
+      <recent name="$PROJECT_DIR$/livingalone/lib/user/component" />
+      <recent name="$PROJECT_DIR$/livingalone/assets/image" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/livingalone/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="" />
+      <created>1723467979840</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1723467979840</updated>
+    </task>
+    <task id="LOCAL-00001" summary="base">
+      <option name="closed" value="true" />
+      <created>1723469784011</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1723469784011</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="base" />
+    <option name="LAST_COMMIT_MESSAGE" value="base" />
+  </component>
+</project>
