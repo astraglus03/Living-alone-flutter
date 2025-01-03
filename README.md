@@ -17,7 +17,7 @@ COPYRIGHT 2024 Moyang INC. ALL RIGHTS RESERVED.
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://github.com/astrraglus03"><img src="https://avatars.githubusercontent.com/u/104690434?v=4" width="100px;" alt=""/><br /><sub><b>김건동</b></sub></a><br /><sub><b>개발</b></sub></td>
+      <td align="center"><a href="https://github.com/astraglus03"><img src="https://avatars.githubusercontent.com/u/104690434?v=4" width="100px;" alt=""/><br /><sub><b>김건동</b></sub></a><br /><sub><b>개발</b></sub></td>
       <td align="center"><a href="https://github.com/mstagon"><img src="https://avatars.githubusercontent.com/u/83182868?v=4" width="100px;" alt=""/><br /><sub><b>최민석</b></sub></a><br /><sub><b>개발</b></sub></td>
     </tr>
   </tbody>
