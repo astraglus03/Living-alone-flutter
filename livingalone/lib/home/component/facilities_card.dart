@@ -61,7 +61,7 @@ class FacilitiesCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SvgPicture.asset(
-                      'assets/image/${_getAssetName(facility)}.svg',
+                      'assets/icons/${_getAssetName(facility)}.svg',
                       width: 14.w,
                       height: 14.h,
                     ),

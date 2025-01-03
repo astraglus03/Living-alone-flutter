@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:livingalone/common/component/colored_image.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
@@ -40,8 +39,9 @@ class _SignupTermsScreenState extends State<SignupTermsScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '이용동의',
-      isNotFirstScreen: true,
-      actionString: '1',
+      showBackButton: false,
+      currentStep: 1,
+      totalSteps: 4,
       child: Stack(
         children: [
           Container(
@@ -84,16 +84,15 @@ class _SignupTermsScreenState extends State<SignupTermsScreen> {
                   child: Container(
                     width: 345.w,
                     height: 56.h,
-                    padding: EdgeInsets.all(12),
-                    // padding: REdgeInsets.all(12),
+                    // padding: EdgeInsets.all(12),
+                    padding: REdgeInsets.all(12),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(12)).w
                     ),
                     child: Row(
                       children: [
                         SizedBox(
-                          // 기본적으로 Row에도 길이가 존재하여 피그마대로 진행할경우 overflow 발생함. 최적은 265
-                          width: 265.w,
+                          width: 264.w,
                           height: 24.h,
                           child: Row(
                             children: [

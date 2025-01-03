@@ -3,8 +3,8 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 
 class StatItem extends StatelessWidget {
-  final String label;
-  final int value;
+  final String label; // 댓글, 채팅, 관심
+  final int value; // 값
 
   const StatItem({
     super.key,

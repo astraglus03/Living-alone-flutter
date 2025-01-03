@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/view/root_tab.dart';
 import 'package:livingalone/common/view/splash_screen.dart';
-import 'package:livingalone/home/models/post_type.dart';
+import 'package:livingalone/home/component/post_type.dart';
+import 'package:livingalone/handover/view/add_room_handover_screen7.dart';
+import 'package:livingalone/handover/view/add_ticket_handover_screen1.dart';
 import 'package:livingalone/home/view/living_detail_screen.dart';
 import 'package:livingalone/user/view/find_password_auth_screen.dart';
 import 'package:livingalone/user/view/find_password_screen.dart';
@@ -17,9 +19,10 @@ import 'package:livingalone/user/view/signup_authentication_screen.dart';
 import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
 import 'package:livingalone/user/view/signup_terms_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  runApp(ProviderScope(child: MyApp()));
+  initializeDateFormatting('ko_KR').then((_) => runApp(ProviderScope(child:MyApp())));
 }
 
 class MyApp extends ConsumerWidget {
@@ -46,7 +49,8 @@ class MyApp extends ConsumerWidget {
               fontFamily: 'SUIT',
             ),
             debugShowCheckedModeBanner: false,
-            home: LivingDetailScreen(postType: PostType.TICKET,),
+            home: LivingDetailScreen(postType: PostType.room),
+            // home: LoginScreen(),
           ),
         );
       }

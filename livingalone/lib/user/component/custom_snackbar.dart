@@ -9,34 +9,36 @@ class CustomSnackBar {
     required BuildContext context,
     required String message,
     required String imagePath,
-    Color backgroundColor = GRAY500_COLOR,
-    Duration duration = const Duration(seconds: 2),
-    EdgeInsetsGeometry? margin,
+    double? bottomOffset,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: backgroundColor,
-        duration: duration,
-        padding: EdgeInsets.symmetric(horizontal: 12.0).r,
-        shape: RoundedRectangleBorder(
-          borderRadius:const BorderRadius.all(Radius.circular(12)).w ,
+        backgroundColor: GRAY500_COLOR,
+        elevation: 0,
+        content: Row(
+          children: [
+            SvgPicture.asset(
+              imagePath,
+            ),
+            8.horizontalSpace,
+            Text(
+              message,
+              style: AppTextStyles.body2.copyWith(
+                color: WHITE100_COLOR,
+              ),
+            ),
+          ],
         ),
         behavior: SnackBarBehavior.floating,
-        margin: margin ?? const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 60.0).r,
-        elevation: 0,
-        content: SizedBox(
-          height: 48.h,
-          child: Row(
-            children: [
-              SvgPicture.asset(imagePath),
-              10.horizontalSpace,
-              Text(
-                message,
-                style:AppTextStyles.body1.copyWith(color: WHITE100_COLOR),
-              ),
-            ],
-          ),
+        margin: EdgeInsets.only(
+          left: 24.w,
+          right: 24.w,
+          bottom: bottomOffset ?? 60.h,
         ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        duration: const Duration(seconds: 2),
       ),
     );
   }

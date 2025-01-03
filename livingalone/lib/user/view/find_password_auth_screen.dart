@@ -1,64 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:livingalone/common/component/colored_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
-import 'package:livingalone/user/component/component_button.dart';
 import 'package:livingalone/user/component/component_button2.dart';
-import 'package:livingalone/user/component/custom_agree_button.dart';
 import 'package:livingalone/user/component/custom_button.dart';
-import 'package:livingalone/user/component/custom_input_field.dart';
-import 'package:livingalone/user/component/custom_signup_field.dart';
 import 'package:livingalone/user/component/custom_snackbar.dart';
-import 'package:livingalone/user/view/signup_authentication_screen.dart';
-import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
+import 'package:livingalone/user/view/redesign_password_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/user/view_models/timer_provider.dart';
 
-class FindPasswordAuthScreen extends StatefulWidget {
+class FindPasswordAuthScreen extends ConsumerStatefulWidget {
   static String get routeName => 'findPwAuth';
 
   const FindPasswordAuthScreen({super.key});
 
   @override
-  State<FindPasswordAuthScreen> createState() => _FindPasswordAuthScreenState();
+  ConsumerState<FindPasswordAuthScreen> createState() => _FindPasswordAuthScreenState();
 }
 
-class _FindPasswordAuthScreenState extends State<FindPasswordAuthScreen> {
+class _FindPasswordAuthScreenState extends ConsumerState<FindPasswordAuthScreen> {
   final TextEditingController controller = TextEditingController();
+  final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
-  String authNumber ='';
+  String authNumber = '';
   bool isPwValid = false;
 
   @override
+  void initState() {
+    super.initState();
+    // 페이지 시작과 동시에 타이머 시작
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(timerProvider.notifier).startTimer();
+    });
+  }
+
+  @override
   void dispose() {
-    // TODO: implement dispose
     controller.dispose();
     focusNode.dispose();
     super.dispose();
   }
 
   void validatePassword(String password) {
-    if (password.isEmpty) {
-      setState(() {
-        isPwValid = false;
-      });
-      return;
-    }
-
-    if (password.length < 6 || !RegExp(r'[0-9]').hasMatch(password)) {
-      setState(() {
-        isPwValid = false;
-      });
-      return;
-    }
-
     setState(() {
-      isPwValid = true;
+      isPwValid = password.length == 6 && RegExp(r'[0-9]').hasMatch(password);
     });
+  }
+
+  void _showErrorSnackBar() {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    
+    CustomSnackBar.show(
+      context: context,
+      message: '인증 번호가 불일치합니다. 다시 시도해 주세요.',
+      imagePath: 'assets/image/x.svg',
+      bottomOffset: bottomInset > 0 ? bottomInset + 40.h : null,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final timerState = ref.watch(timerProvider);
+    final timerNotifier = ref.read(timerProvider.notifier);
+
     return DefaultLayout(
       title: '비밀번호 찾기',
       appbarTitleBackgroundColor: BLUE100_COLOR,
@@ -66,55 +71,80 @@ class _FindPasswordAuthScreenState extends State<FindPasswordAuthScreen> {
       appbarBorderColor: BLUE200_COLOR,
       child: Stack(
         children: [
-          Container(
-            // width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            margin: EdgeInsets.symmetric(horizontal: 24).r,
-            child: Column(
-              children: [
-                20.verticalSpace,
-                Text('가입하신 이메일을 입력해주세요.',style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),textAlign: TextAlign.center,),
-                20.verticalSpace,
-                ComponentButton2(
-                  controller: controller,
-                  hintText: '숫자 6자리 입력',
-                  type:  TextInputType.number,
-                  onPressed: controller.clear,
-                  onChanged: validatePassword,
-                ),
-                4.verticalSpace,
-                Row(
+          GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: SingleChildScrollView(
+              controller: scrollController,
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                margin: EdgeInsets.symmetric(horizontal: 24).r,
+                child: Column(
                   children: [
-                    Text('인증 번호를 받지 못하셨나요?', style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),),
-                    6.horizontalSpace,
-                    Text('다시보내기',style: AppTextStyles.caption2.copyWith(
-                      color: ERROR_TEXT_COLOR,
-                      decoration: TextDecoration.underline,
-                      decorationColor: ERROR_TEXT_COLOR,
-                      decorationStyle: TextDecorationStyle.solid,
-                      decorationThickness: 0.07 * 12.sp,
-                    ),)
+                    20.verticalSpace,
+                    Text(
+                      '가입하신 이메일을 입력해주세요.',
+                      style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
+                      textAlign: TextAlign.center,
+                    ),
+                    20.verticalSpace,
+                    ComponentButton2(
+                      controller: controller,
+                      hintText: '숫자 6자리 입력',
+                      type: TextInputType.number,
+                      onPressed: controller.clear,
+                      onChanged: validatePassword,
+                      backgroundColor: GRAY100_COLOR,
+                      timerText: timerNotifier.formatTime(),
+                      showTimer: timerState.isActive,
+                    ),
+                    4.verticalSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '인증 번호를 받지 못하셨나요?',
+                              style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
+                            ),
+                            6.horizontalSpace,
+                            GestureDetector(
+                              onTap: timerState.isActive ? null : timerNotifier.startTimer,
+                              child: Text(
+                                '다시보내기',
+                                style: AppTextStyles.caption2.copyWith(
+                                  color: timerState.isActive ? GRAY400_COLOR : ERROR_TEXT_COLOR,
+                                  decoration: timerState.isActive ? null : TextDecoration.underline,
+                                  decorationColor: ERROR_TEXT_COLOR,
+                                  decorationStyle: TextDecorationStyle.solid,
+                                  decorationThickness: 0.07 * 12.sp,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
-                )
-              ],
+                ),
+              ),
             ),
           ),
           CustomButton(
-              backgroundColor: BLUE400_COLOR,
-              foregroundColor: WHITE100_COLOR,
-              disabledBackgroundColor: WHITE100_COLOR,
-              disabledForegroundColor: GRAY400_COLOR,
-              text: '확인',
-              textStyle: AppTextStyles.title,
-              isEnabled: isPwValid,
-              onTap: (){
-                // TODO: 인증번호 전송하는 로직
-                CustomSnackBar.show(
-                    context: context,
-                    message: '인증 번호가 불일치합니다. 다시 시도해 주세요.',
-                    imagePath: 'assets/image/x.svg'
-                );
-              }
+            backgroundColor: BLUE400_COLOR,
+            foregroundColor: WHITE100_COLOR,
+            disabledBackgroundColor: WHITE100_COLOR,
+            disabledForegroundColor: GRAY400_COLOR,
+            text: '확인',
+            textStyle: AppTextStyles.title,
+            isEnabled: isPwValid,
+            // onTap: _showErrorSnackBar,
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) => RedesignPasswordScreen()));
+            },
           ),
         ],
       ),

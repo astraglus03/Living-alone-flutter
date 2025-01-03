@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
-import 'package:livingalone/home/models/post_type.dart';
+import 'package:livingalone/home/component/post_type.dart';
 import 'package:ticket_clippers/ticket_clippers.dart';
 import 'package:dotted_line/dotted_line.dart';
 
 class RentInfoCard extends StatelessWidget {
-  final PostType postType;
-  final int leftFee;
-  final int rightFee;
+  final PostType postType; // 티켓 카드
+  final int leftFee; // 왼쪽 가격 or 횟수
+  final int rightFee; // 관리비 가격 or 양도비 가격
 
   const RentInfoCard({
     required this.postType,
@@ -44,12 +44,12 @@ class RentInfoCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  postType == PostType.ROOM ? '월세' : '남은 횟수',
+                  postType == PostType.room ? '월세' : '남은 횟수',
                   style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
                 ),
                 6.verticalSpace,
                 Text(
-                  '$leftFee ${postType == PostType.ROOM ? '만원' : '회'}',
+                  '$leftFee ${postType == PostType.room ? '만원' : '회'}',
                   style: AppTextStyles.title.copyWith(color: BLUE400_COLOR),
                 ),
               ],
@@ -89,7 +89,7 @@ class RentInfoCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        postType == PostType.ROOM ? '관리비' : '양도비',
+                        postType == PostType.room ? '관리비' : '양도비',
                         style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
                       ),
                       6.verticalSpace,

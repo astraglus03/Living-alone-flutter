@@ -5,6 +5,7 @@ import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
+import 'package:livingalone/user/view/signup_complete_screen.dart';
 
 class SignupNicknameScreen extends StatefulWidget {
   static String get routeName => 'nickname';
@@ -43,7 +44,7 @@ class _SignupNicknameScreenState extends State {
 
     if (!isValidNickname(nickname)) {
       setState(() {
-        errorMessage = '닉네임은 한글, 영어, 숫자 조합으로 10자 이하로 입력해주세요';
+        errorMessage = '한글, 영어, 숫자 조합으로 2~8자로 입력해주세요';
         isDuplicateChecked = false;
         isDuplicateValid = false;
       });
@@ -52,17 +53,16 @@ class _SignupNicknameScreenState extends State {
 
     // TODO: 임의로 duplicate는 중복 되도록 설정. api를 통해 중복확인 수정 필요.
     setState(() {
-      errorMessage = null;
       isDuplicateChecked = true;
       isDuplicateValid = nickname != "duplicate";
       if (!isDuplicateValid) {
-        errorMessage = '이미 사용 중인 닉네임입니다';
+        errorMessage = '이미 사용중인 닉네임입니다';
       }
     });
   }
 
   bool isValidNickname(String nickname) {
-    final nicknameRegex = RegExp(r'^[가-힣a-zA-Z0-9]{1,10}$');
+    final nicknameRegex = RegExp(r'^[가-힣a-zA-Z0-9]{2,8}$');
     return nicknameRegex.hasMatch(nickname);
   }
 
@@ -70,7 +70,8 @@ class _SignupNicknameScreenState extends State {
   Widget build(BuildContext context) {
     return DefaultLayout(
       backgroundColor: WHITE100_COLOR,
-      actionString: '4',
+      currentStep: 4,
+      totalSteps: 4,
       title: '회원가입',
       child: Stack(
         children: [
@@ -94,11 +95,10 @@ class _SignupNicknameScreenState extends State {
                     CustomSignupField(
                       controller: nicknameController,
                       focusNode: nicknameFocus,
-                      hintText: '10자 이하 입력(한글, 영어, 숫자 가능)',
+                      hintText: '2~8자 입력(한글, 영어, 숫자 가능)',
                       type: TextInputType.text,
                       subTitle: '닉네임',
                       submitButtonTitle: '중복확인',
-                      // FIXME: 피그마 73
                       width: 74.w,
                       onPressed: () {
                         nicknameController.clear();
@@ -110,6 +110,7 @@ class _SignupNicknameScreenState extends State {
                       },
                       errorText: errorMessage,
                       onTap: checkNicknameDuplicate,
+                      buttonBackground: BLUE100_COLOR,
                     ),
                   ],
                 ),
@@ -123,7 +124,12 @@ class _SignupNicknameScreenState extends State {
             textStyle: AppTextStyles.title,
             onTap: () {
               if (isDuplicateChecked && isDuplicateValid) {
-                // TODO: 페이지 라우팅 필요.
+                // TODO: 페이지 라우팅
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => SignupCompleteScreen()),
+                      (route) => false,
+                );
               } else {
                 setState(() {
                   errorMessage = '닉네임 중복 확인을 완료해주세요';

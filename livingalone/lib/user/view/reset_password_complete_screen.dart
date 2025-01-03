@@ -5,6 +5,7 @@ import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/user/view/login_screen.dart';
 
 class ResetPasswordCompleteScreen extends StatelessWidget {
   static String get routeName => 'passwordFinish';
@@ -35,7 +36,13 @@ class ResetPasswordCompleteScreen extends StatelessWidget {
               foregroundColor: WHITE100_COLOR,
               text: '확인',
               textStyle: AppTextStyles.title,
-              onTap: () {},
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => LoginScreen()),
+                  (route) => false,
+                );
+              },
             )
           ],
         ),

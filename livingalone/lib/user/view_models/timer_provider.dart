@@ -23,13 +23,13 @@ class TimerState {
 
 class TimerNotifier extends StateNotifier<TimerState> {
   Timer? _timer;
-  
-  TimerNotifier() : super(TimerState(isActive: false, timeLeft: 180));
+
+  TimerNotifier() : super(TimerState(isActive: false, timeLeft: 5));  // 테스트를 위해 5초로 설정
 
   void startTimer() {
     _timer?.cancel();
-    state = TimerState(isActive: true, timeLeft: 180);
-    
+    state = TimerState(isActive: true, timeLeft: 5);
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (state.timeLeft > 0) {
         state = state.copyWith(timeLeft: state.timeLeft - 1);
@@ -47,7 +47,7 @@ class TimerNotifier extends StateNotifier<TimerState> {
   String formatTime() {
     int minutes = state.timeLeft ~/ 60;
     int seconds = state.timeLeft % 60;
-    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -59,4 +59,4 @@ class TimerNotifier extends StateNotifier<TimerState> {
 
 final timerProvider = StateNotifierProvider<TimerNotifier, TimerState>((ref) {
   return TimerNotifier();
-}); 
+});

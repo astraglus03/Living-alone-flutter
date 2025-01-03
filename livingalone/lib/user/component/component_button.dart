@@ -63,7 +63,7 @@ class ComponentButton extends StatelessWidget {
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),
                 onPressed: onPressed,
-                icon: SvgPicture.asset('assets/image/signupDelete.svg'),
+                icon: SvgPicture.asset('assets/image/signupDelete.svg',fit: BoxFit.cover,),
               ),
             ],
           ),

@@ -10,8 +10,6 @@ class CustomSignupField extends StatelessWidget {
   final TextEditingController? controller;
   final String hintText;
   final TextInputType type;
-
-  // final String validateText;
   final String subTitle;
   final String submitButtonTitle;
   final double width;
@@ -32,7 +30,6 @@ class CustomSignupField extends StatelessWidget {
     this.controller,
     required this.hintText,
     required this.type,
-    // required this.validateText,
     required this.subTitle,
     required this.submitButtonTitle,
     required this.width, // FIXME: 피그마 기준 104인데 106으로 설정해야함.
@@ -79,9 +76,20 @@ class CustomSignupField extends StatelessWidget {
           ),
           10.verticalSpace,
           if (errorText != null)
-            Text(errorText!,
-                style:
-                    AppTextStyles.caption2.copyWith(color: ERROR_TEXT_COLOR)),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset('assets/image/warning.svg',),
+                    4.horizontalSpace,
+                    Text(errorText!,
+                        style:
+                            AppTextStyles.caption2.copyWith(color: ERROR_TEXT_COLOR)),
+                  ],
+                ),
+                10.verticalSpace,
+              ],
+            ),
           SizedBox(
             width: width.w,
             height: 32.h,

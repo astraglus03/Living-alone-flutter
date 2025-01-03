@@ -5,6 +5,7 @@ import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/user/view/signup_nickname_screen.dart';
 
 class SignupSettingPasswordScreen extends StatefulWidget {
   static String get routeName => 'setPw';
@@ -56,7 +57,8 @@ class _SignupSettingPasswordScreenState extends State<SignupSettingPasswordScree
   Widget build(BuildContext context) {
     return DefaultLayout(
       backgroundColor: WHITE100_COLOR,
-      actionString: '3',
+      currentStep: 3,
+      totalSteps: 4,
       title: '회원가입',
       child: Stack(
         children: [
@@ -68,7 +70,7 @@ class _SignupSettingPasswordScreenState extends State<SignupSettingPasswordScree
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               controller: _scrollController,
               child: Container(
-                height: MediaQuery.of(context).size.height-100,
+                height: MediaQuery.of(context).size.height,
                 padding: EdgeInsets.symmetric(horizontal: 24.0.w),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -93,7 +95,7 @@ class _SignupSettingPasswordScreenState extends State<SignupSettingPasswordScree
                         });
                       },
                       // FIXME: 피그마 101 113
-                      width: isLooking ? 102.w : 114.w,
+                      width: isLooking ? 105.w : 117.w,
                       errorText: errorMessage,
                       onChanged: (value) {
                         validatePassword(value);
@@ -117,6 +119,7 @@ class _SignupSettingPasswordScreenState extends State<SignupSettingPasswordScree
             onTap: () {
               if (isPwValid) {
                 //TODO: 페이지 라우팅 부분
+                Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SignupNicknameScreen()));
               } else {
                 validatePassword(mobileNumController.text);
               }

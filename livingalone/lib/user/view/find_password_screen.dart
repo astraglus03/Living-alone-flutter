@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:livingalone/common/component/colored_image.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
-import 'package:livingalone/user/component/component_button.dart';
 import 'package:livingalone/user/component/component_button2.dart';
-import 'package:livingalone/user/component/custom_agree_button.dart';
 import 'package:livingalone/user/component/custom_button.dart';
-import 'package:livingalone/user/component/custom_input_field.dart';
-import 'package:livingalone/user/component/custom_signup_field.dart';
-import 'package:livingalone/user/view/signup_authentication_screen.dart';
-import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
+import 'package:livingalone/user/view/find_password_auth_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FindPasswordScreen extends StatefulWidget {
@@ -78,16 +72,17 @@ class _FindPasswordScreenState extends State<FindPasswordScreen> {
             ),
           ),
           CustomButton(
-            backgroundColor: BLUE400_COLOR,
-            foregroundColor: WHITE100_COLOR,
-            disabledBackgroundColor: WHITE100_COLOR,
-            disabledForegroundColor: GRAY400_COLOR,
-            text: '인증메일 전송',
-            textStyle: AppTextStyles.title,
-            isEnabled: isButtonEnabled,
-            onTap: (){
-              // TODO: 인증번호 전송하는 로직
-            }
+              backgroundColor: BLUE400_COLOR,
+              foregroundColor: WHITE100_COLOR,
+              disabledBackgroundColor: WHITE100_COLOR,
+              disabledForegroundColor: GRAY400_COLOR,
+              text: '인증메일 전송',
+              textStyle: AppTextStyles.title,
+              isEnabled: isButtonEnabled,
+              onTap: (){
+                // TODO: 인증번호 전송하는 로직 임시로 성공 가정
+                Navigator.of(context).push(MaterialPageRoute(builder: (_)=> FindPasswordAuthScreen()));
+              }
           ),
         ],
       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:livingalone/common/component/common_button.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

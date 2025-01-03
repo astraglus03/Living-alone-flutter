@@ -3,6 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+const double SCROLL_THRESHOLD = 620.0;
+const double TAB_OPACITY_RANGE = 100.0;
+const double SECTION_VISIBILITY_TOP = 180.0;
+const double SECTION_VISIBILITY_BOTTOM = -100.0;
+
 class AppTextStyles {
   static TextStyle heading1 = TextStyle(
     fontFamily: 'SUIT',
