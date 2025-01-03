@@ -27,9 +27,13 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return Positioned(
-      bottom: 34,
       left: 24,
+      bottom: bottomInset > 0
+          ? bottomInset + 10  // 키보드가 올라왔을 때는 10
+          : 34,              // 키보드가 없을 때는 34
       child: CommonButton(
         child: ElevatedButton(
           onPressed: isEnabled ? onTap : null,
@@ -43,25 +47,25 @@ class CustomButton extends StatelessWidget {
           // ),
           // TODO: 자체 material때문에 반응이 느린것처럼 보임. 아래는 애니메이션 없음.
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-              if (states.contains(MaterialState.disabled)) {
-                return disabledBackgroundColor ?? backgroundColor;
-              }
-              return backgroundColor;
-            }),
-            foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-              if (states.contains(MaterialState.disabled)) {
-                return disabledForegroundColor ?? foregroundColor;
-              }
-              return foregroundColor;
-            }),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+              backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return disabledBackgroundColor ?? backgroundColor;
+                }
+                return backgroundColor;
+              }),
+              foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return disabledForegroundColor ?? foregroundColor;
+                }
+                return foregroundColor;
+              }),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
               ),
-            ),
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            animationDuration: Duration.zero
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              animationDuration: Duration.zero
           ),
           child: Text(
             text,

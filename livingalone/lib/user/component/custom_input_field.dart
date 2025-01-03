@@ -9,7 +9,6 @@ class CustomInputField extends StatelessWidget {
   final String? errorText;
   final controller;
   final Iterable<String>? autofillHint;
-  // final TextInputAction? textInputAction;
   final VoidCallback? function;
   final ValueChanged<String>? onChanged;
   final double? width;
@@ -22,7 +21,6 @@ class CustomInputField extends StatelessWidget {
     this.errorText,
     this.controller,
     this.autofillHint,
-    // this.textInputAction,
     this.function,
     this.onChanged, this.width, this.height,
   });

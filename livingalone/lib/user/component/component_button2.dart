@@ -12,6 +12,9 @@ class ComponentButton2 extends StatelessWidget {
   final VoidCallback? onTextFieldTap;
   final VoidCallback onPressed;
   final bool? obscureText;
+  final Color? backgroundColor;
+  final String? timerText;
+  final bool showTimer;
 
   const ComponentButton2({
     super.key,
@@ -22,6 +25,9 @@ class ComponentButton2 extends StatelessWidget {
     this.onTextFieldTap,
     required this.onPressed,
     this.obscureText,
+    this.backgroundColor,
+    this.timerText,
+    this.showTimer = true,
   });
 
   @override
@@ -30,7 +36,7 @@ class ComponentButton2 extends StatelessWidget {
       width: 345.w,
       height: 56.h,
       decoration: BoxDecoration(
-        color: WHITE100_COLOR, // 흰색 배경
+        color: backgroundColor ?? WHITE100_COLOR,
         borderRadius: BorderRadius.circular(10.0.r),
       ),
       child: TextFormField(
@@ -41,12 +47,34 @@ class ComponentButton2 extends StatelessWidget {
         onChanged: onChanged,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(left: 16.0).r,
-          suffixIcon: IconButton(
-            style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-            ),
-            onPressed: onPressed,
-            icon: SvgPicture.asset('assets/image/signupDelete.svg'),
+          suffixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (timerText != null && showTimer)
+                Padding(
+                  padding: EdgeInsets.only(right: 8.w),
+                  child: Text(
+                    timerText!,
+                    style: AppTextStyles.caption2.copyWith(
+                      color: BLUE400_COLOR,
+                    ),
+                  ),
+                ),
+              IconButton(
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                ),
+                onPressed: () {
+                  controller?.clear();
+                  onPressed();
+                  onChanged?.call('');
+                },
+                icon: SvgPicture.asset(
+                  'assets/image/signupDelete.svg',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
           ),
           border: OutlineInputBorder(
             borderSide: BorderSide.none,

@@ -1,17 +1,14 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:livingalone/common/component/common_button.dart';
 import 'package:livingalone/user/component/custom_input_field.dart';
 import 'package:livingalone/user/component/find_signup_button.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
-import 'package:livingalone/user/view/signup_authentication_screen.dart';
+import 'package:livingalone/user/view/find_password_screen.dart';
+import 'package:livingalone/user/view/signup_terms_screen.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:flutter_keychain/flutter_keychain.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //FIXME: 생체인증에 관련된 코드는 아래에 모두 주석처리해 놓았음. 현재는 아이디 비밀번호 입력으로 진행. or flutter secure storage에 토큰 + 키체인 내용 둘다 저장하고 불러오기.
@@ -38,9 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: BLUE100_COLOR,
       appbarTitleBackgroundColor: BLUE100_COLOR,
       appbarBorderColor: BLUE200_COLOR,
-      actionString: '1',
       title: '로그인',
-      isNotFirstScreen: true,
+      showBackButton: false,
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Container(
@@ -85,14 +81,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     FindSignupButton(
                         onTap: () {
-                          // TODO: 비밀번호 찾기 페이지 라우팅
+                          // TODO: 비밀번호 찾기 페이지 라우팅 임시처리
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_)=> FindPasswordScreen()));
                         },
                         text: '비밀번호 찾기'
                     ),
                     9.horizontalSpace,
                     FindSignupButton(
                         onTap: () {
-                          // TODO: 회원가입 페이지 라우팅
+                          // TODO: 회원가입 페이지 라우팅 임시처리
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SignupTermsScreen()));
                         },
                         text: '회원가입'
                     ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RoomInfoCard extends StatelessWidget {
   final String buildingType;    // 건물유형
@@ -63,10 +64,18 @@ class RoomInfoCard extends StatelessWidget {
     );
   }
 
-  Widget _buildListRow(String label, List<String> items) {
+  Widget _buildListRowWithIcons(String label, List<String> items, bool showIcons) {
+    final Map<String, String> iconPaths = {
+      '엘리베이터': 'assets/icons/elevator.svg',
+      '주차장': 'assets/icons/parking.svg',
+      'CCTV': 'assets/icons/cctv.svg',
+      '복층': 'assets/icons/duplex.svg',
+      '즉시입주 가능': 'assets/icons/home.svg',
+      '반려동물 가능': 'assets/icons/pet.svg',
+    };
+
     return Container(
       width: 345.w,
-      height: 47.h,
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -78,6 +87,7 @@ class RoomInfoCard extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 12.h),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               width: 100.w,
@@ -89,13 +99,55 @@ class RoomInfoCard extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Text(
-                items.join(', '),
-                style: AppTextStyles.body2.copyWith(
-                  color: GRAY700_COLOR,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
+              child: label == '옵션' 
+                ? Text(
+                    items.join(', '),
+                    style: AppTextStyles.body2.copyWith(
+                      color: GRAY700_COLOR,
+                    ),
+                  )
+                : Wrap(
+                    spacing: 8.w,
+                    runSpacing: 8.h,
+                    children: items.map((item) {
+                      if (!showIcons || !iconPaths.containsKey(item)) {
+                        return Text(
+                          item,
+                          style: AppTextStyles.body2.copyWith(
+                            color: GRAY700_COLOR,
+                          ),
+                        );
+                      }
+
+                      return Container(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 20.w,
+                              height: 20.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(20)).r,
+                              ),
+                              child: SvgPicture.asset(
+                                iconPaths[item]!,
+                                width: 16.w,
+                                height: 16.h,
+                                color: BLUE400_COLOR,
+                              ),
+                            ),
+                            6.horizontalSpace,
+                            Text(
+                              item,
+                              style: AppTextStyles.body2.copyWith(
+                                color: GRAY700_COLOR,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
             ),
           ],
         ),
@@ -120,9 +172,9 @@ class RoomInfoCard extends StatelessWidget {
           _buildInfoRow('임대방식', rentType),
           _buildInfoRow('면적', area),
           _buildInfoRow('층', floor),
-          _buildListRow('옵션', options),
-          _buildListRow('시설', facilities),
-          _buildListRow('조건', conditions),
+          _buildListRowWithIcons('옵션', options, false),
+          _buildListRowWithIcons('시설', facilities, true),
+          _buildListRowWithIcons('조건', conditions, true),
           _buildInfoRow('입주가능일', availableDate),
         ],
       ),

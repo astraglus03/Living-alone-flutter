@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class LocationInfoCard extends StatelessWidget {
   final String address;

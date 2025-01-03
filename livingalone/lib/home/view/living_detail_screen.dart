@@ -11,12 +11,12 @@ import 'package:livingalone/home/component/comments_section.dart';
 import 'package:livingalone/home/component/facilities_card.dart';
 import 'package:livingalone/home/component/info_detail_card.dart';
 import 'package:livingalone/home/component/location_info_card.dart';
+import 'package:livingalone/home/component/post_type.dart';
 import 'package:livingalone/home/component/rent_info_card.dart';
 import 'package:livingalone/home/component/room_info_card.dart';
 import 'package:livingalone/home/component/stat_item.dart';
 import 'package:livingalone/home/component/ticket_info_card.dart';
 import 'package:livingalone/home/models/comment_model.dart';
-import 'package:livingalone/home/models/post_type.dart';
 import 'package:livingalone/home/view_models/living_detail_screen_provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -59,7 +59,7 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
   ];
 
   final List<String> sectionTitles = [
-    '매물 소개',
+    '방 소개',
     '방 정보',
     '위치',
     '댓글',
@@ -72,6 +72,51 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     scrollController.addListener(_onScroll);
+    // 초기 댓글 데이터 설정
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final initialComments = widget.postType == PostType.room
+        ? <CommentModel>[
+        CommentModel(
+          username: '서은',
+          content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
+          time: '2024.12.15 16:12',
+          replies: [
+            CommentModel(
+              username: '고얌미123424123',
+              content: '네! 체크해보겠습니다',
+              time: '2024.12.15 16:15',
+              isAuthor: true,
+            ),
+          ],
+        ),
+        CommentModel(
+          username: '건동',
+          content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
+          time: '2024.12.15 16:17',
+        ),
+      ]  // 명시적으로 타입 지정
+        : <CommentModel>[
+            CommentModel(
+              username: '서은',
+              content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
+              time: '2024.12.15 16:12',
+              replies: [
+                CommentModel(
+                  username: '고얌미',
+                  content: '네! 체크해보겠습니다',
+                  time: '2024.12.15 16:15',
+                  isAuthor: true,
+                ),
+              ],
+            ),
+            CommentModel(
+              username: '건동',
+              content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
+              time: '2024.12.15 16:17',
+            ),
+          ];
+      ref.read(LivingDetailScreenProvider.notifier).setComments(initialComments);
+    });
   }
 
   @override
@@ -84,67 +129,97 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
 
   void _onScroll() {
     if (!mounted) return;
-    
-    ref.read(LivingDetailScreenProvider.notifier)
-       .updateTabBarVisibility(scrollController.offset);
-     
+
+    ref.read(LivingDetailScreenProvider.notifier).updateTabBarVisibility(scrollController.offset);
     // 스크롤 위치에 따른 현재 섹션 업데이트
-    ref.read(LivingDetailScreenProvider.notifier)
-       .updateCurrentSection(scrollController, _tabController, widget.postType);
+    ref.read(LivingDetailScreenProvider.notifier).updateCurrentSection(scrollController, _tabController, widget.postType);
   }
 
-  PreferredSize? _buildTabBar() {
-    final state = ref.watch(LivingDetailScreenProvider);
-    if (!state.showTabBar) return null;
-
-    return PreferredSize(
-      preferredSize: Size.fromHeight(48.h),
-      child: AnimatedOpacity(
-        opacity: state.tabBarOpacity,
-        duration: const Duration(milliseconds: 200),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: WHITE100_COLOR,
-            border: Border(
-              bottom: BorderSide(
-                color: GRAY200_COLOR,
-                width: 1,
-              ),
+  @override
+  Widget build(BuildContext context) {
+    return DefaultLayout(
+      title: '',
+      appbarBorder: false,
+      actions:IconButton(
+        onPressed: (){},
+        icon: Icon(Icons.more_horiz_rounded),
+      ),
+      child: Stack(
+        children: [
+          SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              children: [
+                _buildImageSlider(),
+                _buildUserInfo(),
+                24.verticalSpace,
+                widget.postType == PostType.room
+                    ? _buildRoomContent()
+                    : _buildTicketContent(),
+                100.verticalSpace,
+              ],
             ),
           ),
-          child: TabBar(
-            controller: _tabController,
-            onTap: (index) {
-              String targetTitle;
-              if (widget.postType == PostType.ROOM) {
-                targetTitle = index == 0 ? '매물 소개' :
-                             index == 1 ? '방 정보' :
-                             index == 2 ? '위치' : '댓글';
-              } else {
-                targetTitle = index == 0 ? '이용권 소개' :
-                             index == 1 ? '이용권 정보' :
-                             index == 2 ? '위치' : '댓글';
-              }
-              ref.read(LivingDetailScreenProvider.notifier)
-                 .scrollToSection(targetTitle, scrollController);
+          Consumer(
+            builder: (context, ref, child) {
+              final state = ref.watch(LivingDetailScreenProvider);
+              return Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: AnimatedOpacity(
+                  opacity: state.tabBarOpacity,
+                  duration: Duration(milliseconds: 200),
+                  child: Container(
+                    height: 48.h,
+                    decoration: BoxDecoration(
+                      color: WHITE100_COLOR.withOpacity(state.tabBarOpacity),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: GRAY200_COLOR.withOpacity(state.tabBarOpacity),
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: TabBar(
+                      controller: _tabController,
+                      isScrollable: false,
+                      labelColor: BLUE400_COLOR,
+                      unselectedLabelColor: GRAY400_COLOR,
+                      indicatorColor: BLUE400_COLOR,
+                      labelPadding: EdgeInsets.zero,
+                      labelStyle: AppTextStyles.subtitle,
+                      tabs: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 4,
+                          child: Tab(text: widget.postType == PostType.room ? '방 소개' : '이용권 소개'),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 4,
+                          child: Tab(text: widget.postType == PostType.room ? '방 정보' : '이용권 정보'),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 4,
+                          child: Tab(text: '위치'),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 4,
+                          child: Tab(text: '댓글 ${state.totalCommentsCount}'),
+                        ),
+                      ],
+                      onTap: (index) {
+                        final title = _getTitleForIndex(index);
+                        ref.read(LivingDetailScreenProvider.notifier)
+                            .scrollToSection(title, scrollController);
+                      },
+                    ),
+                  ),
+                ),
+              );
             },
-            isScrollable: false,
-            labelPadding: EdgeInsets.symmetric(horizontal: 16.w),
-            tabs: [
-              Tab(text: widget.postType == PostType.ROOM ? '매물 소개' : '이용권 소개'),
-              Tab(text: widget.postType == PostType.ROOM ? '방 정보' : '이용권 정보'),
-              Tab(text: '위치'),
-              Tab(text: '댓글'),
-            ],
-            labelColor: BLUE400_COLOR,
-            unselectedLabelColor: GRAY400_COLOR,
-            labelStyle: AppTextStyles.subtitle,
-            unselectedLabelStyle: AppTextStyles.subtitle,
-            indicator: UnderlineTabIndicator(
-              borderSide: BorderSide(color: BLUE400_COLOR, width: 2),
-            ),
           ),
-        ),
+          _buildBottomBar(),
+        ],
       ),
     );
   }
@@ -252,7 +327,7 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
               ),
               12.verticalSpace,
               RentInfoCard(
-                postType: PostType.ROOM,
+                postType: PostType.room,
                 leftFee: 41,
                 rightFee: 9,
               ),
@@ -279,9 +354,9 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
           rentType: '월세',
           area: '33.06m²',
           floor: '7층/10층',
-          options: ['에어컨', '세탁기', '냉장고', '전자레인지'],
-          facilities: ['엘리베이터', '주차장', '택배보관함'],
-          conditions: ['반려동물 불가', '흡연 불가'],
+          options: ['에어컨', '세탁기', '냉장고', '전자레인지, 붙박이장'],
+          facilities: ['엘리베이터', '주차장', 'CCTV', '복층'],
+          conditions: ['반려동물 가능', '즉시입주 가능'],
           availableDate: '즉시 입주',
         ),
         24.verticalSpace,
@@ -300,26 +375,6 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
         24.verticalSpace,
         CommentsSection(
           key: ref.read(LivingDetailScreenProvider).sectionKeys['댓글'],
-          comments: [
-            CommentModel(
-              username: '서은',
-              content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
-              time: '2024.12.15 16:12',
-              isAuthor: true,
-              replies: [
-                CommentModel(
-                  username: '민석',
-                  content: '네! 체크해보겠습니다',
-                  time: '2024.12.15 16:15',
-                ),
-              ],
-            ),
-            CommentModel(
-              username: '건동',
-              content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
-              time: '2024.12.15 16:17',
-            ),
-          ],
         ),
         100.verticalSpace,
       ],
@@ -346,7 +401,7 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
               ),
               12.verticalSpace,
               RentInfoCard(
-                postType: PostType.TICKET,
+                postType: PostType.ticket,
                 leftFee: 7,
                 rightFee: 65,
               ),
@@ -388,26 +443,6 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
         24.verticalSpace,
         CommentsSection(
           key: ref.read(LivingDetailScreenProvider).sectionKeys['댓글'],
-          comments: [
-            CommentModel(
-              username: '서은',
-              content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
-              time: '2024.12.15 16:12',
-              replies: [
-                CommentModel(
-                  username: '민석',
-                  content: '네! 체크해보겠습니다',
-                  time: '2024.12.15 16:15',
-                  isAuthor: true,
-                ),
-              ],
-            ),
-            CommentModel(
-              username: '건동',
-              content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
-              time: '2024.12.15 16:17',
-            ),
-          ],
         ),
         100.verticalSpace,
       ],
@@ -547,34 +582,18 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return DefaultLayout(
-      title: '',
-      bottom: _buildTabBar(),
-      actions: IconButton(
-        onPressed: () {}, 
-        icon: Icon(Icons.more_horiz),
-      ),
-      child: Stack(
-        children: [
-          SingleChildScrollView(
-            controller: scrollController,
-            child: Column(
-              children: [
-                _buildImageSlider(),
-                _buildUserInfo(),
-                24.verticalSpace,
-                widget.postType == PostType.ROOM
-                    ? _buildRoomContent()
-                    : _buildTicketContent(),
-                100.verticalSpace,
-              ],
-            ),
-          ),
-          _buildBottomBar(),
-        ],
-      ),
-    );
+  String _getTitleForIndex(int index) {
+    switch (index) {
+      case 0:
+        return widget.postType == PostType.room ? '매물 소개' : '이용권 소개';
+      case 1:
+        return widget.postType == PostType.room ? '방 정보' : '이용권 정보';
+      case 2:
+        return '위치';
+      case 3:
+        return '댓글';
+      default:
+        return '';
+    }
   }
 }
