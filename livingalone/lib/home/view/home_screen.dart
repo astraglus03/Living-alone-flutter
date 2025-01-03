@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import '../../common/const/text_styles.dart';
-import '../models/post_tile_model.dart';
+import '../models/room_post_model.dart';
 import '../view_models/room_post_tile.dart';
 import 'package:dotted_line/dotted_line.dart';
 import '../component/filterchip.dart';
@@ -113,7 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             bottom: 0,
             right: 0,
             child: FloatingActionButton(
-              backgroundColor: BLUE400_COLOR,
+              backgroundColor: _isDialogVisible ? BLUE200_COLOR : BLUE400_COLOR,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),

@@ -22,6 +22,29 @@ class RoomFilterChipList extends ConsumerWidget {
         state.conditions.values.any((v) => v);
   }
 
+  void _showFilterBottomSheetWithTab(BuildContext context, int tabIndex) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      enableDrag: true,
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: FilterBottomSheet(initialTabIndex: tabIndex),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filterState = ref.watch(filterProvider);
@@ -42,7 +65,7 @@ class RoomFilterChipList extends ConsumerWidget {
                 if (hasActiveFilters(filterState)) {
                   ref.read(filterProvider.notifier).resetFilter();
                 } else {
-                  showFilterBottomSheet(context);
+                  _showFilterBottomSheetWithTab(context, 0);
                 }
               },
             ),
@@ -50,49 +73,49 @@ class RoomFilterChipList extends ConsumerWidget {
             CustomFilterButton(
               label: '지역',
               selectedValue: filterState.selectedLocations,
-              onPressed: () => showFilterBottomSheet(context),
+              onPressed: () => _showFilterBottomSheetWithTab(context, 0),
             ),
             SizedBox(width: 4),
             CustomFilterButton(
               label: '건물 유형',
               selectedValue: filterState.selectedBuildingTypes,
-              onPressed: () => showFilterBottomSheet(context),
+              onPressed: () => _showFilterBottomSheetWithTab(context, 1),
             ),
             SizedBox(width: 4),
             CustomFilterButton(
               label: '매물 종류',
               selectedValue: filterState.selectedPropertyTypes,
-              onPressed: () => showFilterBottomSheet(context),
+              onPressed: () => _showFilterBottomSheetWithTab(context, 2),
             ),
             SizedBox(width: 4),
             CustomFilterButton(
               label: '임대 방식',
               selectedValue: filterState.selectedRentalTypes,
-              onPressed: () => showFilterBottomSheet(context),
+              onPressed: () => _showFilterBottomSheetWithTab(context, 3),
             ),
             SizedBox(width: 4),
             CustomFilterButton(
               label: '보증금',
               selectedValue: filterState.depositRangeText,
-              onPressed: () => showFilterBottomSheet(context),
+              onPressed: () => _showFilterBottomSheetWithTab(context, 4),
             ),
             SizedBox(width: 4),
             CustomFilterButton(
               label: '월세',
               selectedValue: filterState.monthlyRangeText,
-              onPressed: () => showFilterBottomSheet(context),
+              onPressed: () => _showFilterBottomSheetWithTab(context, 4),
             ),
             SizedBox(width: 4),
             CustomFilterButton(
               label: '시설',
               selectedValue: filterState.selectedFacilities,
-              onPressed: () => showFilterBottomSheet(context),
+              onPressed: () => _showFilterBottomSheetWithTab(context, 5),
             ),
             SizedBox(width: 4),
             CustomFilterButton(
               label: '조건',
               selectedValue: filterState.selectedConditions,
-              onPressed: () => showFilterBottomSheet(context),
+              onPressed: () => _showFilterBottomSheetWithTab(context, 6),
             ),
           ],
         ),

@@ -1,7 +1,7 @@
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
-import '../models/post_tile_model.dart';
+import '../models/room_post_model.dart';
 
 part 'post_tile_api.g.dart'; // Build runner가 생성할 파일
 

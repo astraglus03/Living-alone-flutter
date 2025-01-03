@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/home/repository/post_tile_api.dart';
 
-import '../models/post_tile_model.dart';
+import '../models/room_post_model.dart';
 
 
 final postRepositoryProvider = Provider<PostRepository>((ref) {

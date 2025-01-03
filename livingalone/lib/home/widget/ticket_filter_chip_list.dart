@@ -14,6 +14,29 @@ class BoardFilterChipList extends ConsumerWidget {
         state.ticketTypes.values.any((value) => value);
   }
 
+  void _showTicketFilterBottomSheetWithTab(BuildContext context, int tabIndex) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      enableDrag: true,
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: TicketFilterBottomSheet(initialTabIndex: tabIndex),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filterState = ref.watch(ticketFilterProvider);
@@ -33,11 +56,9 @@ class BoardFilterChipList extends ConsumerWidget {
               ),
               onTap: () {
                 if (hasFilters) {
-                  // 필터 초기화
                   ref.read(ticketFilterProvider.notifier).resetFilter();
                 } else {
-                  // 필터 모달 표시
-                  showTicketFilterBottomSheet(context);
+                  _showTicketFilterBottomSheetWithTab(context, 0);
                 }
               },
             ),
@@ -45,13 +66,13 @@ class BoardFilterChipList extends ConsumerWidget {
             CustomFilterButton(
               label: '지역',
               selectedValue: filterState.selectedLocations,
-              onPressed: () => showTicketFilterBottomSheet(context),
+              onPressed: () => _showTicketFilterBottomSheetWithTab(context, 0),
             ),
             SizedBox(width: 4),
             CustomFilterButton(
               label: '종류',
               selectedValue: filterState.selectedTicketTypes,
-              onPressed: () => showTicketFilterBottomSheet(context),
+              onPressed: () => _showTicketFilterBottomSheetWithTab(context, 1),
             ),
           ],
         ),
