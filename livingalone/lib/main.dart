@@ -39,7 +39,7 @@ class MyApp extends ConsumerWidget {
               fontFamily: 'SUIT',
             ),
             debugShowCheckedModeBanner: false,
-            home: SettingPasswordScreen(),
+            home: RootTab(),
           ),
         );
       }

@@ -4,45 +4,16 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="base">
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/chat.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/home.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/likestar.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/map.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/my.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/neighbor.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/nothingCheck.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/assets/image/signupDelete.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/livingalone/lib/common/component/colored_image.dart" afterDir="false" />
+    <list default="true" id="04320860-601e-4e40-9fe8-fd0db9706e77" name="Changes" comment="fix : 검색창 곡률 수정, 필터 선택지 수정 #8">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/android/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/chat.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/fullCheck.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/like.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/map.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/my.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/neighbor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/nothingCheck.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/remainsBell.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/remainsChat.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/assets/image/suffix_delete.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/component/common_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/component/common_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/const/const.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/const/const.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/const/text_styles.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/const/text_styles.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/layout/default_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/layout/default_layout.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/common/view/root_tab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/common/view/root_tab.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/component/custom_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/component/custom_input_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_input_field.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/component/custom_signup_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/component/custom_signup_field.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/component/find_signup_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/component/find_signup_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/complete_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/complete_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/login_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/phone_verify_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/phone_verify_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/setting_password_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/setting_password_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/signup_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/signup_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/lib/user/view/terms_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/user/view/terms_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/livingalone/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/models/post_tile_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/models/room_post_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/models/ticket_post_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/models/ticket_post_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/repository/post_tile_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/repository/post_tile_api.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/repository/room_post_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/repository/room_post_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/view/home_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/view_models/room_post_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/view_models/room_post_tile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/livingalone/lib/home/widget/room_post_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/livingalone/lib/home/widget/room_post_list.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +33,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -90,36 +61,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Flutter.main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/astraglus/StudioProjects/Living-alone-flutter/livingalone/assets/image&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;dart.settings&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Flutter.main.dart.executor": "Run",
+    "Flutter.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "feature/board/8",
+    "io.flutter.reload.alreadyRun": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/cms/StudioProjects/Living-alone-flutter/livingalone/assets/image",
+    "settings.editor.selected.configurable": "dart.settings",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/livingalone/assets/image" />
+      <recent name="$PROJECT_DIR$/livingalone/assets/image/listtile" />
       <recent name="$PROJECT_DIR$/livingalone/assets" />
       <recent name="$PROJECT_DIR$/livingalone/assets/fonts" />
       <recent name="$PROJECT_DIR$/livingalone/lib/common/secure_storage" />
-      <recent name="$PROJECT_DIR$/livingalone/lib/common/layout" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/livingalone/lib/user/component" />
       <recent name="$PROJECT_DIR$/livingalone/assets/image" />
+      <recent name="$PROJECT_DIR$/livingalone/lib/user/component" />
       <recent name="$PROJECT_DIR$/livingalone/lib/common" />
       <recent name="$PROJECT_DIR$/livingalone/lib/user" />
       <recent name="C:\Users\kn055\AndroidStudioProjects\livingalone\livingalone\lib\theme" />
@@ -148,11 +119,75 @@
       <option name="project" value="LOCAL" />
       <updated>1723469784011</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat : 필터 UI 90%완료 #8&#10;&#10;todo&#10;UI 마무리 및 상태관리">
+      <option name="closed" value="true" />
+      <created>1735759092075</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1735759092076</updated>
+    </task>
+    <task id="LOCAL-00003" summary="fix : 필터칩 클릭시 해당하는 필터 bottomsheet가 뜨게 수정, 플로팅 버튼 활성화시 색상 수정">
+      <option name="closed" value="true" />
+      <created>1735917689198</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1735917689198</updated>
+    </task>
+    <task id="LOCAL-00004" summary="fix : 필터칩 클릭시 해당하는 필터 bottomsheet가 뜨게 수정, 플로팅 버튼 활성화시 색상 수정">
+      <option name="closed" value="true" />
+      <created>1735919340678</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1735919340678</updated>
+    </task>
+    <task id="LOCAL-00005" summary="fix : 필터 목록 수정, 검색창 곡률 수정">
+      <option name="closed" value="true" />
+      <created>1735920469843</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1735920469843</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fix : 플로팅 버튼 활성화시 색상 수정, 필터칩 클릭시 해당하는 필터탭 bottom sheet 뜨게 수정 #8">
+      <option name="closed" value="true" />
+      <created>1735920705463</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1735920705463</updated>
+    </task>
+    <task id="LOCAL-00007" summary="fix : 검색창 곡률 수정, 필터 선택지 수정 #8">
+      <option name="closed" value="true" />
+      <created>1735920725699</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1735920725699</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="base" />
-    <option name="LAST_COMMIT_MESSAGE" value="base" />
+    <MESSAGE value="feat : 필터 UI 90%완료 #8&#10;&#10;todo&#10;UI 마무리 및 상태관리" />
+    <MESSAGE value="fix : 필터칩 클릭시 해당하는 필터 bottomsheet가 뜨게 수정, 플로팅 버튼 활성화시 색상 수정" />
+    <MESSAGE value="fix : 필터 목록 수정, 검색창 곡률 수정" />
+    <MESSAGE value="fix : 플로팅 버튼 활성화시 색상 수정, 필터칩 클릭시 해당하는 필터탭 bottom sheet 뜨게 수정 #8" />
+    <MESSAGE value="fix : 검색창 곡률 수정, 필터 선택지 수정 #8" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix : 검색창 곡률 수정, 필터 선택지 수정 #8" />
   </component>
 </project>
