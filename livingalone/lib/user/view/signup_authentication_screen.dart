@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
-import 'package:livingalone/user/component/custom_button.dart';
+import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -237,6 +237,7 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
     if (_validateEmail()) {
       setState(() {
         isEmailSent = true;
+        FocusScope.of(context).unfocus();
       });
       verifyNumController.clear();
       ref.read(timerProvider.notifier).startTimer();
@@ -295,61 +296,67 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
       child: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height,
-                      padding: EdgeInsets.symmetric(horizontal: 24.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          20.verticalSpace,
-                          Text('대학생 인증을 해주세요', style: AppTextStyles.heading1,),
-                          40.verticalSpace,
-                          _buildSchoolField(),
-                          24.verticalSpace,
-                          _buildEmailField(),
-                          24.verticalSpace,
-                          _buildVerifyField(),
-                          4.verticalSpace,
-                          Row(
-                            children: [
-                              Text(
-                                '인증 번호를 받지 못하셨나요?',
-                                style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
-                              ),
-                              6.horizontalSpace,
-                              GestureDetector(
-                                onTap: isEmailSent && !ref.watch(timerProvider).isActive
-                                  ? _sendVerificationEmail
-                                  : null,
-                                child: Text(
-                                  '다시보내기',
-                                  style: AppTextStyles.caption2.copyWith(
-                                    color: (isEmailSent && !ref.watch(timerProvider).isActive)
-                                      ? ERROR_TEXT_COLOR
-                                      : GRAY400_COLOR,
-                                    decoration: (isEmailSent && !ref.watch(timerProvider).isActive)
-                                      ? TextDecoration.underline
-                                      : null,
-                                    decorationColor: ERROR_TEXT_COLOR,
-                                    decorationStyle: TextDecorationStyle.solid,
-                                    decorationThickness: 0.07 * 12.sp,
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height,
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            20.verticalSpace,
+                            Text('대학생 인증을 해주세요', style: AppTextStyles.heading1,),
+                            40.verticalSpace,
+                            _buildSchoolField(),
+                            24.verticalSpace,
+                            _buildEmailField(),
+                            24.verticalSpace,
+                            _buildVerifyField(),
+                            4.verticalSpace,
+                            if(isEmailSent ==true)
+                            Row(
+                              children: [
+                                Text(
+                                  '인증 번호를 받지 못하셨나요?',
+                                  style: AppTextStyles.caption2.copyWith(color: GRAY800_COLOR),
+                                ),
+                                6.horizontalSpace,
+                                GestureDetector(
+                                  onTap: isEmailSent && !ref.watch(timerProvider).isActive
+                                    ? _sendVerificationEmail
+                                    : null,
+                                  child: Text(
+                                    '다시보내기',
+                                    style: AppTextStyles.caption2.copyWith(
+                                      color: (isEmailSent && !ref.watch(timerProvider).isActive)
+                                        ? ERROR_TEXT_COLOR
+                                        : GRAY400_COLOR,
+                                      decoration: (isEmailSent && !ref.watch(timerProvider).isActive)
+                                        ? TextDecoration.underline
+                                        : null,
+                                      decorationColor: ERROR_TEXT_COLOR,
+                                      decorationStyle: TextDecorationStyle.solid,
+                                      decorationThickness: 0.07 * 12.sp,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -366,11 +373,11 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
 
               if (_formKey.currentState!.validate()) {
                 ref.read(timerProvider.notifier).resetTimer();
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (_) => SignupPhoneVerifyScreen(),
-                //   ),
-                // );
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => SignupPhoneVerifyScreen(),
+                  ),
+                );
               }
             },
           ),
@@ -395,7 +402,8 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
       onTap: (){
         isEmailSent ? null : _sendVerificationEmail();
       },
-      buttonBackground: isEmailSent ? GRAY200_COLOR : BLUE100_COLOR,
+      buttonBackground: isEmailSent ? GRAY100_COLOR : BLUE100_COLOR,
+      buttonForeground: isEmailSent ? GRAY200_COLOR : BLUE400_COLOR,
     );
   }
 
@@ -410,7 +418,6 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
       hintText: '인증번호를 입력해주세요',
       type: TextInputType.number,
       subTitle: '인증 번호',
-      submitButtonTitle: '확인',
       // TODO: 피그마 49
       width: 52.w,
       onPressed: verifyNumController.clear,

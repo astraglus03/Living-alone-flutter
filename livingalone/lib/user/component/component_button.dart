@@ -41,6 +41,7 @@ class ComponentButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.0.r),
       ),
       child: TextFormField(
+        scrollPadding: EdgeInsets.only(bottom: 90),
         controller: controller,
         onTap: onTextFieldTap,
         cursorColor: BLUE400_COLOR,

@@ -3,7 +3,9 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/component/custom_button.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SignupTermsDetailScreen extends StatefulWidget {
   final Function(bool) onRead;
@@ -51,6 +53,14 @@ class _SignupTermsDetailScreenState extends State<SignupTermsDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset('assets/image/warning.svg'),
+                        4.horizontalSpace,
+                        Text('스크롤을 내려 내용을 끝까지 확인해 주세요',style: AppTextStyles.caption2.copyWith(color: ERROR_TEXT_COLOR),),
+                      ],
+                    ),
+                    10.verticalSpace,
                     Text(
                       '개인정보 수집 및 이용 동의',
                       style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
@@ -172,6 +182,7 @@ class _SignupTermsDetailScreenState extends State<SignupTermsDetailScreen> {
             ),
           ),
         CustomBottomButton(
+          appbarBorder: true,
           backgroundColor: _isButtonEnabled ? BLUE400_COLOR : GRAY200_COLOR,
           foregroundColor: _isButtonEnabled ? WHITE100_COLOR : GRAY800_COLOR,
           text: '동의',

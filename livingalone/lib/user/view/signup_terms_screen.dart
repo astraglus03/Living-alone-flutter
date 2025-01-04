@@ -3,6 +3,7 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/user/component/custom_agree_button.dart';
+import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:livingalone/user/view/signup_authentication_screen.dart';
 import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
@@ -83,6 +84,7 @@ class _SignupTermsScreenState extends State<SignupTermsScreen> {
             ),
           ),
           CustomBottomButton(
+            appbarBorder: false,
             backgroundColor: BLUE400_COLOR,
             foregroundColor: WHITE100_COLOR,
             disabledBackgroundColor: GRAY200_COLOR,

@@ -37,85 +37,90 @@ class _LoginScreenState extends State<LoginScreen> {
       appbarBorderColor: BLUE200_COLOR,
       title: '로그인',
       showBackButton: false,
-      child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          margin: EdgeInsets.fromLTRB(24.w, 42.h, 24.w, 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomInputField(
-                controller: idController,
-                autofillHint: [AutofillHints.email],
-                hintText: '학교 이메일을 입력해 주세요',
-              ),
-              16.verticalSpace,
-              CustomInputField(
-                controller: passwordController,
-                autofillHint: [AutofillHints.password],
-                hintText: '비밀번호를 입력해 주세요',
-                obscureText: true,
-              ),
-              16.verticalSpace,
-              CommonButton(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: BLUE400_COLOR,
-                      foregroundColor: WHITE100_COLOR,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0.r),
-                      ),
-                    shadowColor: Colors.transparent,
-                  ),
-                  onPressed: () {
-                    // TODO: go router 나중에 적용하기.
-                  },
-                  child: Text('로그인', style: AppTextStyles.title),
+      child: GestureDetector(
+        onTap: (){
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Container(
+            height: MediaQuery.of(context).size.height- 180,
+            margin: EdgeInsets.fromLTRB(24.w, 42.h, 24.w, 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomInputField(
+                  controller: idController,
+                  autofillHint: [AutofillHints.email],
+                  hintText: '학교 이메일을 입력해 주세요',
                 ),
-              ),
-              16.verticalSpace,
-              SizedBox(
-                width: 345.w,
-                height: 36.h,
-                child: Row(
-                  children: [
-                    FindSignupButton(
-                        onTap: () {
-                          // TODO: 비밀번호 찾기 페이지 라우팅 임시처리
-                          // Navigator.of(context).push(MaterialPageRoute(builder: (_)=> FindPasswordScreen()));
-                        },
-                        text: '비밀번호 찾기'
+                16.verticalSpace,
+                CustomInputField(
+                  controller: passwordController,
+                  autofillHint: [AutofillHints.password],
+                  hintText: '비밀번호를 입력해 주세요',
+                  obscureText: true,
+                ),
+                16.verticalSpace,
+                CommonButton(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: BLUE400_COLOR,
+                        foregroundColor: WHITE100_COLOR,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0.r),
+                        ),
+                      shadowColor: Colors.transparent,
                     ),
-                    9.horizontalSpace,
-                    FindSignupButton(
-                        onTap: () {
-                          // TODO: 회원가입 페이지 라우팅 임시처리
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SignupTermsScreen()));
-                        },
-                        text: '회원가입'
+                    onPressed: () {
+                      // TODO: go router 나중에 적용하기.
+                    },
+                    child: Text('로그인', style: AppTextStyles.title),
+                  ),
+                ),
+                16.verticalSpace,
+                SizedBox(
+                  width: 345.w,
+                  height: 36.h,
+                  child: Row(
+                    children: [
+                      FindSignupButton(
+                          onTap: () {
+                            // TODO: 비밀번호 찾기 페이지 라우팅 임시처리
+                            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> FindPasswordScreen()));
+                          },
+                          text: '비밀번호 찾기'
+                      ),
+                      9.horizontalSpace,
+                      FindSignupButton(
+                          onTap: () {
+                            // TODO: 회원가입 페이지 라우팅 임시처리
+                            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SignupTermsScreen()));
+                          },
+                          text: '회원가입'
+                      ),
+                    ],
+                  ),
+                ),
+                384.verticalSpace,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("• ", style: AppTextStyles.caption2.copyWith(color: GRAY500_COLOR)),
+                    ),
+                    Expanded(
+                      child: Text(
+                        "로그인 및 회원가입 완료 이후 ‘자동 로그인'됩니다. 본인 기기가 아닌 경우 [마이]에서 ‘로그아웃’을 해주세요.",
+                        style: AppTextStyles.caption2.copyWith(color: GRAY500_COLOR),
+                      ),
                     ),
                   ],
-                ),
-              ),
-              384.verticalSpace,
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("• ", style: AppTextStyles.caption2.copyWith(color: GRAY500_COLOR)),
-                  ),
-                  Expanded(
-                    child: Text(
-                      "로그인 및 회원가입 완료 이후 ‘자동 로그인'됩니다. 본인 기기가 아닌 경우 [마이]에서 ‘로그아웃’을 해주세요.",
-                      style: AppTextStyles.caption2.copyWith(color: GRAY500_COLOR),
-                    ),
-                  ),
-                ],
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
