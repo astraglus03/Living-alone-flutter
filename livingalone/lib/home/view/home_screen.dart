@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/handover/view/check_room_handover_screen.dart';
+import 'package:livingalone/handover/view/check_ticket_handover_screen.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import '../../common/const/text_styles.dart';
 import '../models/room_post_model.dart';
 import '../view_models/room_post_tile.dart';
@@ -92,6 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       label: '자취방 양도하기',
                       onTap: () {
                         // 자취방 양도하기 동작
+                        pushScreenWithoutNavBar((context), CheckRoomHandoverScreen());
                         setState(() => _isDialogVisible = false);
                       },
                     ),
@@ -101,6 +105,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       label: '이용권 양도하기',
                       onTap: () {
                         // 이용권 양도하기 동작
+                        pushScreenWithoutNavBar((context), CheckTicketHandoverScreen());
                         setState(() => _isDialogVisible = false);
                       },
                     ),

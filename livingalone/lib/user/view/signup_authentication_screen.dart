@@ -292,83 +292,85 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
       currentStep: 1,
       totalSteps: 4,
       title: '회원가입',
-      child: Stack(
+      child: Column(
         children: [
-          GestureDetector(
-            onTap: () {
-              // 폼 필드 외의 영역 터치시 키보드 닫음.
-              FocusScope.of(context).unfocus();
-            },
+          Expanded(
             child: SingleChildScrollView(
               controller: _scrollController,
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               child: Form(
                 key: _formKey,
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  padding: EdgeInsets.symmetric(horizontal: 24.w),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      20.verticalSpace,
-                      Text('대학생 인증을 해주세요', style: AppTextStyles.heading1,),
-                      40.verticalSpace,
-                      _buildSchoolField(),
-                      24.verticalSpace,
-                      _buildEmailField(),
-                      24.verticalSpace,
-                      _buildVerifyField(),
-                      4.verticalSpace,
-                      Row(
+                child: Column(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height,
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '인증 번호를 받지 못하셨나요?',
-                            style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
-                          ),
-                          6.horizontalSpace,
-                          GestureDetector(
-                            onTap: isEmailSent && !ref.watch(timerProvider).isActive 
-                              ? _sendVerificationEmail 
-                              : null,
-                            child: Text(
-                              '다시보내기',
-                              style: AppTextStyles.caption2.copyWith(
-                                color: (isEmailSent && !ref.watch(timerProvider).isActive)
-                                  ? ERROR_TEXT_COLOR
-                                  : GRAY400_COLOR,
-                                decoration: (isEmailSent && !ref.watch(timerProvider).isActive)
-                                  ? TextDecoration.underline
-                                  : null,
-                                decorationColor: ERROR_TEXT_COLOR,
-                                decorationStyle: TextDecorationStyle.solid,
-                                decorationThickness: 0.07 * 12.sp,
+                          20.verticalSpace,
+                          Text('대학생 인증을 해주세요', style: AppTextStyles.heading1,),
+                          40.verticalSpace,
+                          _buildSchoolField(),
+                          24.verticalSpace,
+                          _buildEmailField(),
+                          24.verticalSpace,
+                          _buildVerifyField(),
+                          4.verticalSpace,
+                          Row(
+                            children: [
+                              Text(
+                                '인증 번호를 받지 못하셨나요?',
+                                style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
                               ),
-                            ),
+                              6.horizontalSpace,
+                              GestureDetector(
+                                onTap: isEmailSent && !ref.watch(timerProvider).isActive
+                                  ? _sendVerificationEmail
+                                  : null,
+                                child: Text(
+                                  '다시보내기',
+                                  style: AppTextStyles.caption2.copyWith(
+                                    color: (isEmailSent && !ref.watch(timerProvider).isActive)
+                                      ? ERROR_TEXT_COLOR
+                                      : GRAY400_COLOR,
+                                    decoration: (isEmailSent && !ref.watch(timerProvider).isActive)
+                                      ? TextDecoration.underline
+                                      : null,
+                                    decorationColor: ERROR_TEXT_COLOR,
+                                    decorationStyle: TextDecorationStyle.solid,
+                                    decorationThickness: 0.07 * 12.sp,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-          CustomButton(
+          CustomBottomButton(
             backgroundColor: isFormValid ? BLUE400_COLOR : GRAY200_COLOR,
             foregroundColor: isFormValid ? WHITE100_COLOR : GRAY800_COLOR,
             text: '다음',
             textStyle: AppTextStyles.title,
             onTap: () {
-              // 순서대로 유효성 검사
               if (!_validateSchool()) return;
               if (!_validateEmail()) return;
               if (!_validateVerificationCode()) return;
-              
-              // 모든 검증 통과
+
               if (_formKey.currentState!.validate()) {
-                // TODO: 다음 단계로 이동
-                Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SignupPhoneVerifyScreen()));
+                ref.read(timerProvider.notifier).resetTimer();
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (_) => SignupPhoneVerifyScreen(),
+                //   ),
+                // );
               }
             },
           ),

@@ -19,7 +19,6 @@ import 'package:livingalone/home/component/ticket_info_card.dart';
 import 'package:livingalone/home/models/comment_model.dart';
 import 'package:livingalone/home/view_models/living_detail_screen_provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LivingDetailScreen extends ConsumerStatefulWidget {

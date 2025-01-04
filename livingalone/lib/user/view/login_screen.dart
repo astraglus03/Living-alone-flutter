@@ -66,7 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       foregroundColor: WHITE100_COLOR,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0.r),
-                      )),
+                      ),
+                    shadowColor: Colors.transparent,
+                  ),
                   onPressed: () {
                     // TODO: go router 나중에 적용하기.
                   },
@@ -82,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     FindSignupButton(
                         onTap: () {
                           // TODO: 비밀번호 찾기 페이지 라우팅 임시처리
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_)=> FindPasswordScreen()));
+                          // Navigator.of(context).push(MaterialPageRoute(builder: (_)=> FindPasswordScreen()));
                         },
                         text: '비밀번호 찾기'
                     ),

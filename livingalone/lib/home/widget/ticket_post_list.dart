@@ -144,7 +144,7 @@ class TicketPostItem extends StatelessWidget {
                           SizedBox(width: 6),
                           Row(
                             children: [
-                              SvgPicture.asset('assets/image/comment.svg'),
+                              SvgPicture.asset('assets/image/comment1.svg'),
                               SizedBox(width: 2),
                               Text('${ticketpost.comments}', style: AppTextStyles.caption2.copyWith(color: GRAY400_COLOR)),
                             ],

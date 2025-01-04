@@ -26,6 +26,7 @@ class FindSignupButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0.r),
             ),
+            shadowColor: Colors.transparent
           ),
           child: Text(
             text,
