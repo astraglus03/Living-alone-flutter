@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
@@ -23,10 +24,73 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
   final depositController = TextEditingController();
   final monthlyRentController = TextEditingController();
   final maintenanceController = TextEditingController();
-
   final depositFocus = FocusNode();
   final monthlyRentFocus = FocusNode();
   final maintenanceFocus = FocusNode();
+  String? errorMessage;
+
+  void _validateInputs() {
+      switch (widget.rentType) {
+        case '전세':
+          if (depositController.text.trim().isEmpty) {
+            setState(() {
+              errorMessage = '보증금을 입력해주세요';
+            });
+            return;
+          }
+          if (maintenanceController.text.trim().isEmpty) {
+            setState(() {
+              errorMessage = '관리비를 입력해주세요';
+            });
+            return;
+          }
+          break;
+
+        case '월세':
+          if (depositController.text.trim().isEmpty) {
+            setState(() {
+              errorMessage = '보증금을 입력해주세요';
+            });
+            return;
+          }
+          if (monthlyRentController.text.trim().isEmpty) {
+            setState(() {
+              errorMessage = '월세를 입력해주세요';
+            });
+            return;
+          }
+          if (maintenanceController.text.trim().isEmpty) {
+            setState(() {
+              errorMessage = '관리비를 입력해주세요';
+            });
+            return;
+          }
+          break;
+
+        case '단기양도':
+          if (monthlyRentController.text.trim().isEmpty) {
+            setState(() {
+              errorMessage = '월세를 입력해주세요';
+            });
+            return;
+          }
+          if (maintenanceController.text.trim().isEmpty) {
+            setState(() {
+              errorMessage = '관리비를 입력해주세요';
+            });
+            return;
+          }
+          break;
+      }
+
+      // 모든 검증 통과
+      errorMessage = null;
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const AddRoomHandoverScreen6(),
+        ),
+      );
+  }
 
   @override
   void dispose() {
@@ -47,6 +111,13 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
             label: '보증금',
             controller: depositController,
             focusNode: depositFocus,
+            onChanged: (_) {
+              if (errorMessage != null) {
+                setState(() {
+                  errorMessage = null;
+                });
+              }
+            },
             onSubmitted: () => FocusScope.of(context).requestFocus(maintenanceFocus),
           ),
           16.verticalSpace,
@@ -54,6 +125,13 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
             label: '관리비',
             controller: maintenanceController,
             focusNode: maintenanceFocus,
+            onChanged: (_) {
+              if (errorMessage != null) {
+                setState(() {
+                  errorMessage = null;
+                });
+              }
+            },
           ),
         ];
       
@@ -63,6 +141,13 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
             label: '보증금',
             controller: depositController,
             focusNode: depositFocus,
+            onChanged: (_) {
+              if (errorMessage != null) {
+                setState(() {
+                  errorMessage = null;
+                });
+              }
+            },
             onSubmitted: () => FocusScope.of(context).requestFocus(monthlyRentFocus),
           ),
           16.verticalSpace,
@@ -70,22 +155,43 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
             label: '월세',
             controller: monthlyRentController,
             focusNode: monthlyRentFocus,
+            onChanged: (_) {
+              if (errorMessage != null) {
+                setState(() {
+                  errorMessage = null;
+                });
+              }
+            },
             onSubmitted: () => FocusScope.of(context).requestFocus(maintenanceFocus),
           ),
           16.verticalSpace,
           CustomPriceField(
             label: '관리비',
+            onChanged: (_) {
+              if (errorMessage != null) {
+                setState(() {
+                  errorMessage = null;
+                });
+              }
+            },
             controller: maintenanceController,
             focusNode: maintenanceFocus,
           ),
         ];
       
-      case '단기임대':
+      case '단기양도':
         return [
           CustomPriceField(
             label: '월세',
             controller: monthlyRentController,
             focusNode: monthlyRentFocus,
+            onChanged: (_) {
+              if (errorMessage != null) {
+                setState(() {
+                  errorMessage = null;
+                });
+              }
+            },
             onSubmitted: () => FocusScope.of(context).requestFocus(maintenanceFocus),
           ),
           16.verticalSpace,
@@ -93,6 +199,13 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
             label: '관리비',
             controller: maintenanceController,
             focusNode: maintenanceFocus,
+            onChanged: (_) {
+              if (errorMessage != null) {
+                setState(() {
+                  errorMessage = null;
+                });
+              }
+            },
           ),
         ];
       
@@ -108,51 +221,59 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
       showCloseButton: true,
       currentStep: 5,
       totalSteps: 8,
-      child: Stack(
+      child: Column(
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                20.verticalSpace,
-                Text(
-                  '가격 조건을 입력해 주세요',
-                  style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
-                ),
-                4.verticalSpace,
-                Text('선택한 임대 방식의 가격 조건을 확인해 주세요.',
-                  style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),
-                ),
-                20.verticalSpace,
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.all(16).r,
-                  decoration: BoxDecoration(
-                    color: GRAY100_COLOR,
-                    borderRadius: BorderRadius.all(Radius.circular(10)).r,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.rentType,
-                        style: AppTextStyles.title.copyWith(color: BLUE400_COLOR),
+          Expanded(
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              padding: EdgeInsets.only(bottom: 50.h),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    20.verticalSpace,
+                    Text(
+                      '가격 조건을 입력해 주세요',
+                      style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
+                    ),
+                    4.verticalSpace,
+                    Text('선택한 임대 방식의 가격 조건을 확인해 주세요.',
+                      style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),
+                    ),
+                    20.verticalSpace,
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.all(16).r,
+                      decoration: BoxDecoration(
+                        color: GRAY100_COLOR,
+                        borderRadius: BorderRadius.all(Radius.circular(10)).r,
                       ),
-                      16.verticalSpace,
-                      ..._buildPriceFields(),
-                    ],
-                  ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.rentType,
+                            style: AppTextStyles.title.copyWith(color: BLUE400_COLOR),
+                          ),
+                          16.verticalSpace,
+                          ..._buildPriceFields(),
+                        ],
+                      ),
+                    ),
+                    if (errorMessage != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 4.h),
+                        child: ShowErrorText(errorText: errorMessage!),
+                      ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
           CustomDoubleButton(
-            onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AddRoomHandoverScreen6()));
-            },
+            onTap: _validateInputs,
           ),
         ],
       ),

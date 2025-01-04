@@ -19,15 +19,14 @@ class AddTicketHandoverScreen5 extends ConsumerStatefulWidget {
 }
 
 class _AddRoomHandoverScreen1State extends ConsumerState<AddTicketHandoverScreen5> {
-  final detailAddressController = TextEditingController();
+  final titleController = TextEditingController();
   final titleFocus = FocusNode();
   final List<File> _images = [];
   final Set<int> _selectedImages = {};
   final _scrollController = ScrollController();
   final _introduceController = TextEditingController();
   final introduceFocus = FocusNode();
-  final _introduceKey = GlobalKey();
-  final _titleKey = GlobalKey();
+
 
   Future<void> _pickImage() async {
     if (_images.length >= 10) {
@@ -76,7 +75,7 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddTicketHandoverScreen
 
   @override
   void dispose() {
-    detailAddressController.dispose();
+    titleController.dispose();
     titleFocus.dispose();
     _scrollController.dispose();
     _introduceController.dispose();
@@ -140,7 +139,7 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddTicketHandoverScreen
                     cacheHeight: 160,
                   ),
                 ),
-                if (isSelected)
+                if (index ==0 )
                   Container(
                     width: 80.w,
                     height: 80.h,
@@ -246,16 +245,17 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddTicketHandoverScreen
                         border: Border.all(color: GRAY200_COLOR),
                       ),
                       child: TextFormField(
-                        key: _titleKey,
-                        controller: detailAddressController,
+                        scrollPadding: EdgeInsets.only(
+                          bottom: 90,
+                        ),
+                        controller: titleController,
                         focusNode: titleFocus,
-                        onTap: () => _scrollToField(_titleKey),
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
                             style: ButtonStyle(
                               overlayColor: MaterialStateProperty.all(Colors.transparent),
                             ),
-                            onPressed: detailAddressController.clear,
+                            onPressed: titleController.clear,
                             icon: SvgPicture.asset('assets/image/signupDelete.svg',fit: BoxFit.cover,),
                           ),
                           hintText: '예) 모양헬스 강남점, 모양독서실 압구정점',
@@ -295,12 +295,11 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddTicketHandoverScreen
                         border: Border.all(color: GRAY200_COLOR),
                       ),
                       child: TextFormField(
-                        key: _introduceKey,
+                        scrollPadding: EdgeInsets.only(
+                          bottom: 180,
+                        ),
                         controller: _introduceController,
                         focusNode: introduceFocus,
-                        onTap: (){
-                          _scrollToField(_introduceKey);
-                        },
                         maxLines: null,
                         decoration: InputDecoration(
                           hintText: '이용권의 종류와 특징을 자세히 소개해 주세요. 양도 수수료 무담 주체 등 추가 정보를 제공하면 더 많은 관심을 받을 수 있어요.',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 
@@ -35,48 +36,44 @@ class CustomSelectList extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ListView.separated(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: items.length,
-          separatorBuilder: (context, index) => 10.verticalSpace,
-          itemBuilder: (context, index) {
+        ...List.generate(
+          items.length,
+          (index) {
             final item = items[index];
             final isSelected = _isSelected(item);
             
-            return GestureDetector(
-              onTap: () => onItemSelected(item),
-              child: Container(
-                width: 345.w,
-                height: 56.h,
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
-                decoration: BoxDecoration(
-                  color: isSelected ? BLUE100_COLOR : GRAY100_COLOR,
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(
-                    color: isSelected ? BLUE400_COLOR : Colors.transparent,
-                    width: 1,
+            return Column(
+              children: [
+                GestureDetector(
+                  onTap: () => onItemSelected(item),
+                  child: Container(
+                    width: 345.w,
+                    height: 56.h,
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
+                    decoration: BoxDecoration(
+                      color: isSelected ? BLUE100_COLOR : GRAY100_COLOR,
+                      borderRadius: BorderRadius.circular(12.r),
+                      border: Border.all(
+                        color: isSelected ? BLUE400_COLOR : Colors.transparent,
+                        width: 1,
+                      ),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      item,
+                      style: AppTextStyles.subtitle.copyWith(
+                        color: GRAY800_COLOR,
+                      ),
+                    ),
                   ),
                 ),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  item,
-                  style: AppTextStyles.subtitle.copyWith(
-                    color: GRAY800_COLOR,
-                  ),
-                ),
-              ),
+                10.verticalSpace,
+              ],
             );
           },
         ),
-        if (showError) ...[
-          Text(
-            errorText,
-            style: AppTextStyles.caption2.copyWith(
-              color: ERROR_TEXT_COLOR,
-            ),
-          ),
-        ],
+        if (showError)
+          ShowErrorText(errorText: errorText),
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
@@ -29,6 +30,8 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
   final detailAddressController = TextEditingController();
   final addressFocus = FocusNode();
   final detailAddressFocus = FocusNode();
+  String? addressError;
+  String? detailAddressError;
 
   Future<void> _openAddressSearch() async {
     KopoModel? model = await Navigator.push(
@@ -69,6 +72,34 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
       case PostType.ticket:
         return 4;
     }
+  }
+
+  void _validateAddress() {
+    setState(() {
+      if (addressController.text.trim().isEmpty) {
+        addressError = '주소를 입력해주세요';
+      } else {
+        addressError = null;
+      }
+    });
+  }
+
+  void _validateDetailAddress(String? value) {
+    setState(() {
+      if (value == null || value.trim().isEmpty) {
+        detailAddressError = '상세주소를 입력해주세요';
+      } else if (value.length > 30) {
+        detailAddressError = '상세주소는 30자 이내로 입력해주세요';
+      } else {
+        detailAddressError = null;
+      }
+    });
+  }
+
+  bool _isFormValid() {
+    _validateAddress();
+    _validateDetailAddress(detailAddressController.text);
+    return addressError == null && detailAddressError == null;
   }
 
   @override
@@ -127,7 +158,10 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
                         child: TextFormField(
                           controller: addressController,
                           readOnly: true,
-                          onTap: _openAddressSearch,
+                          onTap: () {
+                            _openAddressSearch();
+                            _validateAddress();
+                          },
                           textAlignVertical: TextAlignVertical.center,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -164,52 +198,29 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
                           ),
                         ),
                       ),
+                      if (addressError != null)
+                        Padding(
+                          padding: EdgeInsets.only(top: 4.h),
+                          child: ShowErrorText(errorText: addressError!),
+                        ),
                       24.verticalSpace,
-                      Text(
-                        '상세주소',
-                        style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
+                      Row(
+                        children: [
+                          Text(
+                            '상세주소',
+                            style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
+                          ),
+                          8.horizontalSpace,
+                          Text('동, 호수는 본인만 확인할 수 있어요.',style: AppTextStyles.caption2.copyWith(color: GRAY400_COLOR),)
+                        ],
                       ),
                       10.verticalSpace,
-                      Container(
-                        width: 345.w,
-                        height: 56.h,
-                        decoration: BoxDecoration(
-                          color: GRAY100_COLOR,
-                          borderRadius: BorderRadius.circular(10.r),
-                          border: Border.all(color: GRAY200_COLOR),
+                      _buildDetailAddressField(),
+                      if (detailAddressError != null)
+                        Padding(
+                          padding: EdgeInsets.only(top: 4.h),
+                          child: ShowErrorText(errorText: detailAddressError!),
                         ),
-                        child: TextFormField(
-                          controller: detailAddressController,
-                          focusNode: detailAddressFocus,
-                          textAlignVertical: TextAlignVertical.center,
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              style: ButtonStyle(
-                                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                              ),
-                              onPressed: detailAddressController.clear,
-                              icon: SvgPicture.asset('assets/image/signupDelete.svg',fit: BoxFit.cover,),
-                            ),
-                            hintText: '동, 호수를 입력해 주세요',
-                            hintStyle: AppTextStyles.subtitle.copyWith(
-                              color: GRAY400_COLOR,
-                            ),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10.0.r),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0.r),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0.r),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -218,7 +229,7 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
           ),
           CustomDoubleButton(
             onTap: () {
-              if (_formKey.currentState!.validate()) {
+              if (_isFormValid()) {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => widget.nextScreen),
                 );
@@ -226,6 +237,52 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDetailAddressField() {
+    return Container(
+      width: 345.w,
+      height: 56.h,
+      decoration: BoxDecoration(
+        color: GRAY100_COLOR,
+        borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: GRAY200_COLOR),
+      ),
+      child: TextFormField(
+        controller: detailAddressController,
+        focusNode: detailAddressFocus,
+        onChanged: (value) {
+          _validateDetailAddress(value);
+        },
+        textAlignVertical: TextAlignVertical.center,
+        decoration: InputDecoration(
+          suffixIcon: IconButton(
+            style: ButtonStyle(
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+            ),
+            onPressed: detailAddressController.clear,
+            icon: SvgPicture.asset('assets/image/signupDelete.svg',fit: BoxFit.cover,),
+          ),
+          hintText: '동, 호수를 입력해 주세요',
+          hintStyle: AppTextStyles.subtitle.copyWith(
+            color: GRAY400_COLOR,
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(10.0.r),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0.r),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0.r),
+            borderSide: BorderSide.none,
+          ),
+        ),
       ),
     );
   }

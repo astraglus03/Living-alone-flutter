@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/view/root_tab.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen1.dart';
+import 'package:livingalone/handover/view/add_room_handover_screen2.dart';
+import 'package:livingalone/handover/view/add_room_handover_screen4.dart';
+import 'package:livingalone/handover/view/add_room_handover_screen6.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen7.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen8.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen1.dart';
@@ -44,7 +47,7 @@ class MyApp extends ConsumerWidget {
             ),
             debugShowCheckedModeBanner: false,
             // home: LivingDetailScreen(postType: PostType.room),
-            home: RootTab(),
+            home: AddRoomHandoverScreen7(),
           ),
         );
       }

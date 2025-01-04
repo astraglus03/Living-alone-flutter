@@ -41,17 +41,17 @@ class CustomMultiSelectGrid extends StatelessWidget {
                   vertical: 10.h,
                 ),
                 decoration: BoxDecoration(
-                  color: isSelected ? BLUE100_COLOR : GRAY100_COLOR,
+                  color: isSelected ? BLUE100_COLOR : WHITE100_COLOR,
                   borderRadius: BorderRadius.circular(40).r,
                   border: Border.all(
-                    color: isSelected ? BLUE400_COLOR : Colors.transparent,
+                    color: isSelected ? BLUE400_COLOR : GRAY300_COLOR,
                     width: 1,
                   ),
                 ),
                 child: Text(
                   item,
                   style: AppTextStyles.body2.copyWith(
-                    color: isSelected ? GRAY800_COLOR : GRAY500_COLOR,
+                    color: isSelected ? BLUE400_COLOR : GRAY500_COLOR,
                   ),
                 ),
               ),

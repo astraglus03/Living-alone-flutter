@@ -15,7 +15,7 @@ class AddRoomHandoverScreen4 extends StatefulWidget {
 }
 
 class _AddRoomHandoverScreen4State extends State<AddRoomHandoverScreen4> {
-  final List<String> buildingTypes = ['전세', '월세', '단기임대'];
+  final List<String> buildingTypes = ['전세', '월세', '단기양도'];
   String? selectedType;
   bool showError = false;
 
@@ -52,28 +52,30 @@ class _AddRoomHandoverScreen4State extends State<AddRoomHandoverScreen4> {
       showCloseButton: true,
       currentStep: 4,
       totalSteps: 8,
-      child: Stack(
+      child: Column(
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                20.verticalSpace,
-                Text(
-                  '임대 방식을 선택해 주세요',
-                  style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
-                ),
-                40.verticalSpace,
-                CustomSelectList(
-                  items: buildingTypes,
-                  selected: selectedType,
-                  onItemSelected: _handleTypeSelection,
-                  showError: showError,
-                  errorText: '임대 방식을 선택해 주세요.',
-                ),
-              ],
+          Expanded(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  20.verticalSpace,
+                  Text(
+                    '임대 방식을 선택해 주세요',
+                    style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
+                  ),
+                  40.verticalSpace,
+                  CustomSelectList(
+                    items: buildingTypes,
+                    selected: selectedType,
+                    onItemSelected: _handleTypeSelection,
+                    showError: showError,
+                    errorText: '임대 방식을 선택해 주세요.',
+                  ),
+                ],
+              ),
             ),
           ),
           CustomDoubleButton(

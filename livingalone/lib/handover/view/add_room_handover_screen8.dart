@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:reorderables/reorderables.dart';
 
 class AddRoomHandoverScreen8 extends ConsumerStatefulWidget {
   const AddRoomHandoverScreen8({super.key});
@@ -21,15 +22,11 @@ class AddRoomHandoverScreen8 extends ConsumerStatefulWidget {
 class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8> {
   final titleController = TextEditingController();
   final titleFocus = FocusNode();
-  final detailAddressFocus = FocusNode();
   final List<File> _images = [];
   final Set<int> _selectedImages = {};
   final _scrollController = ScrollController();
   final _introduceController = TextEditingController();
   final _introduceFocus = FocusNode();
-  final _introduceKey = GlobalKey();
-  final _titleKey = GlobalKey();
-  final introduceFocus = FocusNode();
 
   Future<void> _pickImage() async {
     if (_images.length >= 10) {
@@ -58,33 +55,28 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
     });
   }
 
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (oldIndex < newIndex) {
+        newIndex -= 1;
+      }
+      final File item = _images.removeAt(oldIndex);
+      _images.insert(newIndex, item);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-  }
-
-  void _scrollToField(GlobalKey key) {
-    Future.delayed(Duration(milliseconds: 300), () {
-      final RenderObject? renderObject = key.currentContext?.findRenderObject();
-      if (renderObject != null) {
-        Scrollable.ensureVisible(
-          key.currentContext!,
-          alignment: 0.1,
-          duration: Duration(milliseconds: 300),
-        );
-      }
-    });
   }
 
   @override
   void dispose() {
     titleController.dispose();
     titleFocus.dispose();
-    detailAddressFocus.dispose();
     _scrollController.dispose();
     _introduceController.dispose();
     _introduceFocus.dispose();
-    introduceFocus.dispose();
     super.dispose();
   }
 
@@ -100,68 +92,78 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
           borderRadius: BorderRadius.circular(10.r),
           border: Border.all(color: GRAY200_COLOR),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.camera_alt_outlined,
-              color: GRAY400_COLOR,
-              size: 24.w,
-            ),
-          ],
+        child: Center(
+          child: SvgPicture.asset('assets/icons/photo.svg'),
         ),
       ),
     );
   }
 
-  Widget _buildImageItem(File image, int index) {
-    final isSelected = _selectedImages.contains(index);
+  Widget _buildImageList() {
+    return SizedBox(
+      height: 80.h,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _buildAddImageButton(),
+          if (_images.isNotEmpty)
+            Container(
+              width: MediaQuery.of(context).size.width - 128.w,
+              child: ReorderableListView(
+                scrollDirection: Axis.horizontal,
+                onReorder: _onReorder,
+                children: _images.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final image = entry.value;
+                  return _buildImageItem(image, index);
+                }).toList(),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          if (isSelected) {
-            _selectedImages.remove(index);
-          } else {
-            _selectedImages.add(index);
-          }
-        });
-      },
+  Widget _buildImageItem(File image, int index) {
+    return Container(
+      key: ValueKey(image.path),
+      margin: EdgeInsets.only(right: 10.w),
       child: Stack(
         children: [
-          Container(
-            margin: EdgeInsets.only(right: 10.w),
-            child: Stack(
-              children: [
-                ClipRRect(
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10.r),
+            child: Image.file(
+              image,
+              width: 80.w,
+              height: 80.h,
+              fit: BoxFit.cover,
+              cacheWidth: 160,
+              cacheHeight: 160,
+            ),
+          ),
+          if (index == 0)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  child: Image.file(
-                    image,
-                    width: 80.w,
-                    height: 80.h,
-                    fit: BoxFit.cover,
-                    cacheWidth: 160,
-                    cacheHeight: 160,
+                  border: Border.all(
+                    color: BLUE400_COLOR,
+                    width: 2,
                   ),
                 ),
-                if (isSelected)
-                  Container(
-                    width: 80.w,
-                    height: 80.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      border: Border.all(
-                        color: BLUE400_COLOR,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-              ],
+              ),
+            ),
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () => _removeImage(index),
+              child: Container(
+                color: Colors.transparent,
+              ),
             ),
           ),
           Positioned(
             top: 0.h,
-            right: 10.w,
+            right: 0.w,
             child: GestureDetector(
               onTap: () => _removeImage(index),
               child: Container(
@@ -193,150 +195,140 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
       showCloseButton: true,
       currentStep: 8,
       totalSteps: 8,
-      child: Stack(
-        children: [
-          GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: 24.w,
-                  right: 24.w,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 45,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    20.verticalSpace,
-                    Text('양도할 방의 사진과\n소개 글을 올려주세요', style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR),),
-                    4.verticalSpace,
-                    Text('사진과 소개 글은 자세히 올릴수록 효과적 이에요.', style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),),
-                    20.verticalSpace,
-                    Row(
-                      children: [
-                        Text('사진', style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),),
-                        8.horizontalSpace,
-                        Text('최대 10장 가능',style: AppTextStyles.caption2.copyWith(color: GRAY400_COLOR),)
-                      ],
-                    ),
-                    10.verticalSpace,
-                    SizedBox(
-                      height: 80.h,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _images.length + (_images.length < 10 ? 1 : 0),
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return _buildAddImageButton();
-                          }
-                          return _buildImageItem(_images[index - 1], index - 1);
-                        },
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: 24.w,
+                    right: 24.w,
+                    // bottom: MediaQuery.of(context).viewInsets.bottom + 45,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      20.verticalSpace,
+                      Text('양도할 방의 사진과\n소개 글을 올려주세요', style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR),),
+                      4.verticalSpace,
+                      Text('사진과 소개 글은 자세히 올릴수록 효과적 이에요.', style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),),
+                      20.verticalSpace,
+                      Row(
+                        children: [
+                          Text('사진', style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),),
+                          8.horizontalSpace,
+                          Text('최대 10장 가능',style: AppTextStyles.caption2.copyWith(color: GRAY400_COLOR),)
+                        ],
                       ),
-                    ),
-                    24.verticalSpace,
-                    Text(
-                      '제목',
-                      style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
-                    ),
-                    10.verticalSpace,
-                    Container(
-                      width: 345.w,
-                      height: 56.h,
-                      decoration: BoxDecoration(
-                        color: GRAY100_COLOR,
-                        borderRadius: BorderRadius.circular(10.r),
-                        border: Border.all(color: GRAY200_COLOR),
+                      10.verticalSpace,
+                      _buildImageList(),
+                      24.verticalSpace,
+                      Text(
+                        '제목',
+                        style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
                       ),
-                      child: TextFormField(
-                        key: _titleKey,
-                        controller: titleController,
-                        focusNode: detailAddressFocus,
-                        onTap: () => _scrollToField(_titleKey),
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            style: ButtonStyle(
-                              overlayColor: MaterialStateProperty.all(Colors.transparent),
+                      10.verticalSpace,
+                      Container(
+                        width: 345.w,
+                        height: 56.h,
+                        decoration: BoxDecoration(
+                          color: GRAY100_COLOR,
+                          borderRadius: BorderRadius.circular(10.r),
+                          border: Border.all(color: GRAY200_COLOR),
+                        ),
+                        child: TextFormField(
+                          scrollPadding: EdgeInsets.only(
+                            bottom: 90,
+                          ),
+                          controller: titleController,
+                          focusNode: titleFocus,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              style: ButtonStyle(
+                                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                              ),
+                              onPressed: titleController.clear,
+                              icon: SvgPicture.asset('assets/image/signupDelete.svg',fit: BoxFit.cover,),
                             ),
-                            onPressed: titleController.clear,
-                            icon: SvgPicture.asset('assets/image/signupDelete.svg',fit: BoxFit.cover,),
-                          ),
-                          hintText: '모양아파트 101동, 모양빌라',
-                          hintStyle: AppTextStyles.subtitle.copyWith(
-                            color: GRAY400_COLOR,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(10.0.r),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0.r),
-                            borderSide: BorderSide.none,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0.r),
-                            borderSide: BorderSide.none,
+                            hintText: '모양아파트 101동, 모양빌라',
+                            hintStyle: AppTextStyles.subtitle.copyWith(
+                              color: GRAY400_COLOR,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(10.0.r),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0.r),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0.r),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    24.verticalSpace,
-                    Text(
-                      '소개 글',
-                      style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
-                    ),
-                    10.verticalSpace,
-                    Container(
-                      width: 345.w,
-                      constraints: BoxConstraints(
-                        minHeight: 180.h,
+                      24.verticalSpace,
+                      Text(
+                        '소개 글',
+                        style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
                       ),
-                      decoration: BoxDecoration(
-                        color: GRAY100_COLOR,
-                        borderRadius: BorderRadius.circular(10.r),
-                        border: Border.all(color: GRAY200_COLOR),
-                      ),
-                      child: TextFormField(
-                        key: _introduceKey,
-                        controller: _introduceController,
-                        focusNode: _introduceFocus,
-                        onTap: (){
-                          _scrollToField(_introduceKey);
-                        },
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          hintText: '방의 특징과 장점을 소개해 주세요. 자세한 정보를\n제공하면 더 많은 관심을 받을 수 있어요.',
-                          hintStyle: AppTextStyles.subtitle.copyWith(
-                            color: GRAY400_COLOR,
+                      10.verticalSpace,
+                      Container(
+                        width: 345.w,
+                        constraints: BoxConstraints(
+                          minHeight: 180.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: GRAY100_COLOR,
+                          borderRadius: BorderRadius.circular(10.r),
+                          border: Border.all(color: GRAY200_COLOR),
+                        ),
+                        child: TextFormField(
+                          controller: _introduceController,
+                          focusNode: _introduceFocus,
+                          scrollPadding: EdgeInsets.only(
+                            bottom: 180,
                           ),
-                          contentPadding: EdgeInsets.all(16.w),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(10.0.r),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0.r),
-                            borderSide: BorderSide.none,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0.r),
-                            borderSide: BorderSide.none,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            hintText: '방의 특징과 장점을 소개해 주세요. 자세한 정보를\n제공하면 더 많은 관심을 받을 수 있어요.',
+                            hintStyle: AppTextStyles.subtitle.copyWith(
+                              color: GRAY400_COLOR,
+                            ),
+                            contentPadding: EdgeInsets.all(16.w),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(10.0.r),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0.r),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0.r),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    100.verticalSpace,
-                  ],
+                      100.verticalSpace,
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          CustomDoubleButton(
-            onTap: () {},
-          ),
-        ],
+            CustomDoubleButton(
+              onTap: () {},
+            ),
+          ],
+        ),
       ),
     );
   }

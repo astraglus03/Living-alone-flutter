@@ -52,28 +52,30 @@ class _AddRoomHandoverScreen3State extends State<AddRoomHandoverScreen3> {
       showCloseButton: true,
       currentStep: 3,
       totalSteps: 8,
-      child: Stack(
+      child: Column(
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                20.verticalSpace,
-                Text(
-                  '매물의 종류를 선택해 주세요',
-                  style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
-                ),
-                40.verticalSpace,
-                CustomSelectList(
-                  items: buildingTypes,
-                  selected: selectedType,
-                  onItemSelected: _handleTypeSelection,
-                  showError: showError,
-                  errorText: '매물의 종류를 선택해 주세요.',
-                ),
-              ],
+          Expanded(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  20.verticalSpace,
+                  Text(
+                    '매물의 종류를 선택해 주세요',
+                    style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
+                  ),
+                  40.verticalSpace,
+                  CustomSelectList(
+                    items: buildingTypes,
+                    selected: selectedType,
+                    onItemSelected: _handleTypeSelection,
+                    showError: showError,
+                    errorText: '매물의 종류를 선택해 주세요.',
+                  ),
+                ],
+              ),
             ),
           ),
           CustomDoubleButton(

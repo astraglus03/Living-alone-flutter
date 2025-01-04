@@ -14,61 +14,65 @@ class CustomDoubleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      left: 0,
-      right: 0,
-      // bottom: MediaQuery.of(context).viewInsets.bottom + 34,
-      bottom: 34,
+    return Container(
+      decoration: BoxDecoration(
+        color: WHITE100_COLOR,
+        border: Border(
+          top: BorderSide(
+            color: GRAY200_COLOR,
+            width: 1.w,
+          ),
+        ),
+      ),
+      padding: EdgeInsets.only(
+        left: 24.w,
+        right: 24.w,
+        bottom: MediaQuery.of(context).viewInsets.bottom > 0
+            ? MediaQuery.of(context).viewInsets.bottom + 10
+            : 34.h,
+        top: 12.h,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: GRAY200_COLOR,
-          ),
-          12.verticalSpace,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Row(
-              children: [
-                CommonButton(
-                  width: 168.w,
-                  height: 50.h,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: BLUE100_COLOR,
-                        foregroundColor: BLUE400_COLOR,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8)).r
-                        ),
-                      shadowColor: Colors.transparent,
-                    ),
-                    child: Text('이전', style: AppTextStyles.title),
-                  ),
-                ),
-                9.horizontalSpace,
-                CommonButton(
-                  width: 168.w,
-                  height: 50.h,
-                  child: ElevatedButton(
-                    onPressed: onTap,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: BLUE400_COLOR,
-                      foregroundColor: WHITE100_COLOR,
+          Row(
+            children: [
+              CommonButton(
+                width: 168.w,
+                height: 50.h,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: BLUE100_COLOR,
+                      foregroundColor: BLUE400_COLOR,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8)).r),
-                      shadowColor: Colors.transparent,
-                    ),
-                    child: Text('완료', style: AppTextStyles.title),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(8)).r
+                      ),
+                    shadowColor: Colors.transparent,
                   ),
+                  child: Text('이전', style: AppTextStyles.title),
                 ),
-              ],
-            ),
+              ),
+              9.horizontalSpace,
+              CommonButton(
+                width: 168.w,
+                height: 50.h,
+                child: ElevatedButton(
+                  onPressed: onTap,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: BLUE400_COLOR,
+                    foregroundColor: WHITE100_COLOR,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)).r),
+                    shadowColor: Colors.transparent,
+                  ),
+                  child: Text('완료', style: AppTextStyles.title),
+                ),
+              ),
+            ],
           ),
         ],
       ),

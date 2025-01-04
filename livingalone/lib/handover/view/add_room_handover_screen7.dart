@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
@@ -27,6 +28,59 @@ class _AddRoomHandoverScreen9State
   final _lastDay = DateTime(2049, 12, 31);
   String? _errorMessage;
 
+  void _validateAndNavigate() {
+    if (_selectedDay == null) {
+      setState(() {
+        _errorMessage = '입주가능일을 선택해주세요';
+      });
+    } else {
+      _errorMessage = null; // setState 없이 값만 변경
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => AddRoomHandoverScreen8())
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultLayout(
+      title: '자취방 양도하기',
+      currentStep: 7,
+      totalSteps: 8,
+      showCloseButton: true,
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  20.verticalSpace,
+                  Text(
+                    '입주가능일을 선택해주세요',
+                    style:
+                    AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
+                  ),
+                  20.verticalSpace,
+                  _buildCalendar(),
+                  if (_errorMessage !=null)
+                    Padding(
+                      padding: EdgeInsets.only(top: 4.h),
+                      child: ShowErrorText(errorText: _errorMessage!),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          CustomDoubleButton(
+            onTap: _validateAndNavigate,
+          ),
+        ],
+      ),
+    );
+  }
   Widget _buildCalendar() {
     return TableCalendar(
       locale: 'ko_KR',
@@ -76,74 +130,6 @@ class _AddRoomHandoverScreen9State
       daysOfWeekStyle: DaysOfWeekStyle(
         weekdayStyle: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
         weekendStyle: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultLayout(
-      title: '자취방 양도하기',
-      currentStep: 7,
-      totalSteps: 8,
-      showCloseButton: true,
-      child: Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                padding: EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    20.verticalSpace,
-                    Text(
-                      '입주가능일을 선택해주세요',
-                      style:
-                      AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
-                    ),
-                    20.verticalSpace,
-                    _buildCalendar(),
-                    if (_selectedDay == null)
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/image/warning.svg',
-                              ),
-                              4.horizontalSpace,
-                              Text('입주 가능일을 선택해 주세요',
-                                  style: AppTextStyles.caption2
-                                      .copyWith(color: ERROR_TEXT_COLOR)),
-                            ],
-                          ),
-                          10.verticalSpace,
-                        ],
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          CustomDoubleButton(
-            onTap: () {
-              if (_selectedDay == null) {
-                setState(() {
-                  _errorMessage = '입주가능일을 선택해주세요';
-                });
-                return;
-              }
-              // TODO: 다음 화면으로 이동
-              Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AddRoomHandoverScreen8()));
-            },
-          ),
-        ],
       ),
     );
   }
