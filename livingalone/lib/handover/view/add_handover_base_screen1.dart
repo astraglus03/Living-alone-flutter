@@ -118,110 +118,112 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
       showCloseButton: true,
       currentStep: 1,
       totalSteps: _totalSteps,
-      child: Stack(
+      child: Column(
         children: [
-          GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      20.verticalSpace,
-                      Text('주소를 입력해 주세요',
-                        style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR),
-                      ),
-                      4.verticalSpace,
-                      Text(_subtitle,
-                        style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),
-                      ),
-                      40.verticalSpace,
-                      Text('주소',
-                        style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
-                      ),
-                      10.verticalSpace,
-                      Container(
-                        width: 345.w,
-                        height: 56.h,
-                        decoration: BoxDecoration(
-                          color: GRAY100_COLOR,
-                          borderRadius: BorderRadius.circular(10.r),
-                          border: Border.all(color: GRAY200_COLOR),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: SingleChildScrollView(
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        20.verticalSpace,
+                        Text('주소를 입력해 주세요',
+                          style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR),
                         ),
-                        child: TextFormField(
-                          controller: addressController,
-                          readOnly: true,
-                          onTap: () {
-                            _openAddressSearch();
-                            _validateAddress();
-                          },
-                          textAlignVertical: TextAlignVertical.center,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10.0.r),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0.r),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0.r),
-                              borderSide: BorderSide.none,
-                            ),
-                            suffixIcon: Padding(
-                              padding: EdgeInsets.only(right: 8),
-                              child: IconButton(
-                                style: ButtonStyle(
-                                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                ),
-                                onPressed: _openAddressSearch,
-                                icon: Icon(
-                                  Icons.search,
-                                  color: GRAY600_COLOR,
-                                  size: 24,
+                        4.verticalSpace,
+                        Text(_subtitle,
+                          style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),
+                        ),
+                        40.verticalSpace,
+                        Text('주소',
+                          style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
+                        ),
+                        10.verticalSpace,
+                        Container(
+                          width: 345.w,
+                          height: 56.h,
+                          decoration: BoxDecoration(
+                            color: GRAY100_COLOR,
+                            borderRadius: BorderRadius.circular(10.r),
+                            border: Border.all(color: GRAY200_COLOR),
+                          ),
+                          child: TextFormField(
+                            controller: addressController,
+                            readOnly: true,
+                            onTap: () {
+                              _openAddressSearch();
+                              _validateAddress();
+                            },
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(10.0.r),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0.r),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0.r),
+                                borderSide: BorderSide.none,
+                              ),
+                              suffixIcon: Padding(
+                                padding: EdgeInsets.only(right: 8),
+                                child: IconButton(
+                                  style: ButtonStyle(
+                                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                  ),
+                                  onPressed: _openAddressSearch,
+                                  icon: Icon(
+                                    Icons.search,
+                                    color: GRAY600_COLOR,
+                                    size: 24,
+                                  ),
                                 ),
                               ),
+                              hintText: '예) 상명대길 31, 안서동 300',
+                              hintStyle: AppTextStyles.subtitle.copyWith(
+                                color: GRAY400_COLOR,
+                              ),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                             ),
-                            hintText: '예) 상명대길 31, 안서동 300',
-                            hintStyle: AppTextStyles.subtitle.copyWith(
-                              color: GRAY400_COLOR,
-                            ),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                           ),
                         ),
-                      ),
-                      if (addressError != null)
-                        Padding(
-                          padding: EdgeInsets.only(top: 4.h),
-                          child: ShowErrorText(errorText: addressError!),
-                        ),
-                      24.verticalSpace,
-                      Row(
-                        children: [
-                          Text(
-                            '상세주소',
-                            style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
+                        if (addressError != null)
+                          Padding(
+                            padding: EdgeInsets.only(top: 4.h),
+                            child: ShowErrorText(errorText: addressError!),
                           ),
-                          8.horizontalSpace,
-                          Text('동, 호수는 본인만 확인할 수 있어요.',style: AppTextStyles.caption2.copyWith(color: GRAY400_COLOR),)
-                        ],
-                      ),
-                      10.verticalSpace,
-                      _buildDetailAddressField(),
-                      if (detailAddressError != null)
-                        Padding(
-                          padding: EdgeInsets.only(top: 4.h),
-                          child: ShowErrorText(errorText: detailAddressError!),
+                        24.verticalSpace,
+                        Row(
+                          children: [
+                            Text(
+                              '상세주소',
+                              style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
+                            ),
+                            8.horizontalSpace,
+                            Text('동, 호수는 본인만 확인할 수 있어요.',style: AppTextStyles.caption2.copyWith(color: GRAY400_COLOR),)
+                          ],
                         ),
-                    ],
+                        10.verticalSpace,
+                        _buildDetailAddressField(),
+                        if (detailAddressError != null)
+                          Padding(
+                            padding: EdgeInsets.only(top: 4.h),
+                            child: ShowErrorText(errorText: detailAddressError!),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),

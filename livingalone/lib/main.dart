@@ -47,7 +47,7 @@ class MyApp extends ConsumerWidget {
             ),
             debugShowCheckedModeBanner: false,
             // home: LivingDetailScreen(postType: PostType.room),
-            home: AddRoomHandoverScreen7(),
+            home: RootTab(),
           ),
         );
       }
