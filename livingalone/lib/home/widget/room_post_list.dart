@@ -85,7 +85,7 @@ class PostItem extends StatelessWidget {
     return GestureDetector(
       onTap: (){
         // TODO: 나중에 라우트 사용 + post.id
-        pushScreenWithoutNavBar((context),  LivingDetailScreen(postType: PostType.room));
+        pushScreenWithoutNavBar((context),  LivingDetailScreen(postType: PostType.room,postId: post.id));
         // Navigator.of(context).push(MaterialPageRoute(builder: (_)=> LivingDetailScreen(postType: PostType.ticket)));
       },
       child: Container(
@@ -140,6 +140,7 @@ class PostItem extends StatelessWidget {
                                 post.subTitle2,
                                 style: AppTextStyles.caption2.copyWith(
                                   color: BLUE400_COLOR,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
@@ -213,6 +214,7 @@ class PostItem extends StatelessWidget {
               ),
             ),
             DottedLine(
+              dashColor: GRAY300_COLOR,
               direction: Axis.horizontal,
               alignment: WrapAlignment.center,
               lineLength: MediaQuery.of(context).size.width * 0.87,

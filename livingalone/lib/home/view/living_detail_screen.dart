@@ -20,12 +20,16 @@ import 'package:livingalone/home/models/comment_model.dart';
 import 'package:livingalone/home/view_models/living_detail_screen_provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/home/view_models/comments_provider.dart';
+import 'package:livingalone/home/view_models/like_provider.dart';
 
 class LivingDetailScreen extends ConsumerStatefulWidget {
   final PostType postType;
+  final String postId;
 
   const LivingDetailScreen({
     required this.postType,
+    required this.postId,
     super.key,
   });
 
@@ -34,7 +38,6 @@ class LivingDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with SingleTickerProviderStateMixin {
-  bool isLikeActive = false;
   bool showTabBar = false;
   final PageController pController = PageController();
   final ScrollController scrollController = ScrollController();
@@ -73,6 +76,7 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
     scrollController.addListener(_onScroll);
     // 초기 댓글 데이터 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 더미데이터
       final initialComments = widget.postType == PostType.room
         ? <CommentModel>[
         CommentModel(
@@ -146,6 +150,7 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
       child: Stack(
         children: [
           SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             controller: scrollController,
             child: Column(
               children: [
@@ -208,8 +213,7 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
                       ],
                       onTap: (index) {
                         final title = _getTitleForIndex(index);
-                        ref.read(LivingDetailScreenProvider.notifier)
-                            .scrollToSection(title, scrollController);
+                        ref.read(LivingDetailScreenProvider.notifier).scrollToSection(title, scrollController);
                       },
                     ),
                   ),
@@ -339,7 +343,7 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
           padding: EdgeInsets.only(top: 24.h),  // 상단 여백 추가
           child: InfoDetailCard(
             key: ref.read(LivingDetailScreenProvider).sectionKeys['매물 소개'],
-            title: '매물 소개',
+            title: '방 소개',
             introText: '방학 동안 자리를 비우게 되어 단기 임대합니다.\n1월 1일부터 2월 28일까지 두 달간 깨끗하게 사용하실 분을 구합니다.\n궁금한 점이 있으시면 편하게 채팅 주세요!',
           ),
         ),
@@ -355,8 +359,8 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
           floor: '7층/10층',
           options: ['에어컨', '세탁기', '냉장고', '전자레인지, 붙박이장'],
           facilities: ['엘리베이터', '주차장', 'CCTV', '복층'],
-          conditions: ['반려동물 가능', '즉시입주 가능'],
-          availableDate: '즉시 입주',
+          conditions: ['반려동물 가능',],
+          availableDate: DateTime.now(),
         ),
         24.verticalSpace,
         CommonDivider(),
@@ -492,11 +496,8 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
         child: Row(
           children: [
             _buildIconButton(
-              isLikeActive: isLikeActive,
               onPressed: () {
-                setState(() {
-                  isLikeActive = !isLikeActive;
-                });
+                ref.read(likeProvider.notifier).toggleLike(widget.postId);
               },
             ),
             8.horizontalSpace,
@@ -510,7 +511,6 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
   }
 
   Widget _buildIconButton({
-    required bool isLikeActive,
     required VoidCallback onPressed,
   }) {
     return Container(
@@ -524,8 +524,16 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
-        icon: ColoredImageFill(isActive: isLikeActive),
-        onPressed: onPressed,
+        icon: Consumer(
+          builder: (context, ref, child) {
+            final likeState = ref.watch(likeProvider);
+            final isLiked = likeState.likedPosts[widget.postId] ?? false;
+            return ColoredImageFill(isActive: isLiked);
+          },
+        ),
+        onPressed: () {
+          ref.read(likeProvider.notifier).toggleLike(widget.postId);
+        },
       ),
     );
   }

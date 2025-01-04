@@ -127,6 +127,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
                     _commentController.clear();
                     setState(() {
                       hasText = false;
+                      FocusScope.of(context).unfocus();
                     });
                   }
                 : null,

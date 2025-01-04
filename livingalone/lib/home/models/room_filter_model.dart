@@ -47,7 +47,6 @@ class FilterState {
       '복층': false,
     },
     this.conditions = conditions ?? {
-      '즉시입주': false,
       '2인 거주 가능': false,
       '여성 전용': false,
       '반려동물 가능': false,

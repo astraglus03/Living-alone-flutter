@@ -8,13 +8,15 @@ import 'package:dotted_line/dotted_line.dart';
 
 class RentInfoCard extends StatelessWidget {
   final PostType postType; // 티켓 카드
-  final int leftFee; // 왼쪽 가격 or 횟수
+  final int leftFee; // 왼쪽 가격(월세인경우 보증금) or 횟수
   final int rightFee; // 관리비 가격 or 양도비 가격
+  final int? monthFee; // 월세
 
   const RentInfoCard({
     required this.postType,
     required this.leftFee,
     required this.rightFee,
+    this.monthFee,
     super.key,
   });
 

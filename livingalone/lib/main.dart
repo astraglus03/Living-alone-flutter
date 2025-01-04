@@ -44,7 +44,7 @@ class MyApp extends ConsumerWidget {
             ),
             debugShowCheckedModeBanner: false,
             // home: LivingDetailScreen(postType: PostType.room),
-            home: LoginScreen(),
+            home: RootTab(),
           ),
         );
       }

@@ -160,7 +160,7 @@ class _SignupNicknameScreenState extends State<SignupNicknameScreen> {
 
     if (!isDuplicateChecked) {
       setState(() {
-        errorMessage = '닉네임 중복확인을 해주세요';
+        errorMessage = '닉네임 중복 여부를 확인해 주세요';
       });
       return false;
     }
