@@ -17,7 +17,6 @@ import '../models/ticket_post_model.dart';
 import '../view_models/ticket_post_provider.dart';
 import '../widget/room_post_list.dart';
 import '../widget/ticket_post_list.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   @override

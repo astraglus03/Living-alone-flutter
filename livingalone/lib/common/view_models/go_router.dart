@@ -5,9 +5,9 @@ import 'package:livingalone/common/view/splash_screen.dart';
 import 'package:livingalone/map/view/map_screen.dart';
 import 'package:livingalone/mypage/view/mypage_screen.dart';
 import 'package:livingalone/neighbor/view/neighbor_communication_screen.dart';
-import 'package:livingalone/user/view/signup_screen.dart';
-import 'package:livingalone/user/view/terms_detail_screen.dart';
-import 'package:livingalone/user/view/terms_screen.dart';
+import 'package:livingalone/user/view/signup_authentication_screen.dart';
+import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
+import 'package:livingalone/user/view/signup_terms_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/splash',
@@ -26,12 +26,12 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/signup',
       name: 'signup',
-      builder: (context, state) => SignupScreen(),
+      builder: (context, state) => SignupAuthenticationScreen(),
     ),
     GoRoute(
       path: '/terms',
       name: 'terms',
-      builder: (context, state) => TermsScreen(),
+      builder: (context, state) => SignupTermsScreen(),
       // routes: [
       //   GoRoute(
       //     path: 'termsDetail/:rid',

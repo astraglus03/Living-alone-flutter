@@ -68,6 +68,13 @@ dev_dependencies:
   local_auth: ^2.3.0
   flutter_keychain: ^2.5.0
   flutter_screenutil: ^5.9.3
+  smooth_page_indicator: ^1.2.0+3
+  ticket_clippers: ^0.0.8
+  dotted_line: ^3.2.3
+  share_plus: ^10.1.3
+  flutter_launcher_icons: ^0.14.2
+  table_calendar: ^3.1.3
+  remedi_kopo: ^0.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -83,6 +90,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - assets/image/
+   - assets/applogo/
+   - assets/icons/
 
 
   fonts:
@@ -94,6 +103,15 @@ flutter:
           weight: 600
         - asset: assets/fonts/SUIT-Medium.ttf
           weight: 500
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/applogo/main_logo.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/applogo/main_logo.png"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

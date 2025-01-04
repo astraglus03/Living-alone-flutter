@@ -10,9 +10,16 @@ class DefaultLayout extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
   final String? title;
-  final bool isFirstScreen;
+  final bool showBackButton;
   final Color appbarBorderColor;
-  final String? actionString;
+  final Widget? actions;
+  final double? height;
+  final PreferredSizeWidget? bottom;
+  final bool? showCloseButton;
+  final VoidCallback? onClosePressed;
+  final int? currentStep;
+  final int? totalSteps;
+  final bool? appbarBorder;
 
   const DefaultLayout({
     this.backgroundColor,
@@ -21,9 +28,17 @@ class DefaultLayout extends StatelessWidget {
     this.bottomNavigationBar,
     this.floatingActionButton,
     this.title,
-    this.isFirstScreen = false,
-    super.key, this.appbarBorderColor=GRAY200_COLOR,
-    this.actionString,
+    this.showBackButton = true,
+    this.appbarBorderColor = GRAY200_COLOR,
+    this.actions,
+    this.height,
+    this.bottom,
+    this.showCloseButton,
+    this.onClosePressed,
+    this.currentStep,
+    this.totalSteps,
+    this.appbarBorder = true,
+    super.key,
   });
 
   @override
@@ -45,39 +60,54 @@ class DefaultLayout extends StatelessWidget {
     );
   }
 
-  AppBar? renderAppBar(context) {
+  PreferredSize? renderAppBar(BuildContext context) {
     if (title == null) {
       return null;
-    } else {
-      return AppBar(
+    }
+
+    return PreferredSize(
+      preferredSize: Size.fromHeight((height ?? 48.h) + (bottom?.preferredSize.height ?? 0)),
+      child: AppBar(
         title: Text(title!),
         titleTextStyle: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        leading: showCloseButton == true
+            ? IconButton(
+                icon: const Icon(Icons.close),
+                splashColor: Colors.transparent,
+                disabledColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: onClosePressed ?? () {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+              )
+            : showBackButton
+                ? IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_sharp),
+                    onPressed: () => Navigator.of(context).pop(),
+                  )
+                : null,
         actions: [
-          if(actionString != null)
-          Padding(
-            padding: const EdgeInsets.only(right: 24).r,
-            child: Text('$actionString/4', style: AppTextStyles.caption2.copyWith(color: BLUE400_COLOR),),
-          )
+          if (actions != null) actions!,
+          if (currentStep != null && totalSteps != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 24).r,
+              child: Text(
+                '$currentStep/$totalSteps',
+                style: AppTextStyles.caption2.copyWith(color: BLUE400_COLOR),
+              ),
+            ),
         ],
         scrolledUnderElevation: 0,
-        leading: isFirstScreen
-            ? null
-            : IconButton(
-          icon: Image.asset('assets/image/left_24.png'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         backgroundColor: appbarTitleBackgroundColor,
-        shape: Border(
+        shape: appbarBorder! ?Border(
           bottom: BorderSide(
             width: 1,
             color: appbarBorderColor,
           ),
-        ),
-      );
-    }
+        ):null,
+        bottom: bottom,
+      ),
+    );
   }
 }
