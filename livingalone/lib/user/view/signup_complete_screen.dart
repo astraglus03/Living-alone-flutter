@@ -3,7 +3,6 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/common/view/root_tab.dart';
-import 'package:livingalone/home/component/post_type.dart';
 import 'package:livingalone/home/view/living_detail_screen.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/component/custom_button.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
@@ -23,10 +24,12 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
   final titleController = TextEditingController();
   final titleFocus = FocusNode();
   final List<File> _images = [];
-  final Set<int> _selectedImages = {};
   final _scrollController = ScrollController();
   final _introduceController = TextEditingController();
   final _introduceFocus = FocusNode();
+  bool showImageError = false;
+  bool showTitleError = false;
+  bool showIntroduceError = false;
 
   Future<void> _pickImage() async {
     if (_images.length >= 10) {
@@ -45,6 +48,7 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
     if (images.isNotEmpty) {
       setState(() {
         _images.insertAll(0, images.map((xFile) => File(xFile.path)));
+        if (showImageError) showImageError = false;
       });
     }
   }
@@ -52,6 +56,7 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
   void _removeImage(int index) {
     setState(() {
       _images.removeAt(index);
+      if (_images.isEmpty) showImageError = true;
     });
   }
 
@@ -68,6 +73,33 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
   @override
   void initState() {
     super.initState();
+    titleController.addListener(() {
+      if (titleController.text.isNotEmpty && showTitleError) {
+        setState(() {
+          showTitleError = false;
+        });
+      }
+    });
+
+    _introduceController.addListener(() {
+      if (_introduceController.text.isNotEmpty && showIntroduceError) {
+        setState(() {
+          showIntroduceError = false;
+        });
+      }
+    });
+  }
+
+  void _validateForm() {
+    setState(() {
+      showImageError = _images.isEmpty;
+      showTitleError = titleController.text.trim().isEmpty;
+      showIntroduceError = _introduceController.text.trim().isEmpty;
+    });
+
+    if (!showImageError && !showTitleError && !showIntroduceError) {
+      // 다음 화면으로 이동 또는 데이터 처리
+    }
   }
 
   @override
@@ -207,13 +239,12 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
                   padding: EdgeInsets.only(
                     left: 24.w,
                     right: 24.w,
-                    // bottom: MediaQuery.of(context).viewInsets.bottom + 45,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       20.verticalSpace,
-                      Text('양도할 방의 사진과\n소개 글을 올려주세요', style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR),),
+                      Text('양도할 방의 사진과\n소개 글을 올려주세요', style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),),
                       4.verticalSpace,
                       Text('사진과 소개 글은 자세히 올릴수록 효과적 이에요.', style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),),
                       20.verticalSpace,
@@ -226,6 +257,11 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
                       ),
                       10.verticalSpace,
                       _buildImageList(),
+                      if (showImageError)
+                        Padding(
+                          padding: EdgeInsets.only(top: 4.h),
+                          child: ShowErrorText(errorText: '사진을 1장 이상 등록해주세요'),
+                        ),
                       24.verticalSpace,
                       Text(
                         '제목',
@@ -242,7 +278,7 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
                         ),
                         child: TextFormField(
                           scrollPadding: EdgeInsets.only(
-                            bottom: 90,
+                            bottom: 150,
                           ),
                           controller: titleController,
                           focusNode: titleFocus,
@@ -274,6 +310,11 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
                           ),
                         ),
                       ),
+                      if (showTitleError)
+                        Padding(
+                          padding: EdgeInsets.only(top: 4.h),
+                          child: ShowErrorText(errorText: '제목을 입력해주세요'),
+                        ),
                       24.verticalSpace,
                       Text(
                         '소개 글',
@@ -318,6 +359,11 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
                           ),
                         ),
                       ),
+                      if (showIntroduceError)
+                        Padding(
+                          padding: EdgeInsets.only(top: 4.h),
+                          child: ShowErrorText(errorText: '소개글을 입력해주세요'),
+                        ),
                       100.verticalSpace,
                     ],
                   ),
@@ -325,7 +371,7 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
               ),
             ),
             CustomDoubleButton(
-              onTap: () {},
+              onTap: _validateForm,
             ),
           ],
         ),

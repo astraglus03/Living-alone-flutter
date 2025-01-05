@@ -187,40 +187,47 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
       showCloseButton: true,
       currentStep: 3,
       totalSteps: 4,
-      child: Stack(
+      child: Column(
         children: [
-          SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    20.verticalSpace,
-                    Text(
-                      '이용권의 조건을 입력해 주세요',
-                      style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
+          Expanded(
+            child: GestureDetector(
+              onTap: (){
+                FocusScope.of(context).unfocus();
+              },
+              child: SingleChildScrollView(
+                child: Container(
+                  // width: MediaQuery.of(context).size.width,
+                  // height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        20.verticalSpace,
+                        Text(
+                          '이용권의 조건을 입력해 주세요',
+                          style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
+                        ),
+                        14.verticalSpace,
+                        ...List.generate(widget.types.length, (index) {
+                          final type = widget.types[index];
+                          return Column(
+                            children: [
+                              if (type == '기간 제한')
+                                _buildCalendar()
+                              else
+                                _buildRemainingField(type),
+                              if (index < widget.types.length - 1) ...[
+                                Divider(color: GRAY200_COLOR),
+                                14.verticalSpace,
+                              ],
+                            ],
+                          );
+                        }),
+                      ],
                     ),
-                    28.verticalSpace,
-                    ...List.generate(widget.types.length, (index) {
-                      final type = widget.types[index];
-                      return Column(
-                        children: [
-                          if (type == '기간 제한')
-                            _buildCalendar()
-                          else
-                            _buildRemainingField(type),
-                          if (index < widget.types.length - 1) ...[
-                            Divider(color: GRAY200_COLOR),
-                            28.verticalSpace,
-                          ],
-                        ],
-                      );
-                    }),
-                  ],
+                  ),
                 ),
               ),
             ),

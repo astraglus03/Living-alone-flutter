@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
+import 'package:livingalone/common/enum/post_type.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:livingalone/home/component/post_type.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 
@@ -32,8 +32,29 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
   final detailAddressFocus = FocusNode();
   String? addressError;
   String? detailAddressError;
+  bool isAddressSearchOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    addressController.addListener(() {
+      if (addressController.text.isNotEmpty && addressError != null) {
+        setState(() {
+          addressError = null;
+        });
+      }
+    });
+    detailAddressController.addListener(() {
+      if (detailAddressController.text.isNotEmpty && detailAddressError != null) {
+        setState(() {
+          detailAddressError = null;
+        });
+      }
+    });
+  }
 
   Future<void> _openAddressSearch() async {
+    isAddressSearchOpen = true;
     KopoModel? model = await Navigator.push(
       context,
       CupertinoPageRoute(
@@ -43,11 +64,32 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
     if (model != null) {
       setState(() {
         addressController.text = '${model.address} ${model.buildingName}'.trim();
+        addressError = null;
       });
     }
+    isAddressSearchOpen = false;
   }
 
-  String get _title {
+
+  bool _isFormValid() {
+    setState(() {
+      addressError = addressController.text.trim().isEmpty ? '주소를 입력해주세요' : null;
+      detailAddressError = detailAddressController.text.trim().isEmpty ? '상세주소를 입력해주세요' : null;
+    });
+    return addressError == null && detailAddressError == null;
+  }
+
+  @override
+  void dispose() {
+    addressController.dispose();
+    detailAddressController.dispose();
+    addressFocus.dispose();
+    detailAddressFocus.dispose();
+    super.dispose();
+  }
+
+
+String get _title {
     switch (widget.type) {
       case PostType.room:
         return '자취방 양도하기';
@@ -75,13 +117,15 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
   }
 
   void _validateAddress() {
-    setState(() {
-      if (addressController.text.trim().isEmpty) {
-        addressError = '주소를 입력해주세요';
-      } else {
-        addressError = null;
-      }
-    });
+    if (!isAddressSearchOpen) {
+      setState(() {
+        if (addressController.text.trim().isEmpty) {
+          addressError = '주소를 입력해주세요';
+        } else {
+          addressError = null;
+        }
+      });
+    }
   }
 
   void _validateDetailAddress(String? value) {
@@ -94,21 +138,6 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
         detailAddressError = null;
       }
     });
-  }
-
-  bool _isFormValid() {
-    _validateAddress();
-    _validateDetailAddress(detailAddressController.text);
-    return addressError == null && detailAddressError == null;
-  }
-
-  @override
-  void dispose() {
-    addressController.dispose();
-    detailAddressController.dispose();
-    addressFocus.dispose();
-    detailAddressFocus.dispose();
-    super.dispose();
   }
 
   @override
@@ -128,7 +157,6 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
               child: SingleChildScrollView(
                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Container(
-                  height: MediaQuery.of(context).size.height,
                   padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Form(
                     key: _formKey,
@@ -143,13 +171,13 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
                         Text(_subtitle,
                           style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),
                         ),
-                        40.verticalSpace,
+                        20.verticalSpace,
                         Text('주소',
                           style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
                         ),
                         10.verticalSpace,
                         Container(
-                          width: 345.w,
+                          // width: 345.w,
                           height: 56.h,
                           decoration: BoxDecoration(
                             color: GRAY100_COLOR,
@@ -245,7 +273,7 @@ class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
 
   Widget _buildDetailAddressField() {
     return Container(
-      width: 345.w,
+      // width: 345.w,
       height: 56.h,
       decoration: BoxDecoration(
         color: GRAY100_COLOR,

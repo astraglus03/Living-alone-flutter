@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
+import 'package:livingalone/common/enum/post_type.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/handover/component/agree_container.dart';
 import 'package:livingalone/home/component/custom_bottom_button2.dart';
-import 'package:livingalone/home/component/post_type.dart';
 import 'package:livingalone/user/component/custom_agree_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -94,13 +95,13 @@ class _CheckHandoverBaseScreenState extends State<CheckHandoverBaseScreen> {
                   style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),
                 ),
                 20.verticalSpace,
-                _buildAgreeButton(
+                AgreeContainer(
                   text: _agreeTexts[0],
                   isSelected: firstAgreedSelected,
                   onTap: _toggleFirstAgreed,
                 ),
                 10.verticalSpace,
-                _buildAgreeButton(
+                AgreeContainer(
                   text: _agreeTexts[1],
                   isSelected: secondAgreedSelected,
                   onTap: _toggleSecondAgreed,
@@ -141,41 +142,6 @@ class _CheckHandoverBaseScreenState extends State<CheckHandoverBaseScreen> {
             },
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildAgreeButton({
-    required String text,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 345.w,
-        height: 56.h,
-        padding: REdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isSelected ? BLUE100_COLOR : GRAY100_COLOR,
-          borderRadius: BorderRadius.all(Radius.circular(12)).w,
-          border: Border.all(
-            color: isSelected ? BLUE400_COLOR : GRAY200_COLOR,
-            width: 1,
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CustomAgreeButton(
-              isActive: isSelected,
-              activeColor: BLUE400_COLOR,
-              inactiveColor: GRAY400_COLOR,
-            ),
-            12.horizontalSpace,
-            Text(text, style: AppTextStyles.subtitle),
-          ],
-        ),
       ),
     );
   }

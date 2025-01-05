@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
+import 'package:livingalone/common/enum/rent_type.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/common/component/custom_multi_select_grid.dart';
 import 'package:livingalone/common/component/custom_price_field.dart';
@@ -98,7 +99,7 @@ class _AddRoomHandoverScreen6State extends State<AddRoomHandoverScreen6> {
       if (isValid) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => const AddRoomHandoverScreen7(),
+            builder: (_) => const AddRoomHandoverScreen7(rentType: RentType.shortRent,),
           ),
         );
       }

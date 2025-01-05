@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
-import 'package:livingalone/home/component/post_type.dart';
+import 'package:livingalone/common/enum/post_type.dart';
 import 'package:ticket_clippers/ticket_clippers.dart';
 import 'package:dotted_line/dotted_line.dart';
 

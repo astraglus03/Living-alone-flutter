@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:livingalone/home/component/post_type.dart';
+import 'package:livingalone/common/enum/post_type.dart';
 import 'package:livingalone/home/models/comment_model.dart';
 
 final LivingDetailScreenProvider = StateNotifierProvider<LivingDetailScreenNotifier, LivingDetailScreenState>((ref) {

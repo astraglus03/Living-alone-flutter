@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/common/enum/rent_type.dart';
 import 'package:livingalone/common/view/root_tab.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen1.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen2.dart';
+import 'package:livingalone/handover/view/add_room_handover_screen3.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen4.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen6.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen7.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen8.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen1.dart';
+import 'package:livingalone/handover/view/add_ticket_handover_screen3.dart';
+import 'package:livingalone/handover/view/add_ticket_handover_screen5.dart';
 import 'package:livingalone/home/view/home_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -47,7 +51,7 @@ class MyApp extends ConsumerWidget {
             ),
             debugShowCheckedModeBanner: false,
             // home: LivingDetailScreen(postType: PostType.room),
-            home: RootTab(),
+            home: AddRoomHandoverScreen7(rentType: RentType.shortRent,),
           ),
         );
       }

@@ -7,8 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen4.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 
-import 'add_ticket_handover_screen5.dart';
-
 class AddTicketHandoverScreen3 extends StatefulWidget {
   const AddTicketHandoverScreen3({super.key});
 
@@ -55,34 +53,36 @@ class _AddTicketHandoverScreen3State extends State<AddTicketHandoverScreen3> {
       showCloseButton: true,
       currentStep: 3,
       totalSteps: 4,
-      child: Stack(
+      child: Column(
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                20.verticalSpace,
-                Text(
-                  '이용권의 조건을 선택해 주세요',
-                  style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
-                ),
-                4.verticalSpace,
-                Text(
-                  '중복 선택이 가능해요',
-                  style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),
-                ),
-                20.verticalSpace,
-                CustomSelectList(
-                  items: buildingTypes,
-                  selected: selectedTypes,
-                  onItemSelected: _handleTypeSelection,
-                  showError: showError,
-                  errorText: '이용권 조건을 선택해 주세요.',
-                  multiSelect: true,
-                ),
-              ],
+          Expanded(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  20.verticalSpace,
+                  Text(
+                    '이용권의 조건을 선택해 주세요',
+                    style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
+                  ),
+                  4.verticalSpace,
+                  Text(
+                    '중복 선택이 가능해요',
+                    style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),
+                  ),
+                  20.verticalSpace,
+                  CustomSelectList(
+                    items: buildingTypes,
+                    selected: selectedTypes,
+                    onItemSelected: _handleTypeSelection,
+                    showError: showError,
+                    errorText: '이용권 조건을 선택해 주세요.',
+                    multiSelect: true,
+                  ),
+                ],
+              ),
             ),
           ),
           CustomDoubleButton(
