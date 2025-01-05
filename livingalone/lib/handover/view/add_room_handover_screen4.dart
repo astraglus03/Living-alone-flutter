@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/component/custom_select_list.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
+import 'package:livingalone/common/enum/room_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen5.dart';
+import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddRoomHandoverScreen4 extends StatefulWidget {
+class AddRoomHandoverScreen4 extends ConsumerStatefulWidget {
   const AddRoomHandoverScreen4 ({super.key});
 
   @override
-  State<AddRoomHandoverScreen4> createState() => _AddRoomHandoverScreen4State();
+  ConsumerState<AddRoomHandoverScreen4> createState() => _AddRoomHandoverScreen4State();
 }
 
-class _AddRoomHandoverScreen4State extends State<AddRoomHandoverScreen4> {
-  final List<String> buildingTypes = ['전세', '월세', '단기양도'];
+class _AddRoomHandoverScreen4State extends ConsumerState<AddRoomHandoverScreen4> {
   String? selectedType;
   bool showError = false;
 
@@ -28,6 +30,11 @@ class _AddRoomHandoverScreen4State extends State<AddRoomHandoverScreen4> {
       }
       showError = false;
     });
+
+    if(selectedType !=null){
+      final rentType = RentType.values.firstWhere((e) => e.label == selectedType);
+      ref.read(roomHandoverProvider.notifier).update(rentType: rentType);
+    }
   }
 
   void _handleNextPress() {
@@ -68,7 +75,7 @@ class _AddRoomHandoverScreen4State extends State<AddRoomHandoverScreen4> {
                   ),
                   40.verticalSpace,
                   CustomSelectList(
-                    items: buildingTypes,
+                    items: RentType.values.map((e) => e.label).toList(),
                     selected: selectedType,
                     onItemSelected: _handleTypeSelection,
                     showError: showError,

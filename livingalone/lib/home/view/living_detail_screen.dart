@@ -5,6 +5,7 @@ import 'package:livingalone/common/component/common_divider.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/enum/post_type.dart';
+import 'package:livingalone/common/enum/room_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/common/utils/data_utils.dart';
@@ -12,7 +13,8 @@ import 'package:livingalone/home/component/comments_section.dart';
 import 'package:livingalone/home/component/facilities_card.dart';
 import 'package:livingalone/home/component/info_detail_card.dart';
 import 'package:livingalone/home/component/location_info_card.dart';
-import 'package:livingalone/home/component/rent_info_card.dart';
+import 'package:livingalone/home/component/rent_room_card.dart';
+import 'package:livingalone/home/component/rent_use_card.dart';
 import 'package:livingalone/home/component/room_info_card.dart';
 import 'package:livingalone/home/component/stat_item.dart';
 import 'package:livingalone/home/component/ticket_info_card.dart';
@@ -329,10 +331,11 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
                 style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
               ),
               12.verticalSpace,
-              RentInfoCard(
-                postType: PostType.room,
-                leftFee: 41,
-                rightFee: 9,
+              RentRoomCard(
+                rentType: RentType.monthlyRent,
+                deposit: 500,
+                maintenance: 5,
+                monthlyRent: 40,
               ),
               16.verticalSpace,
               _buildStats(),
@@ -403,11 +406,11 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
                 style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
               ),
               12.verticalSpace,
-              RentInfoCard(
-                postType: PostType.ticket,
-                leftFee: 7,
-                rightFee: 65,
-              ),
+              // RentUseCard(
+              //     useType: rentType,
+              //     leftTime: leftTime,
+              //     maintenance:
+              // ),
               16.verticalSpace,
               _buildStats(),
             ],

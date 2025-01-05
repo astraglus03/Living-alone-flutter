@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
@@ -9,30 +10,33 @@ import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
+import 'package:livingalone/handover/view_models/room_handover_provider.dart';
+// import 'package:livingalone/handover/view_models/ticket_handover_provider.dart';
 
-class AddHandoverBaseScreen1 extends StatefulWidget {
+class AddHandoverBaseScreen1 extends ConsumerStatefulWidget {
   final PostType type;
   final Widget nextScreen;
 
   const AddHandoverBaseScreen1({
     required this.type,
     required this.nextScreen,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<AddHandoverBaseScreen1> createState() => _AddHandoverBaseScreen1State();
+  ConsumerState<AddHandoverBaseScreen1> createState() => _AddHandoverBaseScreen1State();
 }
 
-class _AddHandoverBaseScreen1State extends State<AddHandoverBaseScreen1> {
+class _AddHandoverBaseScreen1State extends ConsumerState<AddHandoverBaseScreen1> {
   final _formKey = GlobalKey<FormState>();
-  final addressController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
   final detailAddressController = TextEditingController();
   final addressFocus = FocusNode();
   final detailAddressFocus = FocusNode();
   String? addressError;
   String? detailAddressError;
   bool isAddressSearchOpen = false;
+  bool showError = false;
 
   @override
   void initState() {
@@ -140,8 +144,31 @@ String get _title {
     });
   }
 
+  void _handleNextPress() {
+    if (_isFormValid()) {
+      if (widget.type == PostType.room) {
+        ref.read(roomHandoverProvider.notifier).update(
+          address: addressController.text,
+          detailAddress: detailAddressController.text,
+        );
+      }
+      // else {
+      //   ref.read(ticketHandoverProvider.notifier).updateAddress(
+      //     addressController.text,
+      //     detailAddressController.text,
+      //   );
+      // }
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => widget.nextScreen,
+        ),
+      );
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,) {
     return DefaultLayout(
       title: _title,
       showCloseButton: true,
@@ -258,13 +285,7 @@ String get _title {
             ),
           ),
           CustomDoubleButton(
-            onTap: () {
-              if (_isFormValid()) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => widget.nextScreen),
-                );
-              }
-            },
+            onTap: _handleNextPress,
           ),
         ],
       ),

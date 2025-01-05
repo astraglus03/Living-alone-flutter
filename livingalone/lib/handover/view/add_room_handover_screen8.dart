@@ -5,6 +5,7 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,16 +45,19 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
       imageQuality: 80,
       limit: 10 - _images.length,
     );
-
+    
     if (images.isNotEmpty) {
+      final files = images.map((xFile) => File(xFile.path)).toList();
+      ref.read(roomHandoverProvider.notifier).addImages(files);
       setState(() {
-        _images.insertAll(0, images.map((xFile) => File(xFile.path)));
+        _images.insertAll(0, files);
         if (showImageError) showImageError = false;
       });
     }
   }
 
   void _removeImage(int index) {
+    ref.read(roomHandoverProvider.notifier).removeImage(index);
     setState(() {
       _images.removeAt(index);
       if (_images.isEmpty) showImageError = true;
@@ -67,6 +71,11 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
       }
       final File item = _images.removeAt(oldIndex);
       _images.insert(newIndex, item);
+      
+      // Provider 상태 업데이트
+      ref.read(roomHandoverProvider.notifier).update(
+        images: _images,
+      );
     });
   }
 
@@ -98,7 +107,22 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
     });
 
     if (!showImageError && !showTitleError && !showIntroduceError) {
-      // 다음 화면으로 이동 또는 데이터 처리
+      // Provider에 최종 데이터 저장
+      ref.read(roomHandoverProvider.notifier).update(
+        images: _images,
+        description: _introduceController.text.trim(),
+      );
+
+      // API 호출
+      ref.read(roomHandoverProvider.notifier).submit().then((_) {
+        // 성공 시 처리
+        Navigator.of(context).pop(); // 또는 완료 화면으로 이동
+      }).catchError((error) {
+        // 에러 처리
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('업로드 실패: ${error.toString()}')),
+        );
+      });
     }
   }
 

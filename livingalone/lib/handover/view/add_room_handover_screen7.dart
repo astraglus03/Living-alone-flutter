@@ -4,10 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
-import 'package:livingalone/common/enum/rent_type.dart';
+import 'package:livingalone/common/enum/room_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/handover/component/agree_container.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen8.dart';
+import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:livingalone/user/component/custom_agree_button.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -38,24 +39,35 @@ class _AddRoomHandoverScreen9State
   bool isAgreedSelected = false;
 
   void _validateAndNavigate() {
-    if (widget.rentType == RentType.shortRent) {
-      if (_rangeStart == null || _rangeEnd == null) {
-        setState(() {
-          _errorMessage = '입주기간을 선택해주세요';
-        });
-        return;
-      }
-    } else {
-      if (_selectedDay == null) {
-        setState(() {
-          _errorMessage = '입주가능일을 선택해주세요';
-        });
-        return;
+    if (!isAgreedSelected) {
+      if (widget.rentType == RentType.shortRent) {
+        if (_rangeStart == null || _rangeEnd == null) {
+          setState(() {
+            _errorMessage = '입주기간을 선택해주세요';
+          });
+          return;
+        }
+      } else {
+        if (_selectedDay == null) {
+          setState(() {
+            _errorMessage = '입주가능일을 선택해주세요';
+          });
+          return;
+        }
       }
     }
-    _errorMessage = null;
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => AddRoomHandoverScreen8()));
+
+    ref.read(roomHandoverProvider.notifier).update(
+      startDate: isAgreedSelected ? DateTime.now() : (_rangeStart ?? _selectedDay),
+      endDate: widget.rentType == RentType.shortRent ? _rangeEnd : null,
+      immediateIn: isAgreedSelected,
+    );
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const AddRoomHandoverScreen8(),
+      ),
+    );
   }
 
   void _toggleFirstAgreed() {
@@ -103,7 +115,6 @@ class _AddRoomHandoverScreen9State
                       child: ShowErrorText(errorText: _errorMessage!),
                     ),
                   28.verticalSpace,
-                  if(widget.rentType != RentType.shortRent)
                   AgreeContainer(
                     text: '즉시 입주 가능',
                     isSelected: isAgreedSelected,

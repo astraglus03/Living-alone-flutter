@@ -9,18 +9,29 @@ class CustomSelectList extends StatelessWidget {
   final dynamic selected;  // String? 또는 List<String>
   final Function(String) onItemSelected;
   final bool showError;
-  final String errorText;
-  final bool multiSelect;  // 복수 선택 여부
+  final String? errorText;
+  final bool multiSelect;  // 다중 선택 여부
+  final int? maxSelect;    // 최대 선택 가능 개수
 
   const CustomSelectList({
     required this.items,
     required this.selected,
     required this.onItemSelected,
     this.showError = false,
-    this.errorText = '항목을 선택해 주세요.',
+    this.errorText,
     this.multiSelect = false,  // 기본값은 단일 선택
-    super.key,
-  });
+    this.maxSelect,
+    Key? key,
+  }) : assert(
+         multiSelect ? selected is List<String> : selected is String?,
+         'multiSelect가 true면 selected는 List<String>이어야 하고, '
+         'false면 selected는 String?이어야 합니다.',
+       ),
+       assert(
+         maxSelect == null || multiSelect,
+         'maxSelect는 multiSelect가 true일 때만 사용할 수 있습니다.',
+       ),
+       super(key: key);
 
   bool _isSelected(String item) {
     if (multiSelect) {
@@ -30,10 +41,15 @@ class CustomSelectList extends StatelessWidget {
     }
   }
 
+  bool _isDisabled(String item) {
+    if (!multiSelect) return false;
+    if (maxSelect == null) return false;
+    return !_isSelected(item) && (selected as List<String>).length >= maxSelect!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...List.generate(
@@ -41,11 +57,12 @@ class CustomSelectList extends StatelessWidget {
           (index) {
             final item = items[index];
             final isSelected = _isSelected(item);
-            
+            final isDisabled = _isDisabled(item);
+
             return Column(
               children: [
                 GestureDetector(
-                  onTap: () => onItemSelected(item),
+                  onTap: isDisabled ? null : () => onItemSelected(item),
                   child: Container(
                     width: 345.w,
                     height: 56.h,
@@ -73,7 +90,7 @@ class CustomSelectList extends StatelessWidget {
           },
         ),
         if (showError)
-          ShowErrorText(errorText: errorText),
+          ShowErrorText(errorText: errorText!),
       ],
     );
   }

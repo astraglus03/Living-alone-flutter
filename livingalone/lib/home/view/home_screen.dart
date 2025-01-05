@@ -29,7 +29,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final ValueNotifier<bool> _openCloseDial = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {

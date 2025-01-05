@@ -2,10 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:livingalone/common/enum/post_type.dart';
 import 'package:livingalone/handover/view/add_handover_base_screen1.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen2.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/handover/view_models/handover_check_provider.dart';
+import 'package:livingalone/handover/view/check_handover_base_screen.dart';
 
-class AddRoomHandoverScreen1 extends StatelessWidget {
+class AddRoomHandoverScreen1 extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 확인 상태 체크
+    final checkState = ref.watch(handoverCheckProvider);
+    if (!checkState.isChecked) {
+      // 확인하지 않았으면 확인 화면으로 돌려보내기
+      return CheckHandoverBaseScreen(
+        type: PostType.room,
+        nextScreen: AddRoomHandoverScreen2(),
+      );
+    }
+
     return AddHandoverBaseScreen1(
       type: PostType.room,
       nextScreen: AddRoomHandoverScreen2(),

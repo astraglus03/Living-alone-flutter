@@ -30,6 +30,39 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
   final _lastDay = DateTime(2049, 12, 31);
   Map<String, String?> _errorMessages = {};
 
+  void _validateInputs(){
+    bool hasError = false;
+
+    for (String type in widget.types) {
+      if (type == '기간 제한') {
+        if (_selectedDay == null) {
+          setState(() {
+            _errorMessages[type] = '이용권 만료일을 선택해 주세요';
+            hasError = true;
+          });
+        }
+      } else if (type == '횟수 제한') {
+        if (_countController.text.isEmpty) {
+          setState(() {
+            _errorMessages[type] = '남은 횟수를 입력해 주세요';
+            hasError = true;
+          });
+        }
+      } else if (type == '시간 제한') {
+        if (_timeController.text.isEmpty) {
+          setState(() {
+            _errorMessages[type] = '남은 시간을 입력해 주세요';
+            hasError = true;
+          });
+        }
+      }
+    }
+
+    if (!hasError) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AddTicketHandoverScreen5()));
+    }
+  }
+
   Widget _buildCalendar() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,24 +82,47 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
             setState(() {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;
-              _errorMessages['기간 제한'] = null;
             });
           },
+          pageJumpingEnabled: false,
           calendarStyle: CalendarStyle(
-            defaultTextStyle: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
-            weekendTextStyle: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
-            outsideTextStyle: AppTextStyles.subtitle.copyWith(color: GRAY400_COLOR),
-            selectedTextStyle: AppTextStyles.subtitle.copyWith(color: WHITE100_COLOR),
-            selectedDecoration: BoxDecoration(
-              color: BLUE400_COLOR,
-              shape: BoxShape.circle,
-            ),
+            defaultTextStyle:
+            AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
+            weekendTextStyle:
+            AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
+            outsideTextStyle:
+            AppTextStyles.subtitle.copyWith(color: GRAY400_COLOR),
+            selectedTextStyle:
+            AppTextStyles.subtitle.copyWith(color: WHITE100_COLOR),
             todayTextStyle: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
             todayDecoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.transparent,
             ),
             rangeHighlightColor: BLUE100_COLOR,
+            cellMargin: EdgeInsets.zero,
+            cellPadding: EdgeInsets.zero,
+          ),
+          calendarBuilders: CalendarBuilders(
+            selectedBuilder: (context, date, _) {
+              return Center(
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: BLUE400_COLOR,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${date.day}',
+                      style:
+                      AppTextStyles.subtitle.copyWith(color: WHITE100_COLOR),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
           headerStyle: HeaderStyle(
             titleCentered: true,
@@ -85,9 +141,19 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
             ),
           ),
           daysOfWeekStyle: DaysOfWeekStyle(
-            weekdayStyle: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
-            weekendStyle: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
+            weekdayStyle: AppTextStyles.body1.copyWith(
+              color: GRAY400_COLOR,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
+            weekendStyle: AppTextStyles.body1.copyWith(
+              color: GRAY400_COLOR,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
           ),
+          daysOfWeekHeight: 48,
+          rowHeight: 48,
         ),
         if (_errorMessages['기간 제한'] != null)
           Column(
@@ -233,38 +299,7 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
             ),
           ),
           CustomDoubleButton(
-            onTap: () {
-              bool hasError = false;
-
-              for (String type in widget.types) {
-                if (type == '기간 제한') {
-                  if (_selectedDay == null) {
-                    setState(() {
-                      _errorMessages[type] = '이용권 만료일을 선택해 주세요';
-                      hasError = true;
-                    });
-                  }
-                } else if (type == '횟수 제한') {
-                  if (_countController.text.isEmpty) {
-                    setState(() {
-                      _errorMessages[type] = '남은 횟수를 입력해 주세요';
-                      hasError = true;
-                    });
-                  }
-                } else if (type == '시간 제한') {
-                  if (_timeController.text.isEmpty) {
-                    setState(() {
-                      _errorMessages[type] = '남은 시간을 입력해 주세요';
-                      hasError = true;
-                    });
-                  }
-                }
-              }
-
-              if (!hasError) {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AddTicketHandoverScreen5()));
-              }
-            },
+            onTap: _validateInputs,
           ),
         ],
       ),

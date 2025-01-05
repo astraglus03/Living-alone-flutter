@@ -7,9 +7,11 @@ import 'package:livingalone/common/component/custom_price_field.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen6.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 
-class AddRoomHandoverScreen5 extends StatefulWidget {
-  final String rentType;  // '전세', '월세', '단기임대' 중 하나
+class AddRoomHandoverScreen5 extends ConsumerStatefulWidget {
+  final String rentType;  // '전세', '월세', '단기양도' 중 하나
 
   const AddRoomHandoverScreen5({
     required this.rentType,
@@ -17,10 +19,10 @@ class AddRoomHandoverScreen5 extends StatefulWidget {
   });
 
   @override
-  State<AddRoomHandoverScreen5> createState() => _AddRoomHandoverScreen5State();
+  ConsumerState<AddRoomHandoverScreen5> createState() => _AddRoomHandoverScreen5State();
 }
 
-class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
+class _AddRoomHandoverScreen5State extends ConsumerState<AddRoomHandoverScreen5> {
   final depositController = TextEditingController();
   final monthlyRentController = TextEditingController();
   final maintenanceController = TextEditingController();
@@ -30,66 +32,47 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
   String? errorMessage;
 
   void _validateInputs() {
-      switch (widget.rentType) {
-        case '전세':
-          if (depositController.text.trim().isEmpty) {
-            setState(() {
-              errorMessage = '보증금을 입력해주세요';
-            });
-            return;
-          }
-          if (maintenanceController.text.trim().isEmpty) {
-            setState(() {
-              errorMessage = '관리비를 입력해주세요';
-            });
-            return;
-          }
-          break;
+    final requiredFields = {
+      '전세': {'deposit': depositController, 'maintenance': maintenanceController},
+      '월세': {
+        'deposit': depositController,
+        'monthlyRent': monthlyRentController,
+        'maintenance': maintenanceController
+      },
+      '단기양도': {'monthlyRent': monthlyRentController, 'maintenance': maintenanceController},
+    }[widget.rentType]!;
 
-        case '월세':
-          if (depositController.text.trim().isEmpty) {
-            setState(() {
-              errorMessage = '보증금을 입력해주세요';
-            });
-            return;
-          }
-          if (monthlyRentController.text.trim().isEmpty) {
-            setState(() {
-              errorMessage = '월세를 입력해주세요';
-            });
-            return;
-          }
-          if (maintenanceController.text.trim().isEmpty) {
-            setState(() {
-              errorMessage = '관리비를 입력해주세요';
-            });
-            return;
-          }
-          break;
+    final errorMessages = {
+      'deposit': '보증금을 입력해주세요',
+      'monthlyRent': '월세를 입력해주세요',
+      'maintenance': '관리비를 입력해주세요',
+    };
 
-        case '단기양도':
-          if (monthlyRentController.text.trim().isEmpty) {
-            setState(() {
-              errorMessage = '월세를 입력해주세요';
-            });
-            return;
-          }
-          if (maintenanceController.text.trim().isEmpty) {
-            setState(() {
-              errorMessage = '관리비를 입력해주세요';
-            });
-            return;
-          }
-          break;
+    // 필수 필드 검증
+    for (final entry in requiredFields.entries) {
+      if (entry.value.text.trim().isEmpty) {
+        setState(() {
+          errorMessage = errorMessages[entry.key];
+        });
+        return;
       }
+    }
 
-      // 모든 검증 통과
-      errorMessage = null;
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => const AddRoomHandoverScreen6(),
-        ),
-      );
+    // 모든 검증 통과
+    errorMessage = null;
+
+    // Provider에 데이터 저장
+    ref.read(roomHandoverProvider.notifier).update(
+      deposit: int.tryParse(depositController.text),
+      monthlyRent: int.tryParse(monthlyRentController.text),
+      maintenance: int.tryParse(maintenanceController.text),
+    );
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const AddRoomHandoverScreen6(),
+      ),
+    );
   }
 
   @override
@@ -134,7 +117,7 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
             },
           ),
         ];
-      
+
       case '월세':
         return [
           CustomPriceField(
@@ -178,7 +161,7 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
             focusNode: maintenanceFocus,
           ),
         ];
-      
+
       case '단기양도':
         return [
           CustomPriceField(
@@ -208,7 +191,7 @@ class _AddRoomHandoverScreen5State extends State<AddRoomHandoverScreen5> {
             },
           ),
         ];
-      
+
       default:
         return [];
     }

@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
-import 'package:livingalone/common/enum/rent_type.dart';
+import 'package:livingalone/common/enum/room_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/common/component/custom_multi_select_grid.dart';
 import 'package:livingalone/common/component/custom_price_field.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen7.dart';
+import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddRoomHandoverScreen6 extends StatefulWidget {
+class AddRoomHandoverScreen6 extends ConsumerStatefulWidget {
   const AddRoomHandoverScreen6 ({super.key});
 
   @override
-  State<AddRoomHandoverScreen6> createState() => _AddRoomHandoverScreen6State();
+  ConsumerState<AddRoomHandoverScreen6> createState() => _AddRoomHandoverScreen6State();
 }
 
-class _AddRoomHandoverScreen6State extends State<AddRoomHandoverScreen6> {
+class _AddRoomHandoverScreen6State extends ConsumerState<AddRoomHandoverScreen6> {
   final areaController = TextEditingController();
   final currentFloorController = TextEditingController();
   final totalFloorController = TextEditingController();
@@ -33,37 +35,19 @@ class _AddRoomHandoverScreen6State extends State<AddRoomHandoverScreen6> {
   String? facilitiesError;
   String? conditionsError;
 
-  // 옵션 목록
-  final List<String> options = [
-    '세탁기', '건조기', '냉장고', '에어컨',
-    '공기순환기', '전자레인지', '가스레인지',
-    '인덕션', '침대', '책상', '의자', '옷장',
-    '불박이장'
-  ];
-
-  // 시설 목록
-  final List<String> facilities = [
-    '엘리베이터', '주차장', 'CCTV', '복층',
-    '옥탑'
-  ];
-
-  final List<String> conditions = ['2인 거주 가능', '여성 전용', '반려동물 가능'];
-
   // 선택된 항목들
   final List<String> selectedOptions = [];
   final List<String> selectedFacilities = [];
   final List<String> selectedConditions = [];
 
   void _validateInputs() {
+    bool isValid = true;
+    
+    // setState로 에러 상태 업데이트
     setState(() {
       // 모든 에러 초기화
       areaError = null;
       floorError = null;
-      optionsError = null;
-      facilitiesError = null;
-      conditionsError = null;
-
-      bool isValid = true;
 
       // 면적 검증
       if (areaController.text.trim().isEmpty) {
@@ -76,34 +60,54 @@ class _AddRoomHandoverScreen6State extends State<AddRoomHandoverScreen6> {
         floorError = '층수를 입력해 주세요';
         isValid = false;
       }
-
-      // 옵션 검증
-      if (selectedOptions.isEmpty) {
-        optionsError = '옵션을 선택해 주세요';
-        isValid = false;
-      }
-
-      // 시설 검증
-      if (selectedFacilities.isEmpty) {
-        facilitiesError = '시설을 선택해 주세요';
-        isValid = false;
-      }
-
-      // 조건 검증
-      if (selectedConditions.isEmpty) {
-        conditionsError = '조건을 선택해 주세요';
-        isValid = false;
-      }
-
-      // 모든 검증 통과
-      if (isValid) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => const AddRoomHandoverScreen7(rentType: RentType.shortRent,),
-          ),
-        );
-      }
     });
+
+    // 검증 통과한 경우에만 Provider 업데이트 및 네비게이션
+    if (isValid) {
+      // Provider에 데이터 저장
+      ref.read(roomHandoverProvider.notifier).update(
+        area: areaController.text.trim(),
+        currentFloor: currentFloorController.text.trim(),
+        totalFloor: totalFloorController.text.trim(),
+      );
+
+      // 선택된 옵션들 저장
+      for (final optionLabel in selectedOptions) {
+        final option = RoomOption.values.firstWhere(
+          (e) => e.label == optionLabel,
+        );
+        ref.read(roomHandoverProvider.notifier).toggleOption(option);
+      }
+
+      // 선택된 시설들 저장
+      for (final facilityLabel in selectedFacilities) {
+        final facility = Facility.values.firstWhere(
+          (e) => e.label == facilityLabel,
+        );
+        ref.read(roomHandoverProvider.notifier).toggleFacility(facility);
+      }
+
+      // 선택된 조건들 저장
+      for (final conditionLabel in selectedConditions) {
+        final condition = RoomCondition.values.firstWhere(
+          (e) => e.label == conditionLabel,
+        );
+        ref.read(roomHandoverProvider.notifier).toggleCondition(condition);
+      }
+
+      final currentRentType = ref.read(roomHandoverProvider).rentType;
+      if (currentRentType == null) {
+        // rentType이 없는 경우 에러 처리
+        print('Error: rentType is not set');
+        return;
+      }
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => AddRoomHandoverScreen7(rentType: currentRentType),
+        ),
+      );
+    }
   }
 
   void _handleOptionSelected(String option) {
@@ -254,7 +258,7 @@ class _AddRoomHandoverScreen6State extends State<AddRoomHandoverScreen6> {
                       14.verticalSpace,
                       CustomMultiSelectGrid(
                         label: '옵션',
-                        items: options,
+                        items: RoomOption.values.map((e)=> e.label).toList(),
                         selectedItems: selectedOptions,
                         onItemSelected: _handleOptionSelected,
                       ),
@@ -270,7 +274,7 @@ class _AddRoomHandoverScreen6State extends State<AddRoomHandoverScreen6> {
                       14.verticalSpace,
                       CustomMultiSelectGrid(
                         label: '시설',
-                        items: facilities,
+                        items: Facility.values.map((e) => e.label).toList(),
                         selectedItems: selectedFacilities,
                         onItemSelected: _handleFacilitySelected,
                       ),
@@ -286,7 +290,7 @@ class _AddRoomHandoverScreen6State extends State<AddRoomHandoverScreen6> {
                       14.verticalSpace,
                       CustomMultiSelectGrid(
                         label: '조건',
-                        items: conditions,
+                        items: RoomCondition.values.map((e) => e.label).toList(),
                         selectedItems: selectedConditions,
                         onItemSelected: _handleConditionsSelected,
                       ),

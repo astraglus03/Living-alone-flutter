@@ -7,22 +7,24 @@ import 'package:livingalone/handover/component/agree_container.dart';
 import 'package:livingalone/home/component/custom_bottom_button2.dart';
 import 'package:livingalone/user/component/custom_agree_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/handover/view_models/handover_check_provider.dart';
 
-class CheckHandoverBaseScreen extends StatefulWidget {
+class CheckHandoverBaseScreen extends ConsumerStatefulWidget {
   final PostType type;
   final Widget nextScreen;
 
   const CheckHandoverBaseScreen({
     required this.type,
     required this.nextScreen,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<CheckHandoverBaseScreen> createState() => _CheckHandoverBaseScreenState();
+  ConsumerState<CheckHandoverBaseScreen> createState() => _CheckHandoverBaseScreenState();
 }
 
-class _CheckHandoverBaseScreenState extends State<CheckHandoverBaseScreen> {
+class _CheckHandoverBaseScreenState extends ConsumerState<CheckHandoverBaseScreen> {
   bool firstAgreedSelected = false;
   bool secondAgreedSelected = false;
 
@@ -136,9 +138,15 @@ class _CheckHandoverBaseScreenState extends State<CheckHandoverBaseScreen> {
             textStyle: AppTextStyles.title,
             isEnabled: secondAgreedSelected && firstAgreedSelected,
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => widget.nextScreen),
-              );
+              if (secondAgreedSelected && firstAgreedSelected) {
+                // 확인 상태 저장
+                ref.read(handoverCheckProvider.notifier)..setPostType(widget.type)..confirmCheck();
+
+                // 다음 화면으로 이동
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => widget.nextScreen),
+                );
+              }
             },
           ),
         ],
