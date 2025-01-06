@@ -23,8 +23,13 @@ import 'package:livingalone/user/view/signup_authentication_screen.dart';
 import 'package:livingalone/user/view/signup_nickname_screen.dart';
 import 'package:livingalone/user/view/signup_setting_password_screen.dart';
 import 'package:livingalone/user/view/signup_terms_screen.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  // 가로모드로 하게되면 심각한 overflow와 폰트, 깨짐. 모든 반은형으로 하기전까지 코드 필수.
+  SystemChrome.setPreferredOrientations(([
+    DeviceOrientation.portraitUp
+  ]));
   initializeDateFormatting('ko_KR').then((_) => runApp(ProviderScope(child:MyApp())));
 }
 
