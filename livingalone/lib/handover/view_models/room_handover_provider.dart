@@ -5,7 +5,7 @@ import 'package:livingalone/handover/view_models/handover_check_provider.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
-import 'package:dio/dio.dart';  // http 대신 dio 사용
+import 'package:dio/dio.dart';
 
 // 방 양도 작성 상태를 관리하는 Provider
 final roomHandoverProvider = StateNotifierProvider<RoomHandoverNotifier, RoomHandoverState>((ref) {
@@ -14,24 +14,29 @@ final roomHandoverProvider = StateNotifierProvider<RoomHandoverNotifier, RoomHan
 
 // 방 양도 작성에 필요한 모든 데이터를 담는 State
 class RoomHandoverState {
-  final String? address;           // 주소 (1/8)
-  final String? detailAddress;     // 상세주소 (1/8)
-  final BuildingType? buildingType; // 건물 유형 (2/8)
-  final PropertyType? propertyType; // 매물 종류 (3/8)
-  final RentType? rentType;        // 임대 방식 (4/8)
-  final int? deposit;              // 보증금 (5/8) - 전세, 월세일 때 필수
-  final int? monthlyRent;          // 월세 (5/8) - 월세, 단기양도일 때만 필수
-  final int? maintenance;          // 관리비 (5/8) - 필수
-  final Set<RoomOption> options;   // 옵션 목록 (6/8) - 선택사항
-  final Set<Facility> facilities;  // 시설 목록 (6/8) - 선택사항
-  final Set<RoomCondition> conditions; // 조건 목록 (6/8) - 선택사항
-  final String? availableDate;     // 입주 가능일 (7/8) - 필수
-  final bool immediateIn;          // 즉시입주 여부 (7/8)
-  final List<File> images;       // String에서 File로 변경
-  final String? title;            // 제목
-  final String? description;       // 상세 설명 (8/8) - 필수
-  final String? area;              // 면적 (6/8) - 필수
-  final String? floor;             // 층수 (6/8) - 필수
+  // 필수 필드
+  final String? address;           // 주소
+  final String? detailAddress;     // 상세주소
+  final BuildingType? buildingType; // 건물 유형
+  final PropertyType? propertyType; // 매물 종류
+  final RentType? rentType;        // 임대 방식
+  final int? maintenance;          // 관리비
+  final String? availableDate;     // 입주 가능일
+  final bool immediateIn;          // 즉시입주 여부
+  final String? title;
+  final String? description;       // 상세 설명
+  final String? area;              // 면적
+  final String? floor;             // 층수
+
+  // 선택 필드 (임대 방식에 따라 필수가 될 수 있음)
+  final int? deposit;              // 보증금 (전세, 월세일 때 필수)
+  final int? monthlyRent;          // 월세 (월세, 단기양도일 때만 필수)
+  
+  // 선택 필드
+  final Set<RoomOption> options;   // 옵션 목록
+  final Set<Facility> facilities;  // 시설 목록
+  final Set<RoomCondition> conditions; // 조건 목록
+  final List<File> images;         // 이미지 (최소 1장 필수)
 
   RoomHandoverState({
     this.address,
@@ -41,17 +46,17 @@ class RoomHandoverState {
     this.rentType,
     this.deposit,
     this.monthlyRent,
-    this.maintenance,
-    this.options = const {},       // 기본값 빈 Set
-    this.facilities = const {},    // 기본값 빈 Set
-    this.conditions = const {},    // 기본값 빈 Set
-    this.availableDate,
-    this.images = const [],      // 기본값 빈 리스트
     this.title,
+    this.maintenance,
+    this.options = const {},
+    this.facilities = const {},
+    this.conditions = const {},
+    this.availableDate,
+    this.images = const [],
     this.description,
     this.area,
     this.floor,
-    this.immediateIn = false,      // 기본값 false
+    this.immediateIn = false,
   });
 
   // 복사본을 만드는 메서드
@@ -99,12 +104,14 @@ class RoomHandoverState {
 
   // 모든 필수 필드가 채워졌는지 확인
   bool get isValid {
-    // 기본 필수 필드 검증
+    // 1. 기본 필수 필드 검증
     if (address == null ||
+        detailAddress == null ||
         buildingType == null ||
         propertyType == null ||
         rentType == null ||
         maintenance == null ||
+        availableDate == null ||
         area == null ||
         floor == null ||
         title == null ||
@@ -113,17 +120,17 @@ class RoomHandoverState {
       return false;
     }
 
-    // 임대 방식별 추가 검증
-    switch (rentType) {
+    // 2. 임대 방식별 추가 필수 필드 검증
+    switch (rentType!) {
       case RentType.monthlyRent:
-        return deposit != null && monthlyRent != null;
+        if (deposit == null || monthlyRent == null) return false;
       case RentType.wholeRent:
-        return deposit != null;
+        if (deposit == null) return false;
       case RentType.shortRent:
-        return monthlyRent != null;
-      default:
-        return false;
+        if (monthlyRent == null) return false;
     }
+
+    return true;
   }
 }
 
@@ -241,34 +248,46 @@ class RoomHandoverNotifier extends StateNotifier<RoomHandoverState> {
     if (!state.isValid) return;
 
     final formData = FormData.fromMap({
+      // 필수 필드
       'address': state.address,
       'detailAddress': state.detailAddress,
-      'buildingType': state.buildingType?.name,
-      'propertyType': state.propertyType?.name,
-      'rentType': state.rentType?.name,
-      'deposit': state.deposit?.toString(),
-      'monthlyRent': state.monthlyRent?.toString(),
-      'maintenance': state.maintenance?.toString(),
-      'options': state.options.map((e) => e.name).toList().join(','),
-      'facilities': state.facilities.map((e) => e.name).toList().join(','),
-      'conditions': state.conditions.map((e) => e.name).toList().join(','),
+      'buildingType': state.buildingType?.label,  // enum의 label 사용
+      'propertyType': state.propertyType?.label,  // enum의 label 사용
+      'rentType': state.rentType?.label,          // enum의 label 사용
+      'maintenance': state.maintenance,            // 숫자 타입 유지
       'availableDate': state.availableDate,
-      'immediateIn': state.immediateIn.toString(),
+      'immediateIn': state.immediateIn,
+      'description': state.description,
       'area': state.area,
       'floor': state.floor,
-      'description': state.description,
-      'checkConfirmed': checkState.isChecked.toString(),
+
+      // 조건부 필수 필드 (null일 수 있음)
+      'deposit': state.deposit,                    // 숫자 타입 유지
+      'monthlyRent': state.monthlyRent,           // 숫자 타입 유지
+
+      // 선택 필드
+      'options': state.options.isNotEmpty 
+          ? state.options.map((e) => e.label).toList() 
+          : null,
+      'facilities': state.facilities.isNotEmpty 
+          ? state.facilities.map((e) => e.label).toList() 
+          : null,
+      'conditions': state.conditions.isNotEmpty 
+          ? state.conditions.map((e) => e.label).toList() 
+          : null,
+
+      // 체크 정보
+      'checkConfirmed': checkState.isChecked,
       'checkConfirmedAt': checkState.checkedAt?.toIso8601String(),
     });
 
     // 이미지 파일 추가
     for (var i = 0; i < state.images.length; i++) {
-      final file = state.images[i];
       formData.files.add(
         MapEntry(
-          'images',  // 서버에서 기대하는 필드 이름
+          'images',
           await MultipartFile.fromFile(
-            file.path,
+            state.images[i].path,
             filename: 'image_$i.jpg',
           ),
         ),
@@ -281,9 +300,8 @@ class RoomHandoverNotifier extends StateNotifier<RoomHandoverState> {
         data: formData,
         options: Options(
           headers: {
-            // 'Authorization': 'Bearer your_token',
+            'Content-Type': 'multipart/form-data',
           },
-          contentType: 'multipart/form-data',
         ),
       );
 

@@ -406,11 +406,11 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
                 style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
               ),
               12.verticalSpace,
-              // RentUseCard(
-              //     useType: rentType,
-              //     leftTime: leftTime,
-              //     maintenance:
-              // ),
+              RentUseCard(
+                remainingCount: 7,
+                remainingTime: 36,
+                price: 100,
+              ),
               16.verticalSpace,
               _buildStats(),
             ],

@@ -1,24 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:livingalone/common/const/colors.dart';
-import 'package:livingalone/common/const/text_styles.dart';
-import 'package:livingalone/common/enum/post_type.dart';
-import 'package:livingalone/common/enum/room_enums.dart';
-import 'package:livingalone/common/enum/use_type.dart';
-import 'package:ticket_clippers/ticket_clippers.dart';
 import 'package:dotted_line/dotted_line.dart';
+import 'package:flutter/material.dart';
+import 'package:livingalone/common/const/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/common/const/text_styles.dart';
+import 'package:ticket_clippers/ticket_clippers.dart';
 
 class RentUseCard extends StatelessWidget {
-  final UseType useType;
-  final int leftTime;
-  final int maintenance; // 양도비
-  final int? monthlyRent; // 월세 (월세일 때만 사용)
+  final int? remainingCount;    // 남은 횟수
+  final int? remainingTime;     // 남은 시간 (시간 단위)
+  final DateTime? expiredDate;  // 만료일
+  final int price;             // 양도비
 
   const RentUseCard({
-    required this.useType,
-    required this.leftTime,
-    required this.maintenance,
-    this.monthlyRent,
+    this.remainingCount,
+    this.remainingTime,
+    this.expiredDate,
+    required this.price,
     super.key,
   });
 
@@ -35,61 +32,69 @@ class RentUseCard extends StatelessWidget {
     }
   }
 
+  String _formatDate(DateTime date) {
+    return '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (useType == RentType.monthlyRent) {
-      // 월세인 경우 3개의 항목 표시
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 보증금
-          _buildTicketSection(
-            width: 115.w,
-            label: '보증금',
-            value: leftTime,
-            isFirst: true,
-          ),
-          // 월세
-          _buildTicketSection(
-            width: 115.w,
-            label: '월세',
-            value: monthlyRent!,
-          ),
-          // 관리비
-          _buildTicketSection(
-            width: 115.w,
-            label: '관리비',
-            value: maintenance,
-            isLast: true,
-          ),
-        ],
-      );
-    } else {
-      // 전세나 단기임대인 경우 2개의 항목 표시
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildTicketSection(
-            width: 172.w,
-            label: useType == RentType.wholeRent ? '보증금' : '월세',
-            value: leftTime,
-            isFirst: true,
-          ),
-          _buildTicketSection(
-            width: 173.w,
-            label: '관리비',
-            value: maintenance,
-            isLast: true,
-          ),
-        ],
-      );
+    // 제한 조건들을 리스트로 만들기
+    final List<Map<String, String>> sections = [];
+
+    // 횟수 제한이 있는 경우
+    if (remainingCount != null) {
+      sections.add({
+        'label': '남은 횟수',
+        'value': '$remainingCount회',
+      });
     }
+
+    // 시간 제한이 있는 경우
+    if (remainingTime != null) {
+      sections.add({
+        'label': '남은 시간',
+        'value': '$remainingTime시간',
+      });
+    }
+
+    // 기간 제한이 있는 경우
+    if (expiredDate != null) {
+      sections.add({
+        'label': '만료일',
+        'value': _formatDate(expiredDate!),
+      });
+    }
+
+    // 양도비는 항상 마지막에 추가
+    sections.add({
+      'label': '양도비',
+      'value': _formatPrice(price),
+    });
+
+    // 섹션 수에 따른 너비 계산
+    final sectionWidth = (345.w) / sections.length;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: sections.asMap().entries.map((entry) {
+        final index = entry.key;
+        final section = entry.value;
+
+        return _buildTicketSection(
+          width: sectionWidth,
+          label: section['label']!,
+          value: section['value']!,
+          isFirst: index == 0,
+          isLast: index == sections.length - 1,
+        );
+      }).toList(),
+    );
   }
 
   Widget _buildTicketSection({
     required double width,
     required String label,
-    required int value,
+    required String value,
     bool isFirst = false,
     bool isLast = false,
   }) {
@@ -121,7 +126,7 @@ class RentUseCard extends StatelessWidget {
                   ),
                   4.verticalSpace,
                   Text(
-                    _formatPrice(value),
+                    value,
                     style: AppTextStyles.subtitle.copyWith(color: BLUE400_COLOR),
                   ),
                 ],
@@ -170,7 +175,7 @@ class RentUseCard extends StatelessWidget {
                   ),
                   4.verticalSpace,
                   Text(
-                    _formatPrice(value),
+                    value,
                     style: AppTextStyles.subtitle.copyWith(
                         color: BLUE400_COLOR,
                         fontWeight: FontWeight.w800

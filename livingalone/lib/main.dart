@@ -16,6 +16,7 @@ import 'package:livingalone/home/view/home_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:livingalone/home/view/living_detail_screen.dart';
+import 'package:livingalone/report/report_screen.dart';
 import 'package:livingalone/user/view/login_screen.dart';
 import 'package:livingalone/user/view/redesign_password_screen.dart';
 import 'package:livingalone/user/view/signup_authentication_screen.dart';
@@ -51,8 +52,8 @@ class MyApp extends ConsumerWidget {
               fontFamily: 'SUIT',
             ),
             debugShowCheckedModeBanner: false,
-            // home: LivingDetailScreen(postType: PostType.room, postId: '10',),
-            home: RootTab(),
+            // home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
+            home: ReportScreen()
             // home: AddRoomHandoverScreen7(rentType: RentType.shortRent,),
             // home: AddRoomHandoverScreen6(),
           ),
