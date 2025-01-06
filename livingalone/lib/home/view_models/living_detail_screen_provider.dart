@@ -7,7 +7,6 @@ final LivingDetailScreenProvider = StateNotifierProvider<LivingDetailScreenNotif
   return LivingDetailScreenNotifier();
 });
 
-
 class LivingDetailScreenState {
   final bool showTabBar;
   final double tabBarOpacity;
@@ -62,7 +61,7 @@ class LivingDetailScreenNotifier extends StateNotifier<LivingDetailScreenState> 
   void updateTabBarVisibility(double scrollOffset) {
     final threshold = 620.0;
     final transitionDistance = 150.0;
-    
+
     final rawOpacity = ((scrollOffset - (threshold - transitionDistance)) / transitionDistance)
         .clamp(0.0, 1.0);
     final opacity = Curves.easeInOut.transform(rawOpacity);
@@ -161,10 +160,10 @@ class LivingDetailScreenNotifier extends StateNotifier<LivingDetailScreenState> 
     final newComments = List<CommentModel>.from(state.comments);
     final comment = newComments[commentIndex];
     final newReplies = List<CommentModel>.from(comment.replies ?? []);
-    
+
     // 대댓글 삭제
     newReplies.removeAt(replyIndex);
-    
+
     // 대댓글이 모두 삭제되고 댓글이 삭제 상태면 댓글 자체를 완전히 제거
     if (newReplies.isEmpty && comment.isDeleted) {
       newComments.removeAt(commentIndex);
@@ -179,7 +178,7 @@ class LivingDetailScreenNotifier extends StateNotifier<LivingDetailScreenState> 
         isDeleted: comment.isDeleted,
       );
     }
-    
+
     state = state.copyWith(comments: newComments);
   }
 }

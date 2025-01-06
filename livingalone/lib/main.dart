@@ -52,8 +52,8 @@ class MyApp extends ConsumerWidget {
               fontFamily: 'SUIT',
             ),
             debugShowCheckedModeBanner: false,
-            // home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
-            home: ReportScreen()
+            home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
+            // home: ReportScreen()
             // home: AddRoomHandoverScreen7(rentType: RentType.shortRent,),
             // home: AddRoomHandoverScreen6(),
           ),

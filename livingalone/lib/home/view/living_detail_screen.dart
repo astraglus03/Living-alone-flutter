@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:livingalone/common/component/colored_image.dart';
 import 'package:livingalone/common/component/colored_image_fill.dart';
@@ -20,10 +22,13 @@ import 'package:livingalone/home/component/stat_item.dart';
 import 'package:livingalone/home/component/ticket_info_card.dart';
 import 'package:livingalone/home/models/comment_model.dart';
 import 'package:livingalone/home/view_models/living_detail_screen_provider.dart';
+import 'package:livingalone/report/report_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/home/view_models/comments_provider.dart';
 import 'package:livingalone/home/view_models/like_provider.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LivingDetailScreen extends ConsumerStatefulWidget {
   final PostType postType;
@@ -136,7 +141,6 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
     if (!mounted) return;
 
     ref.read(LivingDetailScreenProvider.notifier).updateTabBarVisibility(scrollController.offset);
-    // 스크롤 위치에 따른 현재 섹션 업데이트
     ref.read(LivingDetailScreenProvider.notifier).updateCurrentSection(scrollController, _tabController, widget.postType);
   }
 
@@ -145,8 +149,125 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
     return DefaultLayout(
       title: '',
       appbarBorder: false,
-      actions:IconButton(
-        onPressed: (){},
+      actions: IconButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            barrierColor: Colors.black.withOpacity(0.5),
+            builder: (context) {
+              // TODO: 실제 자신의 게시물인지 확인하는 로직
+              const bool isMyPost = true;
+              final List<Map<String, dynamic>> options = isMyPost
+                ? [  // TODO: 게시글 수정, 게시글 숨기기, 게시글 삭제 이벤트 처리 완료해야함..
+                    {'text': '게시글 수정', 'icon': 'assets/icons/modify_post.svg', 'onTap': () {
+                      // Navigator.pop(context);
+                    }},
+                    {'text': '게시글 숨기기', 'icon': 'assets/icons/hide_post.svg', 'onTap': () {
+                      // Navigator.pop(context);
+                    }},
+                    {'text': 'URL 공유하기', 'icon': 'assets/icons/share_nocolor.svg', 'onTap': () {
+                      // Navigator.pop(context);
+                      DataUtils.sharePost(
+                        title: '[모양] 자취방 양도 게시물 공유하기',
+                        price: '41만원',
+                        location: '천안시 동남구 각원사길 59-5',
+                      );
+                    }},
+                    {'text': '게시글 삭제', 'icon': 'assets/icons/delete_post.svg', 'onTap': (){
+                      // Navigator.pop(context);
+                    }},
+                  ]
+                : [
+                    {'text': 'URL 공유하기', 'icon': 'assets/icons/share_nocolor.svg', 'onTap': () {
+                      Navigator.pop(context);
+                      DataUtils.sharePost(
+                        title: '[모양] 자취방 양도 게시물 공유하기',
+                        price: '41만원',
+                        location: '천안시 동남구 각원사길 59-5',
+                      );
+                    }},
+                    {'text': '신고하기', 'icon': 'assets/icons/report.svg', 'onTap': () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ReportScreen()));
+                    }},
+                  ];
+
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 56.h,
+                      left: 201.w,
+                      child: Container(
+                        width: 180.w,
+                        height: isMyPost ? 180.h : 90.h,
+                        decoration: BoxDecoration(
+                          color: WHITE100_COLOR,
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: options.asMap().entries.map((entry) {
+                            final index = entry.key;
+                            final option = entry.value;
+                            final isFirst = index == 0;
+                            final isLast = index == options.length - 1;
+
+                            return Expanded(
+                              child: Material(
+                                color: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: isFirst ? Radius.circular(10.r) : Radius.zero,
+                                    topRight: isFirst ? Radius.circular(10.r) : Radius.zero,
+                                    bottomLeft: isLast ? Radius.circular(10.r) : Radius.zero,
+                                    bottomRight: isLast ? Radius.circular(10.r) : Radius.zero,
+                                  ),
+                                ),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: isFirst ? Radius.circular(10.r) : Radius.zero,
+                                    topRight: isFirst ? Radius.circular(10.r) : Radius.zero,
+                                    bottomLeft: isLast ? Radius.circular(10.r) : Radius.zero,
+                                    bottomRight: isLast ? Radius.circular(10.r) : Radius.zero,
+                                  ),
+                                  hoverColor: BLUE200_COLOR,
+                                  splashColor: BLUE200_COLOR,
+                                  highlightColor: BLUE200_COLOR,
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    option['onTap']();
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(option['icon']),
+                                        6.horizontalSpace,
+                                        Text(
+                                          option['text'],
+                                          style: AppTextStyles.body2.copyWith(
+                                            color: GRAY800_COLOR,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
         icon: Icon(Icons.more_horiz_rounded),
       ),
       child: Stack(
