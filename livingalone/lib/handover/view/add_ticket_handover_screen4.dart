@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
+import 'package:livingalone/common/enum/ticket_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen5.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/handover/view_models/ticket_handover_provider.dart';
 
-class AddTicketHandoverScreen4 extends StatefulWidget {
-  final List<String> types; // 선택된 조건들의 리스트
+class AddTicketHandoverScreen4 extends ConsumerStatefulWidget {
+  final Set<LimitType> types;
 
   const AddTicketHandoverScreen4({
     required this.types,
@@ -17,10 +20,10 @@ class AddTicketHandoverScreen4 extends StatefulWidget {
   });
 
   @override
-  State<AddTicketHandoverScreen4> createState() => _AddTicketHandoverScreen4State();
+  ConsumerState<AddTicketHandoverScreen4> createState() => _AddTicketHandoverScreen4State();
 }
 
-class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
+class _AddTicketHandoverScreen4State extends ConsumerState<AddTicketHandoverScreen4> {
   final _formKey = GlobalKey<FormState>();
   final _countController = TextEditingController();
   final _timeController = TextEditingController();
@@ -33,25 +36,25 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
   void _validateInputs(){
     bool hasError = false;
 
-    for (String type in widget.types) {
-      if (type == '기간 제한') {
+    for (LimitType type in widget.types) {
+      if (type == LimitType.periodLimit) {
         if (_selectedDay == null) {
           setState(() {
-            _errorMessages[type] = '이용권 만료일을 선택해 주세요';
+            _errorMessages[type.label] = '이용권 만료일을 선택해 주세요';
             hasError = true;
           });
         }
-      } else if (type == '횟수 제한') {
+      } else if (type == LimitType.numberLimit) {
         if (_countController.text.isEmpty) {
           setState(() {
-            _errorMessages[type] = '남은 횟수를 입력해 주세요';
+            _errorMessages[type.label] = '남은 횟수를 입력해 주세요';
             hasError = true;
           });
         }
-      } else if (type == '시간 제한') {
+      } else if (type == LimitType.timeLimit) {
         if (_timeController.text.isEmpty) {
           setState(() {
-            _errorMessages[type] = '남은 시간을 입력해 주세요';
+            _errorMessages[type.label] = '남은 시간을 입력해 주세요';
             hasError = true;
           });
         }
@@ -59,7 +62,21 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
     }
 
     if (!hasError) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AddTicketHandoverScreen5()));
+      ref.read(ticketHandoverProvider.notifier).update(
+        remainingCount: widget.types.contains(LimitType.numberLimit) 
+            ? int.parse(_countController.text) 
+            : null,
+        remainingHours: widget.types.contains(LimitType.timeLimit) 
+            ? int.parse(_timeController.text) 
+            : null,
+        expiryDate: widget.types.contains(LimitType.periodLimit) 
+            ? _selectedDay 
+            : null,
+      );
+
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_)=> const AddTicketHandoverScreen5()),
+      );
     }
   }
 
@@ -175,10 +192,10 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
     );
   }
 
-  Widget _buildRemainingField(String type) {
-    final controller = type == '횟수 제한' ? _countController : _timeController;
-    final suffix = type == '횟수 제한' ? '회' : '시간';
-    final label = type == '횟수 제한' ? '남은 횟수' : '남은 시간';
+  Widget _buildRemainingField(LimitType type) {
+    final controller = type == LimitType.numberLimit ? _countController : _timeController;
+    final suffix = type == LimitType.numberLimit ? '회' : '시간';
+    final label = type == LimitType.numberLimit ? '남은 횟수' : '남은 시간';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,7 +242,7 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
             ),
           ),
         ),
-        if (_errorMessages[type] != null)
+        if (_errorMessages[type.label] != null)
           Column(
             children: [
               8.verticalSpace,
@@ -234,7 +251,7 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
                   SvgPicture.asset('assets/image/warning.svg'),
                   4.horizontalSpace,
                   Text(
-                    _errorMessages[type]!,
+                    _errorMessages[type.label]!,
                     style: AppTextStyles.caption2.copyWith(color: ERROR_TEXT_COLOR),
                   ),
                 ],
@@ -262,8 +279,6 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
               },
               child: SingleChildScrollView(
                 child: Container(
-                  // width: MediaQuery.of(context).size.width,
-                  // height: MediaQuery.of(context).size.height,
                   padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Form(
                     key: _formKey,
@@ -277,10 +292,10 @@ class _AddTicketHandoverScreen4State extends State<AddTicketHandoverScreen4> {
                         ),
                         14.verticalSpace,
                         ...List.generate(widget.types.length, (index) {
-                          final type = widget.types[index];
+                          final type = widget.types.elementAt(index);
                           return Column(
                             children: [
-                              if (type == '기간 제한')
+                              if (type == LimitType.periodLimit)
                                 _buildCalendar()
                               else
                                 _buildRemainingField(type),

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
@@ -6,6 +8,7 @@ import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen3.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen4.dart';
+import 'package:livingalone/handover/view_models/ticket_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:livingalone/user/component/component_button2.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -75,6 +78,10 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
         !showFeeError && 
         !(hasTransferFee == true && showFeeAmountError) && 
         _formKey.currentState!.validate()) {
+      ref.read(ticketHandoverProvider.notifier).update(
+        ticketType: typeController.text.trim(),
+        price: int.parse(_feeController.text.trim()),
+      );
       Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => AddTicketHandoverScreen3()),
       );

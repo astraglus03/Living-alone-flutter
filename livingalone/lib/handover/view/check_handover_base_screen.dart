@@ -73,6 +73,21 @@ class _CheckHandoverBaseScreenState extends ConsumerState<CheckHandoverBaseScree
     }
   }
 
+  void _onNextTap() {
+    if (secondAgreedSelected && firstAgreedSelected) {
+      // type에 따라 적절한 provider 사용
+      if (widget.type == PostType.room) {
+        ref.read(roomHandoverCheckProvider.notifier).confirmCheck();
+      } else {
+        ref.read(ticketHandoverCheckProvider.notifier).confirmCheck();
+      }
+
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => widget.nextScreen),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -137,17 +152,7 @@ class _CheckHandoverBaseScreenState extends ConsumerState<CheckHandoverBaseScree
             text: '다음',
             textStyle: AppTextStyles.title,
             isEnabled: secondAgreedSelected && firstAgreedSelected,
-            onTap: () {
-              if (secondAgreedSelected && firstAgreedSelected) {
-                // 확인 상태 저장
-                ref.read(handoverCheckProvider.notifier)..setPostType(widget.type)..confirmCheck();
-
-                // 다음 화면으로 이동
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => widget.nextScreen),
-                );
-              }
-            },
+            onTap: _onNextTap,
           ),
         ],
       ),

@@ -2,15 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/enum/room_enums.dart';
 import 'package:livingalone/common/enum/post_type.dart';
 import 'package:livingalone/handover/view_models/handover_check_provider.dart';
-import 'dart:io';  // File 타입을 위해 추가
-import 'dart:convert';  // json 파싱을 위해 추가
-import 'dart:async';  // http 호출을 위해 추가
-import 'package:http/http.dart' as http;  // http 패키지를 위해 추가
+import 'dart:io';
+import 'dart:convert';
+import 'dart:async';
 import 'package:dio/dio.dart';  // http 대신 dio 사용
 
 // 방 양도 작성 상태를 관리하는 Provider
 final roomHandoverProvider = StateNotifierProvider<RoomHandoverNotifier, RoomHandoverState>((ref) {
-  return RoomHandoverNotifier(ref.read(handoverCheckProvider));
+  return RoomHandoverNotifier(ref.read(roomHandoverCheckProvider));
 });
 
 // 방 양도 작성에 필요한 모든 데이터를 담는 State
@@ -29,6 +28,7 @@ class RoomHandoverState {
   final String? availableDate;     // 입주 가능일 (7/8) - 필수
   final bool immediateIn;          // 즉시입주 여부 (7/8)
   final List<File> images;       // String에서 File로 변경
+  final String? title;            // 제목
   final String? description;       // 상세 설명 (8/8) - 필수
   final String? area;              // 면적 (6/8) - 필수
   final String? floor;             // 층수 (6/8) - 필수
@@ -47,6 +47,7 @@ class RoomHandoverState {
     this.conditions = const {},    // 기본값 빈 Set
     this.availableDate,
     this.images = const [],      // 기본값 빈 리스트
+    this.title,
     this.description,
     this.area,
     this.floor,
@@ -68,6 +69,7 @@ class RoomHandoverState {
     Set<RoomCondition>? conditions,
     String? availableDate,
     List<File>? images,  // String에서 File로 변경
+    String? title,
     String? description,
     String? area,
     String? floor,
@@ -87,6 +89,7 @@ class RoomHandoverState {
       conditions: conditions ?? this.conditions,
       availableDate: availableDate ?? this.availableDate,
       images: images ?? this.images,
+      title: title ?? this.title,
       description: description ?? this.description,
       area: area ?? this.area,
       floor: floor ?? this.floor,
@@ -104,6 +107,7 @@ class RoomHandoverState {
         maintenance == null ||
         area == null ||
         floor == null ||
+        title == null ||
         description == null ||
         images.isEmpty) {
       return false;

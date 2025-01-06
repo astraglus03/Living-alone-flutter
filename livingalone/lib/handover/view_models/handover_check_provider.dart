@@ -1,8 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/enum/post_type.dart';
 
-final handoverCheckProvider = StateNotifierProvider<HandoverCheckNotifier, HandoverCheckState>((ref) {
-  return HandoverCheckNotifier();
+final roomHandoverCheckProvider = StateNotifierProvider<HandoverCheckNotifier, HandoverCheckState>((ref) {
+  return HandoverCheckNotifier(initialPostType: PostType.room);
+});
+
+final ticketHandoverCheckProvider = StateNotifierProvider<HandoverCheckNotifier, HandoverCheckState>((ref) {
+  return HandoverCheckNotifier(initialPostType: PostType.ticket);
 });
 
 class HandoverCheckState {
@@ -30,11 +34,8 @@ class HandoverCheckState {
 }
 
 class HandoverCheckNotifier extends StateNotifier<HandoverCheckState> {
-  HandoverCheckNotifier() : super(HandoverCheckState(postType: PostType.room));
-
-  void setPostType(PostType type) {
-    state = state.copyWith(postType: type);
-  }
+  HandoverCheckNotifier({required PostType initialPostType})
+      : super(HandoverCheckState(postType: initialPostType));
 
   void confirmCheck() {
     state = state.copyWith(
@@ -42,4 +43,4 @@ class HandoverCheckNotifier extends StateNotifier<HandoverCheckState> {
       checkedAt: DateTime.now(),
     );
   }
-} 
+}

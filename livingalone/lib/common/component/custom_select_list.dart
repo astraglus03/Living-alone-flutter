@@ -4,7 +4,7 @@ import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 
-class CustomSelectList extends StatelessWidget {
+class CustomSelectList<T> extends StatelessWidget {
   final List<String> items;
   final dynamic selected;  // String? 또는 List<String>
   final Function(String) onItemSelected;

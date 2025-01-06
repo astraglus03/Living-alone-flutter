@@ -7,6 +7,7 @@ final LivingDetailScreenProvider = StateNotifierProvider<LivingDetailScreenNotif
   return LivingDetailScreenNotifier();
 });
 
+
 class LivingDetailScreenState {
   final bool showTabBar;
   final double tabBarOpacity;

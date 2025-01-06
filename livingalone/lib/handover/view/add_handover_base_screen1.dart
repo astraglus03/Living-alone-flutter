@@ -6,6 +6,7 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/enum/post_type.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/handover/view_models/ticket_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -152,12 +153,12 @@ String get _title {
           detailAddress: detailAddressController.text,
         );
       }
-      // else {
-      //   ref.read(ticketHandoverProvider.notifier).updateAddress(
-      //     addressController.text,
-      //     detailAddressController.text,
-      //   );
-      // }
+      else {
+        ref.read(ticketHandoverProvider.notifier).update(
+          address: addressController.text,
+          detailAddress: detailAddressController.text,
+        );
+      }
 
       Navigator.of(context).push(
         MaterialPageRoute(
