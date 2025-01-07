@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:livingalone/common/enum/post_type.dart';
@@ -50,7 +51,7 @@ class LivingDetailScreenState {
 
 class LivingDetailScreenNotifier extends StateNotifier<LivingDetailScreenState> {
   LivingDetailScreenNotifier() : super(LivingDetailScreenState(sectionKeys: {
-    '매물 소개': GlobalKey(),
+    '방 소개': GlobalKey(),
     '방 정보': GlobalKey(),
     '이용권 소개': GlobalKey(),
     '이용권 정보': GlobalKey(),
@@ -59,39 +60,47 @@ class LivingDetailScreenNotifier extends StateNotifier<LivingDetailScreenState> 
   }));
 
   void updateTabBarVisibility(double scrollOffset) {
-    final threshold = 620.0;
-    final transitionDistance = 150.0;
+    final threshold = 670.0;
+    final transitionDistance = 100.0;
 
     final rawOpacity = ((scrollOffset - (threshold - transitionDistance)) / transitionDistance)
         .clamp(0.0, 1.0);
     final opacity = Curves.easeInOut.transform(rawOpacity);
 
-    if ((opacity - state.tabBarOpacity).abs() > 0.01) {
-      state = state.copyWith(
-        tabBarOpacity: opacity,
-        showTabBar: opacity > 0.01,
-      );
-    }
+    state = state.copyWith(
+      tabBarOpacity: opacity,
+      showTabBar: opacity > 0.01,
+    );
   }
 
   void scrollToSection(String title, ScrollController scrollController) {
     final key = state.sectionKeys[title];
     if (key?.currentContext == null) return;
 
-    final RenderBox renderBox = key!.currentContext!.findRenderObject() as RenderBox;
-    final position = renderBox.localToGlobal(Offset.zero);
+    final RenderObject? renderObject = key!.currentContext!.findRenderObject();
+    if (renderObject == null) return;
 
-    final targetScroll = scrollController.offset + position.dy - 170;
+    final RenderAbstractViewport? viewport = RenderAbstractViewport.of(renderObject);
+    if (viewport == null) return;
+
+    final RevealedOffset offsetToReveal = viewport.getOffsetToReveal(renderObject, 0.0);
+    double offset = offsetToReveal.offset + 70;
+
+    final tabBarOffset = 58.0;
+    offset -= tabBarOffset;
 
     scrollController.animateTo(
-      targetScroll,
+      offset,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
 
   void updateCurrentSection(ScrollController scrollController, TabController tabController, PostType postType) {
+    if (state.tabBarOpacity < 0.01) return;
+
     String? currentSection;
+    final scrollOffset = scrollController.offset;
 
     final isNearBottom = scrollController.position.pixels >
         scrollController.position.maxScrollExtent - 100;
@@ -99,23 +108,37 @@ class LivingDetailScreenNotifier extends StateNotifier<LivingDetailScreenState> 
     if (isNearBottom) {
       currentSection = '댓글';
     } else {
+      double minDistance = double.infinity;
+      String? closestSection;
+
       state.sectionKeys.forEach((title, key) {
         if (key.currentContext != null) {
-          final RenderBox box = key.currentContext!.findRenderObject() as RenderBox;
-          final offset = box.localToGlobal(Offset.zero).dy;
+          final RenderObject? renderObject = key.currentContext!.findRenderObject();
+          if (renderObject != null) {
+            final RenderAbstractViewport? viewport = RenderAbstractViewport.of(renderObject);
+            if (viewport != null) {
+              final RevealedOffset offsetToReveal = viewport.getOffsetToReveal(renderObject, 0.0);
+              final double offsetFromTop = offsetToReveal.offset - scrollOffset;
 
-          if (offset < 180 && offset > -100) {
-            currentSection = title;
+              if (offsetFromTop.abs() < minDistance && offsetFromTop > -200) {
+                minDistance = offsetFromTop.abs();
+                closestSection = title;
+              }
+            }
           }
         }
       });
+
+      if (closestSection != null) {
+        currentSection = closestSection;
+      }
     }
 
     if (currentSection != null) {
       int newIndex;
       if (postType == PostType.room) {
         newIndex = switch (currentSection) {
-          '매물 소개' => 0,
+          '방 소개' => 0,
           '방 정보' => 1,
           '위치' => 2,
           '댓글' => 3,

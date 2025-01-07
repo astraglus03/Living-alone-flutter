@@ -26,6 +26,7 @@ import 'package:livingalone/user/view/signup_terms_screen.dart';
 import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   // 가로모드로 하게되면 심각한 overflow와 폰트, 깨짐. 모든 반은형으로 하기전까지 코드 필수.
   SystemChrome.setPreferredOrientations(([
     DeviceOrientation.portraitUp
@@ -57,7 +58,7 @@ class MyApp extends ConsumerWidget {
               fontFamily: 'SUIT',
             ),
             debugShowCheckedModeBanner: false,
-            home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
+            home: LivingDetailScreen(postType: PostType.room, postId: '10',),
             // home: ReportScreen()
             // home: AddRoomHandoverScreen7(rentType: RentType.shortRent,),
             // home: AddRoomHandoverScreen6(),
