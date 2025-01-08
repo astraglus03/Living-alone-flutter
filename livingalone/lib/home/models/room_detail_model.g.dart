@@ -32,9 +32,6 @@ RoomDetailModel _$RoomDetailModelFromJson(Map<String, dynamic> json) =>
       comments: (json['comments'] as num).toInt(),
       chatRooms: (json['chatRooms'] as num).toInt(),
       createdAt: DateTime.parse(json['createdAt'] as String),
-      room: (json['room'] as List<dynamic>)
-          .map((e) => RoomModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
       additionalImages: (json['additionalImages'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
@@ -74,7 +71,6 @@ Map<String, dynamic> _$RoomDetailModelToJson(RoomDetailModel instance) =>
       'comments': instance.comments,
       'chatRooms': instance.chatRooms,
       'createdAt': instance.createdAt.toIso8601String(),
-      'room': instance.room,
       'additionalImages': instance.additionalImages,
       'authorProfileUrl': instance.authorProfileUrl,
       'authorName': instance.authorName,

@@ -8,7 +8,6 @@ part 'room_detail_model.g.dart';
 
 @JsonSerializable()
 class RoomDetailModel extends RoomModel {
-  final List<RoomModel> room;
   final List<String> additionalImages;  // 추가 이미지 URL 목록 (최대 9개)
   final String authorProfileUrl;        // 게시자 프로필 이미지 URL
   final String authorName;              // 게시자 닉네임
@@ -42,7 +41,6 @@ class RoomDetailModel extends RoomModel {
     required super.comments,             // 전체 댓글 수 (대댓글 포함)
     required super.chatRooms,            // 활성화된 채팅방 수
     required super.createdAt,            // 게시물 작성 시간
-    required this.room,
     required this.additionalImages,
     required this.authorProfileUrl,
     required this.authorName,

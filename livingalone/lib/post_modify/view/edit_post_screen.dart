@@ -32,7 +32,6 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
     final state = ref.watch(editRoomPostProvider);
     return DefaultLayout(
       title: '게시물 수정하기',
-      showCloseButton: true,
       child: Column(
         children: [
           Expanded(
