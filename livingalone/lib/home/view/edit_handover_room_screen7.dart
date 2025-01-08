@@ -10,26 +10,53 @@ import 'package:livingalone/handover/component/agree_container.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen8.dart';
 import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
+import 'package:livingalone/home/view_models/edit_provider.dart';
 import 'package:livingalone/user/component/custom_agree_button.dart';
+import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AddRoomHandoverScreen7 extends ConsumerStatefulWidget {
-  final String rentType; // 단기양도 or 월세, 전세
+class EditHandoverRoomScreen7 extends ConsumerStatefulWidget {
 
-  const AddRoomHandoverScreen7({
+  const EditHandoverRoomScreen7({
     super.key,
-    required this.rentType,
   });
 
   @override
-  ConsumerState<AddRoomHandoverScreen7> createState() =>
+  ConsumerState<EditHandoverRoomScreen7> createState() =>
       _AddRoomHandoverScreen9State();
 }
 
 class _AddRoomHandoverScreen9State
-    extends ConsumerState<AddRoomHandoverScreen7> {
-  DateTime? _selectedDay;
+    extends ConsumerState<EditHandoverRoomScreen7> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    final state = ref.read(editPostProvider);
+
+    // 시작 날짜 설정
+    _currentDay = state.getStartDate();
+
+    if (_currentDay != null) {
+      _focusedDay = _currentDay!;
+    }
+
+    // 단기 양도인 경우 종료 날짜도 설정
+    if (state.rentType == RentType.shortRent.label) {
+      rentType = state.rentType;
+      _rangeStart = state.getStartDate();
+      _rangeEnd = state.getEndDate();
+      if (_rangeStart != null) {
+        _focusedDay = _rangeStart!;
+      }
+    }
+
+    isAgreedSelected = state.immediateEnter!;
+  }
+
+  String? rentType;
+  DateTime? _currentDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
   DateTime _focusedDay = DateTime.now();
@@ -40,7 +67,7 @@ class _AddRoomHandoverScreen9State
 
   void _validateAndNavigate() {
     if (!isAgreedSelected) {
-      if (widget.rentType == RentType.shortRent.label) {
+      if (rentType == RentType.shortRent.label) {
         if (_rangeStart == null || _rangeEnd == null) {
           setState(() {
             _errorMessage = '입주기간을 선택해주세요';
@@ -48,7 +75,7 @@ class _AddRoomHandoverScreen9State
           return;
         }
       } else {
-        if (_selectedDay == null) {
+        if (_currentDay == null) {
           setState(() {
             _errorMessage = '입주가능일을 선택해주세요';
           });
@@ -56,18 +83,14 @@ class _AddRoomHandoverScreen9State
         }
       }
     }
-
-    ref.read(roomHandoverProvider.notifier).update(
-      startDate: isAgreedSelected ? DateTime.now() : (_rangeStart ?? _selectedDay),
-      endDate: widget.rentType == RentType.shortRent.label ? _rangeEnd : null,
+    
+    ref.read(editPostProvider.notifier).updateDate(
+      startDate:_rangeStart ?? _currentDay,
+      endDate: rentType == RentType.shortRent.label ? _rangeEnd : null,
       immediateIn: isAgreedSelected,
     );
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => const AddRoomHandoverScreen8(),
-      ),
-    );
+    Navigator.of(context).pop();
   }
 
   void _toggleFirstAgreed() {
@@ -79,10 +102,7 @@ class _AddRoomHandoverScreen9State
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '자취방 양도하기',
-      currentStep: 7,
-      totalSteps: 8,
-      showCloseButton: true,
+      title: '게시물 수정하기',
       child: Column(
         children: [
           Expanded(
@@ -94,18 +114,18 @@ class _AddRoomHandoverScreen9State
                 children: [
                   20.verticalSpace,
                   Text(
-                    widget.rentType == RentType.shortRent.label
+                    rentType == RentType.shortRent.label
                         ? '단기양도 기간을 선택해 주세요'
                         : '입주가능일을 선택해주세요',
                     style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
                   ),
                   4.verticalSpace,
                   Text(
-                    widget.rentType == RentType.shortRent.label
+                    rentType == RentType.shortRent.label
                         ? '입주일, 퇴거일과 즉시 입주 여부를 확인해 주세요.'
                         : '입주 가능 날짜와 즉시 입주 여부를 확인해 주세요.',
                     style:
-                        AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),
+                    AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),
                   ),
                   20.verticalSpace,
                   _buildCalendar(),
@@ -124,7 +144,12 @@ class _AddRoomHandoverScreen9State
               ),
             ),
           ),
-          CustomDoubleButton(
+          CustomBottomButton(
+            appbarBorder: true,
+            backgroundColor: BLUE400_COLOR ,
+            foregroundColor: WHITE100_COLOR,
+            text: '저장',
+            textStyle: AppTextStyles.title,
             onTap: _validateAndNavigate,
           ),
         ],
@@ -133,7 +158,7 @@ class _AddRoomHandoverScreen9State
   }
 
   Widget _buildCalendar() {
-    if (widget.rentType == RentType.shortRent.label) {
+    if (rentType == RentType.shortRent.label) {
       return TableCalendar(
         locale: 'ko_KR',
         firstDay: _firstDay,
@@ -250,10 +275,10 @@ class _AddRoomHandoverScreen9State
         firstDay: _firstDay,
         lastDay: _lastDay,
         focusedDay: _focusedDay,
-        selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+        selectedDayPredicate: (day) => isSameDay(_currentDay, day),
         onDaySelected: (selectedDay, focusedDay) {
           setState(() {
-            _selectedDay = selectedDay;
+            _currentDay = selectedDay;
             _focusedDay = focusedDay;
           });
         },

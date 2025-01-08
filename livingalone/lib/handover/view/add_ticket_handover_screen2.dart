@@ -1,9 +1,11 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:livingalone/common/component/custom_select_grid.dart';
 import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
+import 'package:livingalone/common/enum/ticket_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen3.dart';
@@ -22,6 +24,7 @@ class AddTicketHandoverScreen2 extends ConsumerStatefulWidget {
 
 class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScreen2> {
   final _formKey = GlobalKey<FormState>();
+  String? selectedItem;
   final typeController = TextEditingController();
   final _feeController = TextEditingController();
   bool? hasTransferFee;
@@ -32,13 +35,6 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
   @override
   void initState() {
     super.initState();
-    typeController.addListener(() {
-      if (typeController.text.isNotEmpty && showTypeError) {
-        setState(() {
-          showTypeError = false;
-        });
-      }
-    });
     
     _feeController.addListener(() {
       if (_feeController.text.isNotEmpty && showFeeAmountError) {
@@ -51,7 +47,6 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
 
   @override
   void dispose() {
-    typeController.dispose();
     _feeController.dispose();
     super.dispose();
   }
@@ -67,9 +62,20 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
     });
   }
 
+  void _handleTypeSelection(String type) {
+    setState(() {
+      if (selectedItem == type) {
+        selectedItem = null;
+      } else {
+        selectedItem = type;
+      }
+      showTypeError = false;
+    });
+  }
+
   void _validateForm() {
     setState(() {
-      showTypeError = typeController.text.trim().isEmpty;
+      showTypeError = selectedItem == null;
       showFeeError = hasTransferFee == null;
       showFeeAmountError = hasTransferFee == true && _feeController.text.trim().isEmpty;
     });
@@ -78,9 +84,12 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
         !showFeeError && 
         !(hasTransferFee == true && showFeeAmountError) && 
         _formKey.currentState!.validate()) {
+      final ticketType = TicketType.values.firstWhere(
+              (e) => e.label == selectedItem
+      );
       ref.read(ticketHandoverProvider.notifier).update(
-        ticketType: typeController.text.trim(),
-        price: int.parse(_feeController.text.trim()),
+        ticketType: ticketType.label,
+        price: int.tryParse(_feeController.text.trim()),
       );
       Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => AddTicketHandoverScreen3()),
@@ -117,20 +126,11 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
                           style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
                         ),
                         20.verticalSpace,
-                        Text(
-                          '이용권 유형',
-                          style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
-                        ),
-                        10.verticalSpace,
-                        ComponentButton2(
-                          controller: typeController,
-                          hintText: '예) 헬스장, 헬스PT, 필라테스, 독서실 등',
-                          type: TextInputType.text,
-                          onPressed: (){
-                            typeController.clear();
-                            showTypeError = true;
-                          },
-                          backgroundColor: GRAY100_COLOR,
+                        CustomSingleSelectGrid(
+                            label: '이용권 유형',
+                            items: TicketType.values.map((e) => e.label).toList(),
+                            selectedItem: selectedItem,
+                            onItemSelected: _handleTypeSelection,
                         ),
                         if(showTypeError)
                           Padding(

@@ -18,7 +18,7 @@ class RoomDetailModel extends RoomModel {
   final String area;                    // 면적 (예: "33.06m²")
   final String currentFloor;            // 현재 층수 (예: "7층")
   final String totalFloor;              // 전체 층수
-  final DateTime availableDate;         // 입주 가능일
+  final String availableDate;         // 입주 가능일
   final bool immediateEnter;            // 즉시 입주 가능 여부
   final List<CommentModel> commentList; // 댓글 목록 (대댓글 포함)
 

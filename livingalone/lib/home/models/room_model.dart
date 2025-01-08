@@ -7,14 +7,14 @@ part 'room_model.g.dart';
 @JsonSerializable()
 class RoomModel {
   final String id;                        // 게시물 고유 식별자
-  final PostType postType;                // 방인지 이용권인지(페이지 통합으로 인해 필요함)
+  final String postType;                // 방인지 이용권인지(페이지 통합으로 인해 필요함)
   final String thumbnailUrl;              // 게시물 대표 이미지 URL (첫 번째 이미지)
   final String title;                     // 게시물 제목 (예: "안서동보아파트 101동")
   final bool isTransferred;               // 양도 완료 여부 (true: 양도완료, false: 양도중)
   final String location;                  // 지역명 (예: 안서동, 신부동, 두정동)
   final String buildingType;              // 건물 유형 (아파트, 빌라, 주택, 오피스텔)
   final String propertyType;              // 매물 종류 (원룸(오픈형), 원룸(분리형), 투룸, 쓰리룸 이상)
-  final RentType rentType;                // 임대 방식 (월세, 전세, 단기양도)
+  final String rentType;                // 임대 방식 (월세, 전세, 단기양도)
   final int deposit;                      // 보증금 (만원 단위)
   final int maintenance;                  // 관리비 (만원 단위)
   final int? monthlyRent;                 // 월세 (만원 단위, 전세, 단기양도의 경우 null)

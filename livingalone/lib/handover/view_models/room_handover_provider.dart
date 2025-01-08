@@ -17,9 +17,9 @@ class RoomHandoverState {
   // 필수 필드
   final String? address;           // 주소
   final String? detailAddress;     // 상세주소
-  final BuildingType? buildingType; // 건물 유형
-  final PropertyType? propertyType; // 매물 종류
-  final RentType? rentType;        // 임대 방식
+  final String? buildingType; // 건물 유형
+  final String? propertyType; // 매물 종류
+  final String? rentType;        // 임대 방식
   final int? maintenance;          // 관리비
   final String? availableDate;     // 입주 가능일
   final bool immediateIn;          // 즉시입주 여부
@@ -63,9 +63,9 @@ class RoomHandoverState {
   RoomHandoverState copyWith({
     String? address,
     String? detailAddress,
-    BuildingType? buildingType,
-    PropertyType? propertyType,
-    RentType? rentType,
+    String? buildingType,
+    String? propertyType,
+    String? rentType,
     int? deposit,
     int? monthlyRent,
     int? maintenance,
@@ -120,15 +120,15 @@ class RoomHandoverState {
       return false;
     }
 
-    // 2. 임대 방식별 추가 필수 필드 검증
-    switch (rentType!) {
-      case RentType.monthlyRent:
-        if (deposit == null || monthlyRent == null) return false;
-      case RentType.wholeRent:
-        if (deposit == null) return false;
-      case RentType.shortRent:
-        if (monthlyRent == null) return false;
-    }
+    // // 2. 임대 방식별 추가 필수 필드 검증
+    // switch (rentType!) {
+    //   case RentType.monthlyRent:
+    //     if (deposit == null || monthlyRent == null) return false;
+    //   case RentType.wholeRent:
+    //     if (deposit == null) return false;
+    //   case RentType.shortRent:
+    //     if (monthlyRent == null) return false;
+    // }
 
     return true;
   }
@@ -144,9 +144,9 @@ class RoomHandoverNotifier extends StateNotifier<RoomHandoverState> {
   void update({
     String? address,
     String? detailAddress,
-    BuildingType? buildingType,
-    PropertyType? propertyType,
-    RentType? rentType,
+    String? buildingType,
+    String? propertyType,
+    String? rentType,
     int? deposit,
     int? monthlyRent,
     int? maintenance,
@@ -251,9 +251,9 @@ class RoomHandoverNotifier extends StateNotifier<RoomHandoverState> {
       // 필수 필드
       'address': state.address,
       'detailAddress': state.detailAddress,
-      'buildingType': state.buildingType?.label,  // enum의 label 사용
-      'propertyType': state.propertyType?.label,  // enum의 label 사용
-      'rentType': state.rentType?.label,          // enum의 label 사용
+      'buildingType': state.buildingType,  // enum의 label 사용
+      'propertyType': state.propertyType,  // enum의 label 사용
+      'rentType': state.rentType,          // enum의 label 사용
       'maintenance': state.maintenance,            // 숫자 타입 유지
       'availableDate': state.availableDate,
       'immediateIn': state.immediateIn,

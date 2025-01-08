@@ -13,16 +13,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:livingalone/home/view_models/edit_provider.dart';
 import 'package:reorderables/reorderables.dart';
 
-class AddRoomHandoverScreen8 extends ConsumerStatefulWidget {
-  const AddRoomHandoverScreen8({super.key});
+import '../../user/component/custom_bottom_button.dart';
+
+class EditHandoverRoomScreen8 extends ConsumerStatefulWidget {
+  const EditHandoverRoomScreen8({super.key});
 
   @override
-  ConsumerState<AddRoomHandoverScreen8> createState() => _AddRoomHandoverScreen1State();
+  ConsumerState<EditHandoverRoomScreen8> createState() => _AddRoomHandoverScreen1State();
 }
 
-class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8> {
+class _AddRoomHandoverScreen1State extends ConsumerState<EditHandoverRoomScreen8> {
   final titleController = TextEditingController();
   final titleFocus = FocusNode();
   final List<File> _images = [];
@@ -33,6 +36,7 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
   bool showTitleError = false;
   bool showIntroduceError = false;
 
+
   Future<void> _pickImage() async {
     if (_images.length >= 10) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -42,13 +46,13 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
     }
 
     final ImagePicker picker = ImagePicker();
-    final List<XFile> images = await picker.pickMultiImage(
+    final List<XFile> multiImages = await picker.pickMultiImage(
       imageQuality: 80,
       limit: 10 - _images.length,
     );
-    
-    if (images.isNotEmpty) {
-      final files = images.map((xFile) => File(xFile.path)).toList();
+
+    if (multiImages.isNotEmpty) {
+      final files = multiImages.map((xFile) => File(xFile.path)).toList();
       ref.read(roomHandoverProvider.notifier).addImages(files);
       setState(() {
         _images.insertAll(0, files);
@@ -72,7 +76,7 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
       }
       final File item = _images.removeAt(oldIndex);
       _images.insert(newIndex, item);
-      
+
       // Provider 상태 업데이트
       ref.read(roomHandoverProvider.notifier).update(
         images: _images,
@@ -83,6 +87,10 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
   @override
   void initState() {
     super.initState();
+    final state = ref.read(editPostProvider);
+    titleController.text = state.title ?? '';
+    _introduceController.text = state.description ?? '';
+
     titleController.addListener(() {
       if (titleController.text.isNotEmpty && showTitleError) {
         setState(() {
@@ -108,86 +116,14 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
     });
 
     if (!showImageError && !showTitleError && !showIntroduceError) {
-      // Provider에 최종 데이터 저장
-      ref.read(roomHandoverProvider.notifier).update(
-        images: _images,
-        description: _introduceController.text,
+      final imagePaths = _images.map((file) => file.path).toList();
+      ref.read(editPostProvider.notifier).updateImages(imagePaths);
+      ref.read(editPostProvider.notifier).updateTitleAndContent(
+        title: titleController.text.trim(),
+        description: _introduceController.text.trim(),
       );
 
-      final roomState = ref.watch(roomHandoverProvider);
-      final checkState = ref.watch(roomHandoverCheckProvider);
-
-      // 주소 정보
-      print('\n=== 위치 정보 ===');
-      print({
-        '주소': roomState.address,
-        '상세주소': roomState.detailAddress,
-      });
-
-      // 건물 정보
-      print('\n=== 건물 정보 ===');
-      print({
-        '건물 유형': roomState.buildingType,
-        '매물 종류': roomState.propertyType,
-        '층수': roomState.floor,
-        '면적': roomState.area,
-      });
-
-      // 계약 정보
-      print('\n=== 계약 정보 ===');
-      print({
-        '임대 방식': roomState.rentType,
-        '보증금': roomState.deposit,
-        '월세': roomState.monthlyRent,
-        '관리비': roomState.maintenance,
-      });
-
-      // 입주 정보
-      print('\n=== 입주 정보 ===');
-      print({
-        '입주 가능일': roomState.availableDate,
-        '즉시 입주 가능': roomState.immediateIn,
-      });
-
-      // 추가 정보
-      print('\n=== 추가 정보 ===');
-      print({
-        '시설': roomState.facilities.map((e) => e.label).toList(),
-        '조건': roomState.conditions.map((e) => e.label).toList(),
-      });
-
-      // 설명
-      print('\n=== 상세 설명 ===');
-      print({
-        '설명': roomState.description,
-      });
-
-      // 이미지
-      print('\n=== 이미지 정보 ===');
-      print({
-        '이미지 개수': roomState.images.length,
-        '이미지 경로': roomState.images.map((e) => e.path).toList(),
-      });
-
-      // 개인정보 동의
-      print('\n=== 개인정보 동의 ===');
-      print({
-        '게시물 타입': checkState.postType?.label,
-        '동의 여부': checkState.isChecked,
-        '동의 시간': checkState.checkedAt?.toIso8601String(),
-      });
-
-
-      // // API 호출
-      // ref.read(roomHandoverProvider.notifier).submit().then((_) {
-      //   // 성공 시 처리
-      //   Navigator.of(context).pop(); // 또는 완료 화면으로 이동
-      // }).catchError((error) {
-      //   // 에러 처리
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(content: Text('업로드 실패: ${error.toString()}')),
-      //   );
-      // });
+      Navigator.of(context).pop();
     }
   }
 
@@ -201,121 +137,10 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
     super.dispose();
   }
 
-  Widget _buildAddImageButton() {
-    return GestureDetector(
-      onTap: _pickImage,
-      child: Container(
-        width: 80.w,
-        height: 80.h,
-        margin: EdgeInsets.only(right: 8.w),
-        decoration: BoxDecoration(
-          color: GRAY100_COLOR,
-          borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(color: GRAY200_COLOR),
-        ),
-        child: Center(
-          child: SvgPicture.asset('assets/icons/photo.svg'),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImageList() {
-    return SizedBox(
-      height: 80.h,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _buildAddImageButton(),
-          if (_images.isNotEmpty)
-            Container(
-              width: MediaQuery.of(context).size.width - 128.w,
-              child: ReorderableListView(
-                scrollDirection: Axis.horizontal,
-                onReorder: _onReorder,
-                children: _images.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final image = entry.value;
-                  return _buildImageItem(image, index);
-                }).toList(),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildImageItem(File image, int index) {
-    return Container(
-      key: ValueKey(image.path),
-      margin: EdgeInsets.only(right: 10.w),
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
-            child: Image.file(
-              image,
-              width: 80.w,
-              height: 80.h,
-              fit: BoxFit.cover,
-              cacheWidth: 160,
-              cacheHeight: 160,
-            ),
-          ),
-          if (index == 0)
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.r),
-                  border: Border.all(
-                    color: BLUE400_COLOR,
-                    width: 2,
-                  ),
-                ),
-              ),
-            ),
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: () => _removeImage(index),
-              child: Container(
-                color: Colors.transparent,
-              ),
-            ),
-          ),
-          Positioned(
-            top: 0.h,
-            right: 0.w,
-            child: GestureDetector(
-              onTap: () => _removeImage(index),
-              child: Container(
-                padding: EdgeInsets.all(4.w),
-                decoration: BoxDecoration(
-                  color: BLUE400_COLOR,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10.r),
-                    bottomLeft: Radius.circular(1),
-                  ),
-                ),
-                child: Icon(
-                  Icons.close,
-                  color: BLUE100_COLOR,
-                  size: 16.w,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '자취방 양도하기',
-      showCloseButton: true,
-      currentStep: 8,
-      totalSteps: 8,
+      title: '게시글 수정하기',
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
@@ -459,11 +284,123 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
                 ),
               ),
             ),
-            CustomDoubleButton(
+            CustomBottomButton(
+              appbarBorder: true,
+              backgroundColor: BLUE400_COLOR ,
+              foregroundColor: WHITE100_COLOR,
+              text: '저장',
+              textStyle: AppTextStyles.title,
               onTap: _validateForm,
             ),
           ],
         ),
+      ),
+    );
+  }
+  Widget _buildAddImageButton() {
+    return GestureDetector(
+      onTap: _pickImage,
+      child: Container(
+        width: 80.w,
+        height: 80.h,
+        margin: EdgeInsets.only(right: 8.w),
+        decoration: BoxDecoration(
+          color: GRAY100_COLOR,
+          borderRadius: BorderRadius.circular(10.r),
+          border: Border.all(color: GRAY200_COLOR),
+        ),
+        child: Center(
+          child: SvgPicture.asset('assets/icons/photo.svg'),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageList() {
+    return SizedBox(
+      height: 80.h,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _buildAddImageButton(),
+          if (_images.isNotEmpty)
+            Container(
+              width: MediaQuery.of(context).size.width - 128.w,
+              child: ReorderableListView(
+                scrollDirection: Axis.horizontal,
+                onReorder: _onReorder,
+                children: _images.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final image = entry.value;
+                  return _buildImageItem(image, index);
+                }).toList(),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImageItem(File image, int index) {
+    return Container(
+      key: ValueKey(image.path),
+      margin: EdgeInsets.only(right: 10.w),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10.r),
+            child: Image.file(
+              image,
+              width: 80.w,
+              height: 80.h,
+              fit: BoxFit.cover,
+              cacheWidth: 160,
+              cacheHeight: 160,
+            ),
+          ),
+          if (index == 0)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.r),
+                  border: Border.all(
+                    color: BLUE400_COLOR,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () => _removeImage(index),
+              child: Container(
+                color: Colors.transparent,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 0.h,
+            right: 0.w,
+            child: GestureDetector(
+              onTap: () => _removeImage(index),
+              child: Container(
+                padding: EdgeInsets.all(4.w),
+                decoration: BoxDecoration(
+                  color: BLUE400_COLOR,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10.r),
+                    bottomLeft: Radius.circular(1),
+                  ),
+                ),
+                child: Icon(
+                  Icons.close,
+                  color: BLUE100_COLOR,
+                  size: 16.w,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -35,7 +35,7 @@ class _AddRoomHandoverScreen3State extends ConsumerState<AddRoomHandoverScreen3>
       final propertyType = PropertyType.values.firstWhere(
           (e) => e.label == selectedType
       );
-      ref.read(roomHandoverProvider.notifier).update(propertyType: propertyType);
+      ref.read(roomHandoverProvider.notifier).update(propertyType: propertyType.label);
     }
   }
 

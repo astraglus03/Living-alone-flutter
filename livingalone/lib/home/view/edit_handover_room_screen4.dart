@@ -9,36 +9,45 @@ import 'package:livingalone/handover/view/add_room_handover_screen5.dart';
 import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/home/view/edit_handover_room_screen5.dart';
+import 'package:livingalone/home/view_models/edit_provider.dart';
+import 'package:livingalone/user/component/custom_bottom_button.dart';
 
-class AddRoomHandoverScreen4 extends ConsumerStatefulWidget {
-  const AddRoomHandoverScreen4 ({super.key});
+class EditHandoverRoomScreen4 extends ConsumerStatefulWidget {
+  final String selectedType;
+  const EditHandoverRoomScreen4 ({
+    required this.selectedType,
+    super.key
+});
 
   @override
-  ConsumerState<AddRoomHandoverScreen4> createState() => _AddRoomHandoverScreen4State();
+  ConsumerState<EditHandoverRoomScreen4> createState() => _AddRoomHandoverScreen4State();
 }
 
-class _AddRoomHandoverScreen4State extends ConsumerState<AddRoomHandoverScreen4> {
-  String? selectedType;
+class _AddRoomHandoverScreen4State extends ConsumerState<EditHandoverRoomScreen4> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    currentType = widget.selectedType;
+    super.initState();
+  }
+
+  String? currentType;
   bool showError = false;
 
   void _handleTypeSelection(String type) {
     setState(() {
-      if (selectedType == type) {
-        selectedType = null;
+      if (currentType == type) {
+        currentType = null;
       } else {
-        selectedType = type;
+        currentType = type;
       }
       showError = false;
     });
-
-    if(selectedType !=null){
-      final rentType = RentType.values.firstWhere((e) => e.label == selectedType);
-      ref.read(roomHandoverProvider.notifier).update(rentType: rentType.label);
-    }
   }
 
   void _handleNextPress() {
-    if (selectedType == null) {
+    if (currentType == null) {
       setState(() {
         showError = true;
       });
@@ -46,7 +55,8 @@ class _AddRoomHandoverScreen4State extends ConsumerState<AddRoomHandoverScreen4>
       // TODO: 다음 화면으로 이동
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => AddRoomHandoverScreen5(rentType: selectedType!,),
+          builder: (_) => EditHandoverRoomScreen5(rentType: currentType!,isEditingPriceOnly: false,),
+            settings: RouteSettings(name: "PriceConditionPage")
         ),
       );
     }
@@ -56,9 +66,6 @@ class _AddRoomHandoverScreen4State extends ConsumerState<AddRoomHandoverScreen4>
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '자취방 양도하기',
-      showCloseButton: true,
-      currentStep: 4,
-      totalSteps: 8,
       child: Column(
         children: [
           Expanded(
@@ -76,7 +83,7 @@ class _AddRoomHandoverScreen4State extends ConsumerState<AddRoomHandoverScreen4>
                   40.verticalSpace,
                   CustomSelectList(
                     items: RentType.values.map((e) => e.label).toList(),
-                    selected: selectedType,
+                    selected: currentType,
                     onItemSelected: _handleTypeSelection,
                     showError: showError,
                     errorText: '임대 방식을 선택해 주세요.',
@@ -85,7 +92,12 @@ class _AddRoomHandoverScreen4State extends ConsumerState<AddRoomHandoverScreen4>
               ),
             ),
           ),
-          CustomDoubleButton(
+          CustomBottomButton(
+            appbarBorder: true,
+            backgroundColor: BLUE400_COLOR ,
+            foregroundColor: WHITE100_COLOR,
+            text: '저장',
+            textStyle: AppTextStyles.title,
             onTap: _handleNextPress,
           ),
         ],

@@ -9,25 +9,35 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen3.dart';
 import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
+import 'package:livingalone/home/view_models/edit_provider.dart';
+import 'package:livingalone/user/component/custom_bottom_button.dart';
 
-class AddRoomHandoverScreen2 extends ConsumerStatefulWidget {
-  const AddRoomHandoverScreen2({super.key});
+class EditHandoverRoomScreen2 extends ConsumerStatefulWidget {
+  final String selectedType;
+  const EditHandoverRoomScreen2({
+    required this.selectedType,
+    super.key
+});
 
   @override
-  ConsumerState<AddRoomHandoverScreen2> createState() => _AddRoomHandoverScreen2State();
+  ConsumerState<EditHandoverRoomScreen2> createState() => _AddRoomHandoverScreen2State();
 }
 
-class _AddRoomHandoverScreen2State extends ConsumerState<AddRoomHandoverScreen2> {
-  String? selectedType;
+class _AddRoomHandoverScreen2State extends ConsumerState<EditHandoverRoomScreen2> {
+  String? currentType;
   bool showError = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    currentType = widget.selectedType;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '자취방 양도하기',
-      showCloseButton: true,
-      currentStep: 2,
-      totalSteps: 8,
+      title: '게시글 수정',
       child: Column(
         children: [
           Expanded(
@@ -46,7 +56,7 @@ class _AddRoomHandoverScreen2State extends ConsumerState<AddRoomHandoverScreen2>
                   20.verticalSpace,
                   CustomSelectList(
                     items: BuildingType.values.map((e) => e.label).toList(),
-                    selected: selectedType,
+                    selected: currentType,
                     onItemSelected: _handleTypeSelection,
                     showError: showError,
                     errorText: '건물 유형을 선택해 주세요.',
@@ -56,8 +66,13 @@ class _AddRoomHandoverScreen2State extends ConsumerState<AddRoomHandoverScreen2>
               ),
             ),
           ),
-          CustomDoubleButton(
-            onTap: _handleNextPress,
+          CustomBottomButton(
+            appbarBorder: true,
+            backgroundColor: BLUE400_COLOR ,
+            foregroundColor: WHITE100_COLOR,
+            text: '저장',
+            textStyle: AppTextStyles.title,
+            onTap: _handleFinishPress,
           ),
         ],
       ),
@@ -66,34 +81,24 @@ class _AddRoomHandoverScreen2State extends ConsumerState<AddRoomHandoverScreen2>
 
   void _handleTypeSelection(String type) {
     setState(() {
-      if (selectedType == type) {
-        selectedType = null;
+      if (currentType == type) {
+        currentType = null;
       } else {
-        selectedType = type;
+        currentType = type;
       }
       showError = false;
     });
-
-    if (selectedType != null) {
-      final buildingType = BuildingType.values.firstWhere(
-        (e) => e.label == selectedType
-      );
-      ref.read(roomHandoverProvider.notifier).update(buildingType: buildingType.label);
-    }
   }
 
-  void _handleNextPress() {
-    if (selectedType == null) {
+  void _handleFinishPress() {
+    if (currentType == null) {
       setState(() {
         showError = true;
       });
     } else {
-      // TODO: 다음 화면으로 이동
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => const AddRoomHandoverScreen3(),
-        ),
-      );
+      // TODO: 다음 이전 화면으로 돌아가 적용하기
+      Navigator.of(context).pop();
+      ref.read(editPostProvider.notifier).updateBuildingType(currentType!);
     }
   }
 }
