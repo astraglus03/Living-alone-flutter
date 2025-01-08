@@ -13,20 +13,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:livingalone/home/view_models/ticket_post_provider.dart';
 import 'package:livingalone/post_modify/view_models/edit_room_provider.dart';
 import 'package:livingalone/post_modify/view_models/edit_ticket_provider.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../user/component/custom_bottom_button.dart';
 
-class EditHandoverRoomScreen8 extends ConsumerStatefulWidget {
-  const EditHandoverRoomScreen8({super.key});
+class EditHandoverTicketScreen5 extends ConsumerStatefulWidget {
+  const EditHandoverTicketScreen5({super.key});
 
   @override
-  ConsumerState<EditHandoverRoomScreen8> createState() => _AddRoomHandoverScreen1State();
+  ConsumerState<EditHandoverTicketScreen5> createState() => _EditHandoverTicketScreen5State();
 }
 
-class _AddRoomHandoverScreen1State extends ConsumerState<EditHandoverRoomScreen8> {
+class _EditHandoverTicketScreen5State extends ConsumerState<EditHandoverTicketScreen5> {
   final titleController = TextEditingController();
   final titleFocus = FocusNode();
   final List<File> _images = [];
@@ -37,14 +38,14 @@ class _AddRoomHandoverScreen1State extends ConsumerState<EditHandoverRoomScreen8
   bool showTitleError = false;
   bool showIntroduceError = false;
 
-
   @override
   void initState() {
     super.initState();
-    final state = ref.read(editRoomPostProvider);
+    final state = ref.read(editTicketPostProvider);
     titleController.text = state.title ?? '';
     _introduceController.text = state.description ?? '';
 
+    // 기존 이미지가 있다면 File 객체로 변환하여 로드
     if (state.additionalImages != null) {
       _images.addAll(state.additionalImages!.map((path) => File(path)).toList());
     }
@@ -64,25 +65,6 @@ class _AddRoomHandoverScreen1State extends ConsumerState<EditHandoverRoomScreen8
         });
       }
     });
-  }
-
-  void _removeImage(int index) {
-    setState(() {
-      _images.removeAt(index);
-      if (_images.isEmpty) showImageError = true;
-    });
-    ref.read(editRoomPostProvider.notifier).removeImage(index);
-  }
-
-  void _onReorder(int oldIndex, int newIndex) {
-    setState(() {
-      if (oldIndex < newIndex) {
-        newIndex -= 1;
-      }
-      final File item = _images.removeAt(oldIndex);
-      _images.insert(newIndex, item);
-    });
-    ref.read(editRoomPostProvider.notifier).reorderImages(oldIndex, newIndex);
   }
 
   Future<void> _pickImage() async {
@@ -105,8 +87,27 @@ class _AddRoomHandoverScreen1State extends ConsumerState<EditHandoverRoomScreen8
         _images.insertAll(0, files);
         if (showImageError) showImageError = false;
       });
-      ref.read(editRoomPostProvider.notifier).addImages(files);
+      ref.read(editTicketPostProvider.notifier).addImages(files);
     }
+  }
+
+  void _removeImage(int index) {
+    setState(() {
+      _images.removeAt(index);
+      if (_images.isEmpty) showImageError = true;
+    });
+    ref.read(editTicketPostProvider.notifier).removeImage(index);
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (oldIndex < newIndex) {
+        newIndex -= 1;
+      }
+      final File item = _images.removeAt(oldIndex);
+      _images.insert(newIndex, item);
+    });
+    ref.read(editTicketPostProvider.notifier).reorderImages(oldIndex, newIndex);
   }
 
   void _validateForm() {
@@ -117,9 +118,9 @@ class _AddRoomHandoverScreen1State extends ConsumerState<EditHandoverRoomScreen8
     });
 
     if (!showImageError && !showTitleError && !showIntroduceError) {
-      ref.read(editRoomPostProvider.notifier).updateTitleAndContent(
-        title: titleController.text.trim(),
-        description: _introduceController.text.trim(),
+      ref.read(editTicketPostProvider.notifier).updateTitleAndContent(
+        titleController.text.trim(),
+        _introduceController.text.trim(),
       );
       Navigator.of(context).pop();
     }

@@ -37,7 +37,7 @@ class _AddRoomHandoverScreen2State extends ConsumerState<EditHandoverRoomScreen2
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '게시글 수정',
+      title: '게시글 수정하기',
       child: Column(
         children: [
           Expanded(

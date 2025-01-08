@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:livingalone/common/component/custom_select_grid.dart';
 import 'package:livingalone/common/component/show_error_text.dart';
@@ -12,20 +10,23 @@ import 'package:livingalone/handover/view/add_ticket_handover_screen3.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen4.dart';
 import 'package:livingalone/handover/view_models/ticket_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
+import 'package:livingalone/post_modify/view_models/edit_ticket_provider.dart';
 import 'package:livingalone/user/component/component_button2.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/user/component/custom_bottom_button.dart';
 
-class AddTicketHandoverScreen2 extends ConsumerStatefulWidget {
-  const AddTicketHandoverScreen2({super.key});
+class EditHandoverTicketScreen2 extends ConsumerStatefulWidget {
+  const EditHandoverTicketScreen2({
+    super.key
+});
 
   @override
-  ConsumerState<AddTicketHandoverScreen2> createState() => _AddTicketHandoverScreen2State();
+  ConsumerState<EditHandoverTicketScreen2> createState() => _EditHandoverTicketScreen2State();
 }
 
-class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScreen2> {
+class _EditHandoverTicketScreen2State extends ConsumerState<EditHandoverTicketScreen2> {
   final _formKey = GlobalKey<FormState>();
   String? selectedItem;
-  final typeController = TextEditingController();
   final _feeController = TextEditingController();
   bool? hasTransferFee;
   bool showFeeError = false;
@@ -35,7 +36,17 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
   @override
   void initState() {
     super.initState();
-    
+    final state = ref.read(editTicketPostProvider);
+
+    selectedItem = state.ticketType;
+    hasTransferFee = state.maintenanceFee !=0 ? true : false ;
+
+    if(hasTransferFee !=null){
+      _feeController.text = state.maintenanceFee.toString();
+    } else{
+      _feeController.text='';
+    }
+
     _feeController.addListener(() {
       if (_feeController.text.isNotEmpty && showFeeAmountError) {
         setState(() {
@@ -80,31 +91,24 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
       showFeeAmountError = hasTransferFee == true && _feeController.text.trim().isEmpty;
     });
 
-    if (!showTypeError && 
-        !showFeeError && 
-        !(hasTransferFee == true && showFeeAmountError) && 
+    if (!showTypeError &&
+        !showFeeError &&
+        !(hasTransferFee == true && showFeeAmountError) &&
         _formKey.currentState!.validate()) {
-      final ticketType = TicketType.values.firstWhere(
-              (e) => e.label == selectedItem
+      final fee = hasTransferFee == true ? _feeController.text.trim().toString() : '0';
+
+      ref.read(editTicketPostProvider.notifier).updateTicketTypeInfo(
+        selectedItem!,
+        int.tryParse(fee),
       );
-      final price = _feeController.text.isEmpty ? 0 : _feeController.text.trim();
-      ref.read(ticketHandoverProvider.notifier).update(
-        ticketType: ticketType.label,
-        price: int.tryParse(price.toString()),
-      );
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => AddTicketHandoverScreen3()),
-      );
+      Navigator.of(context).pop();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '이용권 양도하기',
-      showCloseButton: true,
-      currentStep: 2,
-      totalSteps: 4,
+      title: '게시글 수정하기',
       child: Column(
         children: [
           Expanded(
@@ -128,10 +132,10 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
                         ),
                         20.verticalSpace,
                         CustomSingleSelectGrid(
-                            label: '이용권 유형',
-                            items: TicketType.values.map((e) => e.label).toList(),
-                            selectedItem: selectedItem,
-                            onItemSelected: _handleTypeSelection,
+                          label: '이용권 유형',
+                          items: TicketType.values.map((e) => e.label).toList(),
+                          selectedItem: selectedItem,
+                          onItemSelected: _handleTypeSelection,
                         ),
                         if(showTypeError)
                           Padding(
@@ -158,7 +162,7 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
                         if (showFeeError)
                           Padding(
                             padding: EdgeInsets.only(
-                              top: 4.0
+                                top: 4.0
                             ).w,
                             child: ShowErrorText(errorText: '양도 수수료 여부를 선택해 주세요'),
                           ),
@@ -222,7 +226,12 @@ class _AddTicketHandoverScreen2State extends ConsumerState<AddTicketHandoverScre
               ),
             ),
           ),
-          CustomDoubleButton(
+          CustomBottomButton(
+            appbarBorder: true,
+            backgroundColor: BLUE400_COLOR ,
+            foregroundColor: WHITE100_COLOR,
+            text: '저장',
+            textStyle: AppTextStyles.title,
             onTap: _validateForm,
           ),
         ],

@@ -12,24 +12,29 @@ import 'package:livingalone/post_modify/view/edit_handover_room_screen6.dart';
 import 'package:livingalone/post_modify/view/edit_handover_room_screen7.dart';
 import 'package:livingalone/home/view/home_screen.dart';
 import 'package:livingalone/post_modify/view/edit_handover_room_screen8.dart';
+import 'package:livingalone/post_modify/view/edit_handover_ticket_screen2.dart';
+import 'package:livingalone/post_modify/view/edit_handover_ticket_screen3.dart';
+import 'package:livingalone/post_modify/view/edit_handover_ticket_screen4.dart';
+import 'package:livingalone/post_modify/view/edit_handover_ticket_screen5.dart';
 import 'package:livingalone/post_modify/view_models/edit_room_provider.dart';
+import 'package:livingalone/post_modify/view_models/edit_ticket_provider.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/view/login_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class EditPostScreen extends ConsumerStatefulWidget {
-  const EditPostScreen({Key? key}) : super(key: key);
+class EditTicketPostScreen extends ConsumerStatefulWidget {
+  const EditTicketPostScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<EditPostScreen> createState() => _EditPostScreenState();
+  ConsumerState<EditTicketPostScreen> createState() => _EditPostScreenState();
 }
 
-class _EditPostScreenState extends ConsumerState<EditPostScreen> {
+class _EditPostScreenState extends ConsumerState<EditTicketPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(editRoomPostProvider);
+    final state = ref.watch(editTicketPostProvider);
     return DefaultLayout(
       title: '게시물 수정하기',
       child: Column(
@@ -49,7 +54,7 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                     ),
                     child: Row(
                       children: [
-                        SvgPicture.asset('assets/image/homemini.svg',width: 24, height: 24,),
+                        SvgPicture.asset('assets/image/ticket_mini.svg',width: 24, height: 24,),
                         10.horizontalSpace,
                         Expanded(
                           child: Text('${state.address} ${state.detailedAddress}',
@@ -62,52 +67,35 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                     ),
                   ),
                   8.verticalSpace,
-                  _buildListTile('건물 유형', state.buildingType!, () async {
-                     await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => EditHandoverRoomScreen2(
-                          selectedType: state.buildingType!,  // 현재 선택된 값 전달
-                        ),
-                      ),
+                  _buildListTile('이용권 유형', state.ticketType!, () async {
+                     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => EditHandoverTicketScreen2(),),
                     );
                   }),
-                  _buildListTile('매물 종류', state.propertyType!, () async {
-                    await Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverRoomScreen3(selectedType: state.propertyType!)));
+                  _buildListTile('양도 수수료 여부', state.maintenanceFee != 0 ? '${state.maintenanceFee}' :'없음', () async {
+                    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => EditHandoverTicketScreen2(),),);
                   }),
-                  _buildListTile('임대 방식', state.rentType!, () async {
-                    await Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverRoomScreen4(selectedType: state.rentType!)));
-                  }),
-                  _buildListTile1('가격 조건', state.rentType!, (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverRoomScreen5(
-                      rentType: state.rentType!,
-                      deposit: state.deposit.toString(),
-                      monthlyRent: state.monthlyRent.toString(),
-                      maintenanceFee: state.maintenanceFee.toString(),
-                      isEditingPriceOnly: true,
-                    ),settings: RouteSettings(name: "PriceConditionPage"),));
-                  }),
-                  // TODO: 받아온 모델에서 만약 posttype이 자취방 이라면 안보이게 조건.
-                  _buildListTile2('방 정보', '', (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverRoomScreen6(
-                      state.area!,
-                      state.currentFloor!,
-                      state.totalFloor!,
-                      state.options!,
-                      state.facilities!,
-                      state.conditions!,
-                    )));
-                  }),
-                  _buildListTile('입주 가능일', '${state.availableDate!.toString()} ${state.immediateEnter == true ? '\n(즉시 입주 가능)': ''}', (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverRoomScreen7()));
-                  }),
+                  _buildListTile1('이용권 조건', '', (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverTicketScreen3(),settings: RouteSettings(name: "PriceConditionPage"),));
+                  }, state),
+                  // // TODO: 받아온 모델에서 만약 posttype이 자취방 이라면 안보이게 조건.
+                  // _buildListTile2('방 정보', '', (){
+                  //   Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverRoomScreen6(
+                  //     state.area!,
+                  //     state.currentFloor!,
+                  //     state.totalFloor!,
+                  //     state.options!,
+                  //     state.facilities!,
+                  //     state.conditions!,
+                  //   )));
+                  // }),
                   _buildListTile('사진', '', (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverRoomScreen8()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverTicketScreen5()));
                   }),
                   _buildListTile('제목', '', (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverRoomScreen8()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverTicketScreen5()));
                   }),
                   _buildListTile('소개 글', '', (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverRoomScreen8()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditHandoverTicketScreen5()));
                   }),
                 ],
               ),
@@ -164,24 +152,41 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
     );
   }
 
-  Widget _buildListTile1(String title, String rentType, VoidCallback onTap) {
-    final state = ref.watch(editRoomPostProvider);
+  Widget _buildListTile1(String title, String rentType, VoidCallback onTap, EditTicketPostState state) {
     List<Map<String, String>> priceConditions = [];
-    if (rentType == '월세') {
+
+    if (state.remainingNum != null && state.remainingTime != null && state.availableDate != null) {
       priceConditions = [
-        {'title': '보증금', 'value': '${state.deposit}만원'},
-        {'title': '월세', 'value': '${state.monthlyRent}만원'},
-        {'title': '관리비', 'value': '${state.maintenanceFee}만원'},
+        {'title': '횟수', 'value': '${state.remainingNum}회'},
+        {'title': '시간', 'value': '${state.remainingTime}시간'},
+        {'title': '기간', 'value': '${state.availableDate}'},
       ];
-    } else if (rentType == '전세') {
+    } else if (state.remainingNum != null && state.remainingTime != null) {
       priceConditions = [
-        {'title': '보증금', 'value': '500만원'},
-        {'title': '관리비', 'value': '5만원'},
+        {'title': '횟수', 'value': '${state.remainingNum}회'},
+        {'title': '기간', 'value': '${state.remainingTime}시간'},
       ];
-    } else if (rentType == '단기양도') {
+    } else if (state.remainingTime != null && state.availableDate != null) {
       priceConditions = [
-        {'title': '월세', 'value': '${state.monthlyRent}만원'},
-        {'title': '관리비', 'value': '${state.maintenanceFee}만원'},
+        {'title': '시간', 'value': '${state.remainingTime}시간'},
+        {'title': '기간', 'value': '${state.availableDate}'},
+      ];
+    } else if (state.remainingNum != null && state.availableDate != null) {
+      priceConditions = [
+        {'title': '횟수', 'value': '${state.remainingNum}회'},
+        {'title': '기간', 'value': '${state.availableDate}'},
+      ];
+    } else if (state.remainingNum != null) {
+      priceConditions = [
+        {'title': '횟수', 'value': '${state.remainingNum}회'},
+      ];
+    } else if (state.remainingTime != null) {
+      priceConditions = [
+        {'title': '시간', 'value': '${state.remainingTime}시간'},
+      ];
+    } else if (state.availableDate != null) {
+      priceConditions = [
+        {'title': '기간', 'value': '${state.availableDate}'},
       ];
     }
 
@@ -215,54 +220,6 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
             Icon(
               Icons.keyboard_arrow_right_outlined,
               color: GRAY300_COLOR
-            ),
-          ],
-        ),
-        onTap: onTap,
-      ),
-    );
-  }
-
-  Widget _buildListTile2(String title, String rentType, VoidCallback onTap) {
-    final state = ref.watch(editRoomPostProvider);
-    List<Map<String, String>> roomInfo = [
-      {'title': '면적', 'value': '${state.area}'},
-      {'title': '층', 'value': '${state.currentFloor} / ${state.totalFloor} 층'},
-      {'title': '옵션', 'value': state.options!.isNotEmpty ? state.options!.join(', ') : '없음'},
-      {'title': '시설', 'value': state.facilities!.isNotEmpty ? state.facilities!.join(', ') : '없음'},
-      {'title': '조건', 'value': state.conditions!.isNotEmpty ? state.conditions!.join(', ') : '없음'},
-    ];
-
-    return Container(
-      constraints: BoxConstraints(
-        minHeight: 56,
-      ),
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Color(0xFFEEEEEE),
-            width: 1,
-          ),
-        ),
-      ),
-      child: ListTile(
-        title: Text(title),
-        titleTextStyle: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            8.verticalSpace,
-            ...roomInfo.map((item) => _buildRoomInfoItem(item['title']!, item['value']!)).toList(),
-            4.verticalSpace,
-          ],
-        ),
-        subtitleTextStyle: AppTextStyles.body2.copyWith(color: GRAY600_COLOR),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-                Icons.keyboard_arrow_right_outlined,
-                color: GRAY300_COLOR
             ),
           ],
         ),

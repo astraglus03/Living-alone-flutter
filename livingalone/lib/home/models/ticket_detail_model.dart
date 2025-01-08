@@ -5,15 +5,18 @@ part 'ticket_detail_model.g.dart';
 
 @JsonSerializable()
 class TicketDetailModel extends TicketModel {
+  final int handoverPrice;
   final List<String> additionalImages;
   final String authorProfileUrl;
-  final String authorProfileName;
+  final String authorName;
   final String address;
-  final String? remainingNum;
-  final String? remainingTime;
-  final String? maintenanceFee;
-  final String ticketIntroText;
-  final String isPossibleUse;
+  final String detailedAddress;
+  final int? remainingNum;
+  final int? remainingTime;
+  final int? maintenanceFee;
+  final String description;
+  final String availableDate;
+  final bool? immediateEnter;
 
   TicketDetailModel({
     required super.id,
@@ -23,15 +26,18 @@ class TicketDetailModel extends TicketModel {
     required super.ticketType,
     required super.createdAt,
     required super.isTransferred,
+    required this.handoverPrice,
     required this.additionalImages,
     required this.authorProfileUrl,
-    required this.authorProfileName,
+    required this.authorName,
     required this.address,
-    required this.remainingNum,
-    required this.remainingTime,
-    required this.maintenanceFee,
-    required this.ticketIntroText,
-    required this.isPossibleUse,
+    required this.detailedAddress,
+    this.remainingNum,
+    this.remainingTime,
+    this.maintenanceFee,
+    required this.description,
+    required this.availableDate,
+    this.immediateEnter,
   });
 
   factory TicketDetailModel.fromJson(Map<String, dynamic> json) =>

@@ -20,8 +20,9 @@ import 'package:livingalone/home/component/room_info_card.dart';
 import 'package:livingalone/home/component/stat_item.dart';
 import 'package:livingalone/home/component/ticket_info_card.dart';
 import 'package:livingalone/home/models/comment_model.dart';
-import 'package:livingalone/post_modify/view/edit_post_screen.dart';
+import 'package:livingalone/post_modify/view/edit_room_post_screen.dart';
 import 'package:livingalone/home/view_models/living_detail_screen_provider.dart';
+import 'package:livingalone/post_modify/view/edit_ticket_post_screen.dart';
 import 'package:livingalone/report/report_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -577,7 +578,9 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen>
                   'text': '게시글 수정',
                   'icon': 'assets/icons/edit.svg',
                   'onTap': () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditPostScreen(),settings: RouteSettings(name: "EditPage"),));
+                    // TODO: 나중에 go router 사용시 필요없음.
+                    // Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditTicketPostScreen(),settings: RouteSettings(name: "EditTicketPage"),));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EditRoomPostScreen(),settings: RouteSettings(name: "EditRoomPage"),));
                   }
                 },
                 {

@@ -89,26 +89,42 @@ class _AddRoomHandoverScreen5State extends ConsumerState<EditHandoverRoomScreen5
     // 모든 검증 통과
     errorMessage = null;
 
+    // 임대 방식에 따라 필요한 값만 전달하고 나머지는 null로 설정
+    int? deposit;
+    int? monthlyRent;
+    int? maintenanceFee;
+
+    switch (widget.rentType) {
+      case '전세':
+        deposit = int.tryParse(depositController.text);
+        maintenanceFee = int.tryParse(maintenanceController.text);
+        monthlyRent = null;  // 명시적으로 null 설정
+        break;
+      case '월세':
+        deposit = int.tryParse(depositController.text);
+        monthlyRent = int.tryParse(monthlyRentController.text);
+        maintenanceFee = int.tryParse(maintenanceController.text);
+        break;
+      case '단기양도':
+        deposit = null;  // 명시적으로 null 설정
+        monthlyRent = int.tryParse(monthlyRentController.text);
+        maintenanceFee = int.tryParse(maintenanceController.text);
+        break;
+    }
+
     // Provider에 데이터 저장
-    ref.read(editRoomPostProvider.notifier).updateRentType(widget.rentType);
-    ref.read(editRoomPostProvider.notifier).updatePriceInfo(
-      deposit: int.tryParse(depositController.text),
-      monthlyRent: int.tryParse(monthlyRentController.text),
-      maintenanceFee: int.tryParse(maintenanceController.text),
-    );
-    print(depositController.text);
-    print(monthlyRentController.text);
-    print(maintenanceController.text);
+    ref.read(editRoomPostProvider.notifier)..updateRentType(widget.rentType)..updatePriceInfo(
+        deposit: deposit,
+        monthlyRent: monthlyRent,
+        maintenanceFee: maintenanceFee,
+      );
 
     if (widget.isEditingPriceOnly) {
-      // 가격 조건만 수정하는 경우, 바로 이전 페이지(수정 페이지)로 pop
       Navigator.of(context).pop();
     } else {
-      // 임대 방식 -> 가격 조건 -> 수정 페이지 경로라면,
-      // 이전 페이지(임대 방식)까지 pop하고 수정 페이지로 돌아가기
-      Navigator.of(context).popUntil((route) => route.settings.name == "EditPage");
+      Navigator.of(context).popUntil((route) => route.settings.name == "EditRoomPage");
     }
-  }
+    }
 
   @override
   void dispose() {

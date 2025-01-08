@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/home/models/room_detail_model.dart';
+
+const unchanged = Object();
 
 final editRoomPostProvider = StateNotifierProvider<EditRoomPostNotifier, EditRoomPostState>((ref) {
   return EditRoomPostNotifier();
@@ -71,6 +75,10 @@ class EditRoomPostState {
   });
 
   EditRoomPostState copyWith({
+    Object? deposit = unchanged,
+    Object? monthlyRent = unchanged,
+    Object? maintenanceFee = unchanged,
+
     String? id,
     String? postType,
     String? thumbnailUrl,
@@ -80,9 +88,9 @@ class EditRoomPostState {
     String? buildingType,
     String? propertyType,
     String? rentType,
-    int? deposit,
-    int? monthlyRent,
-    int? maintenanceFee,
+    // int? deposit,
+    // int? monthlyRent,
+    // int? maintenanceFee,
     String? area,
     String? currentFloor,
     String? totalFloor,
@@ -113,9 +121,9 @@ class EditRoomPostState {
       buildingType: buildingType ?? this.buildingType,
       propertyType: propertyType ?? this.propertyType,
       rentType: rentType ?? this.rentType,
-      deposit: deposit ?? this.deposit,
-      monthlyRent: monthlyRent ?? this.monthlyRent,
-      maintenanceFee: maintenanceFee ?? this.maintenanceFee,
+      deposit: deposit == unchanged ? this.deposit : deposit as int?,
+      monthlyRent: monthlyRent == unchanged ? this.monthlyRent : monthlyRent as int?,
+      maintenanceFee: maintenanceFee == unchanged ? this.maintenanceFee : maintenanceFee as int?,
       currentFloor: currentFloor ?? this.currentFloor,
       totalFloor: totalFloor ?? this.totalFloor,
       options: options ?? this.options,
@@ -214,9 +222,9 @@ class EditRoomPostNotifier extends StateNotifier<EditRoomPostState> {
     id: '1',
     postType: '자취방',
     thumbnailUrl: '/Users/astraglus/Library/Developer/CoreSimulator/Devices/82FA348D-F0DB-42BE-BAE7-2C83EE432433/data/Containers/Data/Application/0BBA6B6F-9C55-478E-B409-2B26E2A8C078/tmp/image_picker_EDA014CA-35DA-4D90-A30F-572E187BA1F6-1155-0000055850B04BAF.jpg',
-    title: 'Sample Title',
+    title: '모양아파트 101동',
     isTransferred: false,
-    location: '서울특별시 강남구',
+    location: '안서동',
     buildingType: '오피스텔',
     propertyType: '원룸(오픈형)',
     rentType: '월세',
@@ -231,14 +239,15 @@ class EditRoomPostNotifier extends StateNotifier<EditRoomPostState> {
     chatRooms: 2,
     createdAt: DateTime.now(),
     additionalImages: [
-      '/Users/astraglus/Library/Developer/CoreSimulator/Devices/82FA348D-F0DB-42BE-BAE7-2C83EE432433/data/Containers/Data/Application/0BBA6B6F-9C55-478E-B409-2B26E2A8C078/tmp/image_picker_1FEA318F-7C3D-4D65-B6EB-039379482F07-1155-0000055851229CAC.jpg'
-      '/Users/astraglus/Library/Developer/CoreSimulator/Devices/82FA348D-F0DB-42BE-BAE7-2C83EE432433/data/Containers/Data/Application/0BBA6B6F-9C55-478E-B409-2B26E2A8C078/tmp/image_picker_EDA014CA-35DA-4D90-A30F-572E187BA1F6-1155-0000055850B04BAF.jpg'
+      '/Users/astraglus/Library/Developer/CoreSimulator/Devices/82FA348D-F0DB-42BE-BAE7-2C83EE432433/data/Containers/Data/Application/0BBA6B6F-9C55-478E-B409-2B26E2A8C078/tmp/image_picker_1E69B777-3AF0-44E7-9BD5-64F089140B56-1155-000006390BAF464D.jpg',
+      '/Users/astraglus/Library/Developer/CoreSimulator/Devices/82FA348D-F0DB-42BE-BAE7-2C83EE432433/data/Containers/Data/Application/0BBA6B6F-9C55-478E-B409-2B26E2A8C078/tmp/image_picker_34437C57-0B62-458A-A6B4-E6F1201D33E4-1155-0000063966BADB42.jpg',
+      '/Users/astraglus/Library/Developer/CoreSimulator/Devices/82FA348D-F0DB-42BE-BAE7-2C83EE432433/data/Containers/Data/Application/0BBA6B6F-9C55-478E-B409-2B26E2A8C078/tmp/image_picker_999DA050-84B3-4D4B-9D83-D83A69BFB3B1-1155-0000063967016F5D.jpg'
     ],
     authorProfileUrl: 'https://example.com/profile.jpg',
     authorName: 'John Doe',
     address: '충남 천안시 동남구 상명대길 23-6',
     detailedAddress: 'B동 307호',
-    description: 'This is a sample description.',
+    description: '자취방 양도 게시글 수정하는 더미데이터 입니다.',
     area: '33',
     currentFloor: '7',
     totalFloor: '15',
@@ -313,11 +322,37 @@ class EditRoomPostNotifier extends StateNotifier<EditRoomPostState> {
     }
   }
 
-  void updateImages(List<String> imageUrls) {
-    if (imageUrls.isNotEmpty) {
+  void addImages(List<File> newImages) {
+    final currentImages = state.additionalImages ?? [];
+    final newImagePaths = newImages.map((file) => file.path).toList();
+
+    state = state.copyWith(
+      additionalImages: [...currentImages, ...newImagePaths],
+    );
+  }
+
+  void removeImage(int index) {
+    if (state.additionalImages != null && index < state.additionalImages!.length) {
+      final updatedImages = List<String>.from(state.additionalImages!);
+      updatedImages.removeAt(index);
+
       state = state.copyWith(
-        thumbnailUrl: imageUrls.first,
-        additionalImages: imageUrls.length > 1 ? imageUrls.sublist(1) : [],
+        additionalImages: updatedImages,
+      );
+    }
+  }
+
+  void reorderImages(int oldIndex, int newIndex) {
+    if (state.additionalImages != null) {
+      final updatedImages = List<String>.from(state.additionalImages!);
+      if (oldIndex < newIndex) {
+        newIndex -= 1;
+      }
+      final String item = updatedImages.removeAt(oldIndex);
+      updatedImages.insert(newIndex, item);
+
+      state = state.copyWith(
+        additionalImages: updatedImages,
       );
     }
   }
