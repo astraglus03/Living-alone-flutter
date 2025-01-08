@@ -11,7 +11,7 @@ import 'package:livingalone/handover/view/add_room_handover_screen7.dart';
 import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:livingalone/home/view_models/edit_provider.dart';
+import 'package:livingalone/post_modify/view_models/edit_room_provider.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 
 class EditHandoverRoomScreen6 extends ConsumerStatefulWidget {
@@ -85,15 +85,15 @@ class _AddRoomHandoverScreen6State extends ConsumerState<EditHandoverRoomScreen6
     // 검증 통과한 경우에만 Provider 업데이트 및 네비게이션
     if (isValid) {
       // Provider에 데이터 저장
-      ref.read(editPostProvider.notifier).updateRoomInfo(
+      ref.read(editRoomPostProvider.notifier).updateRoomInfo(
         area: areaController.text.trim(),
         currentFloor: currentFloorController.text.trim(),
         totalFloor: totalFloorController.text.trim(),
       );
 
-      ref.read(editPostProvider.notifier).updateOptions(selectedOptions);
-      ref.read(editPostProvider.notifier).updateFacilities(selectedFacilities);
-      ref.read(editPostProvider.notifier).updateConditions(selectedConditions);
+      ref.read(editRoomPostProvider.notifier).updateOptions(selectedOptions);
+      ref.read(editRoomPostProvider.notifier).updateFacilities(selectedFacilities);
+      ref.read(editRoomPostProvider.notifier).updateConditions(selectedConditions);
       Navigator.of(context).pop();
     }
   }

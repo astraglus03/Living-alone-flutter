@@ -10,7 +10,7 @@ import 'package:livingalone/handover/component/agree_container.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen8.dart';
 import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
-import 'package:livingalone/home/view_models/edit_provider.dart';
+import 'package:livingalone/post_modify/view_models/edit_room_provider.dart';
 import 'package:livingalone/user/component/custom_agree_button.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -33,7 +33,7 @@ class _AddRoomHandoverScreen9State
   @override
   void initState() {
     // TODO: implement initState
-    final state = ref.read(editPostProvider);
+    final state = ref.read(editRoomPostProvider);
 
     // 시작 날짜 설정
     _currentDay = state.getStartDate();
@@ -84,7 +84,7 @@ class _AddRoomHandoverScreen9State
       }
     }
     
-    ref.read(editPostProvider.notifier).updateDate(
+    ref.read(editRoomPostProvider.notifier).updateDate(
       startDate:_rangeStart ?? _currentDay,
       endDate: rentType == RentType.shortRent.label ? _rangeEnd : null,
       immediateIn: isAgreedSelected,

@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/home/models/room_detail_model.dart';
 
-final editPostProvider = StateNotifierProvider<EditPostNotifier, EditPostState>((ref) {
-  return EditPostNotifier();
+final editRoomPostProvider = StateNotifierProvider<EditRoomPostNotifier, EditRoomPostState>((ref) {
+  return EditRoomPostNotifier();
 });
 
-class EditPostState {
+class EditRoomPostState {
   final String? id;
   final String? postType;
   final String? thumbnailUrl;
@@ -37,7 +37,7 @@ class EditPostState {
   final String? availableDate;
   final bool? immediateEnter;
 
-  EditPostState({
+  EditRoomPostState({
     this.id,
     this.postType,
     this.thumbnailUrl,
@@ -70,7 +70,7 @@ class EditPostState {
     this.immediateEnter,
   });
 
-  EditPostState copyWith({
+  EditRoomPostState copyWith({
     String? id,
     String? postType,
     String? thumbnailUrl,
@@ -103,7 +103,7 @@ class EditPostState {
     String? availableDate,
     bool? immediateEnter,
   }) {
-    return EditPostState(
+    return EditRoomPostState(
       id: id ?? this.id,
       postType: postType ?? this.postType,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
@@ -137,8 +137,8 @@ class EditPostState {
     );
   }
 
-  factory EditPostState.fromOriginal(RoomDetailModel original) {
-    return EditPostState(
+  factory EditRoomPostState.fromOriginal(RoomDetailModel original) {
+    return EditRoomPostState(
       id: original.id,
       postType: original.postType,
       thumbnailUrl: original.thumbnailUrl,
@@ -209,8 +209,8 @@ class EditPostState {
   }
 }
 
-class EditPostNotifier extends StateNotifier<EditPostState> {
-  EditPostNotifier() : super(EditPostState(
+class EditRoomPostNotifier extends StateNotifier<EditRoomPostState> {
+  EditRoomPostNotifier() : super(EditRoomPostState(
     id: '1',
     postType: '자취방',
     thumbnailUrl: '/Users/astraglus/Library/Developer/CoreSimulator/Devices/82FA348D-F0DB-42BE-BAE7-2C83EE432433/data/Containers/Data/Application/0BBA6B6F-9C55-478E-B409-2B26E2A8C078/tmp/image_picker_EDA014CA-35DA-4D90-A30F-572E187BA1F6-1155-0000055850B04BAF.jpg',
@@ -247,7 +247,7 @@ class EditPostNotifier extends StateNotifier<EditPostState> {
   ));
 
   void initializeWithOriginal(RoomDetailModel original) {
-    state = EditPostState.fromOriginal(original);
+    state = EditRoomPostState.fromOriginal(original);
   }
 
   void updateBuildingType(String type) {
@@ -330,6 +330,6 @@ class EditPostNotifier extends StateNotifier<EditPostState> {
   }
 
   void resetAll() {
-    state = EditPostState();
+    state = EditRoomPostState();
   }
 }

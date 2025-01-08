@@ -114,68 +114,68 @@ class _AddRoomHandoverScreen1State extends ConsumerState<AddRoomHandoverScreen8>
         description: _introduceController.text,
       );
 
-      final roomState = ref.watch(roomHandoverProvider);
-      final checkState = ref.watch(roomHandoverCheckProvider);
-
-      // 주소 정보
-      print('\n=== 위치 정보 ===');
-      print({
-        '주소': roomState.address,
-        '상세주소': roomState.detailAddress,
-      });
-
-      // 건물 정보
-      print('\n=== 건물 정보 ===');
-      print({
-        '건물 유형': roomState.buildingType,
-        '매물 종류': roomState.propertyType,
-        '층수': roomState.floor,
-        '면적': roomState.area,
-      });
-
-      // 계약 정보
-      print('\n=== 계약 정보 ===');
-      print({
-        '임대 방식': roomState.rentType,
-        '보증금': roomState.deposit,
-        '월세': roomState.monthlyRent,
-        '관리비': roomState.maintenance,
-      });
-
-      // 입주 정보
-      print('\n=== 입주 정보 ===');
-      print({
-        '입주 가능일': roomState.availableDate,
-        '즉시 입주 가능': roomState.immediateIn,
-      });
-
-      // 추가 정보
-      print('\n=== 추가 정보 ===');
-      print({
-        '시설': roomState.facilities.map((e) => e.label).toList(),
-        '조건': roomState.conditions.map((e) => e.label).toList(),
-      });
-
-      // 설명
-      print('\n=== 상세 설명 ===');
-      print({
-        '설명': roomState.description,
-      });
-
-      // 이미지
-      print('\n=== 이미지 정보 ===');
-      print({
-        '이미지 개수': roomState.images.length,
-        '이미지 경로': roomState.images.map((e) => e.path).toList(),
-      });
-
-      // 개인정보 동의
-      print('\n=== 개인정보 동의 ===');
-      print({
-        '게시물 타입': checkState.postType?.label,
-        '동의 여부': checkState.isChecked,
-        '동의 시간': checkState.checkedAt?.toIso8601String(),
-      });
+      // final roomState = ref.watch(roomHandoverProvider);
+      // final checkState = ref.watch(roomHandoverCheckProvider);
+      //
+      // // 주소 정보
+      // print('\n=== 위치 정보 ===');
+      // print({
+      //   '주소': roomState.address,
+      //   '상세주소': roomState.detailAddress,
+      // });
+      //
+      // // 건물 정보
+      // print('\n=== 건물 정보 ===');
+      // print({
+      //   '건물 유형': roomState.buildingType,
+      //   '매물 종류': roomState.propertyType,
+      //   '층수': roomState.floor,
+      //   '면적': roomState.area,
+      // });
+      //
+      // // 계약 정보
+      // print('\n=== 계약 정보 ===');
+      // print({
+      //   '임대 방식': roomState.rentType,
+      //   '보증금': roomState.deposit,
+      //   '월세': roomState.monthlyRent,
+      //   '관리비': roomState.maintenance,
+      // });
+      //
+      // // 입주 정보
+      // print('\n=== 입주 정보 ===');
+      // print({
+      //   '입주 가능일': roomState.availableDate,
+      //   '즉시 입주 가능': roomState.immediateIn,
+      // });
+      //
+      // // 추가 정보
+      // print('\n=== 추가 정보 ===');
+      // print({
+      //   '시설': roomState.facilities.map((e) => e.label).toList(),
+      //   '조건': roomState.conditions.map((e) => e.label).toList(),
+      // });
+      //
+      // // 설명
+      // print('\n=== 상세 설명 ===');
+      // print({
+      //   '설명': roomState.description,
+      // });
+      //
+      // // 이미지
+      // print('\n=== 이미지 정보 ===');
+      // print({
+      //   '이미지 개수': roomState.images.length,
+      //   '이미지 경로': roomState.images.map((e) => e.path).toList(),
+      // });
+      //
+      // // 개인정보 동의
+      // print('\n=== 개인정보 동의 ===');
+      // print({
+      //   '게시물 타입': checkState.postType?.label,
+      //   '동의 여부': checkState.isChecked,
+      //   '동의 시간': checkState.checkedAt?.toIso8601String(),
+      // });
 
 
       // // API 호출

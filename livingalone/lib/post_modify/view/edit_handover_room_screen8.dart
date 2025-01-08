@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:livingalone/home/view_models/edit_provider.dart';
+import 'package:livingalone/post_modify/view_models/edit_room_provider.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../user/component/custom_bottom_button.dart';
@@ -87,7 +87,7 @@ class _AddRoomHandoverScreen1State extends ConsumerState<EditHandoverRoomScreen8
   @override
   void initState() {
     super.initState();
-    final state = ref.read(editPostProvider);
+    final state = ref.read(editRoomPostProvider);
     titleController.text = state.title ?? '';
     _introduceController.text = state.description ?? '';
 
@@ -117,8 +117,8 @@ class _AddRoomHandoverScreen1State extends ConsumerState<EditHandoverRoomScreen8
 
     if (!showImageError && !showTitleError && !showIntroduceError) {
       final imagePaths = _images.map((file) => file.path).toList();
-      ref.read(editPostProvider.notifier).updateImages(imagePaths);
-      ref.read(editPostProvider.notifier).updateTitleAndContent(
+      ref.read(editRoomPostProvider.notifier).updateImages(imagePaths);
+      ref.read(editRoomPostProvider.notifier).updateTitleAndContent(
         title: titleController.text.trim(),
         description: _introduceController.text.trim(),
       );

@@ -9,8 +9,8 @@ import 'package:livingalone/handover/view/add_room_handover_screen5.dart';
 import 'package:livingalone/handover/view_models/room_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:livingalone/home/view/edit_handover_room_screen5.dart';
-import 'package:livingalone/home/view_models/edit_provider.dart';
+import 'package:livingalone/post_modify/view/edit_handover_room_screen5.dart';
+import 'package:livingalone/post_modify/view_models/edit_room_provider.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 
 class EditHandoverRoomScreen4 extends ConsumerStatefulWidget {

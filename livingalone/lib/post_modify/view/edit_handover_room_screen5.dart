@@ -9,7 +9,7 @@ import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/handover/view_models/room_handover_provider.dart';
-import 'package:livingalone/home/view_models/edit_provider.dart';
+import 'package:livingalone/post_modify/view_models/edit_room_provider.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 
 class EditHandoverRoomScreen5 extends ConsumerStatefulWidget {
@@ -45,7 +45,7 @@ class _AddRoomHandoverScreen5State extends ConsumerState<EditHandoverRoomScreen5
   @override
   void initState() {
     super.initState();
-    final previousRentType = ref.read(editPostProvider).rentType;
+    final previousRentType = ref.read(editRoomPostProvider).rentType;
 
     // 임대 방식이 변경되었으면 필드를 초기화, 아니면 기존 값 유지
     if (previousRentType != widget.rentType) {
@@ -90,8 +90,8 @@ class _AddRoomHandoverScreen5State extends ConsumerState<EditHandoverRoomScreen5
     errorMessage = null;
 
     // Provider에 데이터 저장
-    ref.read(editPostProvider.notifier).updateRentType(widget.rentType);
-    ref.read(editPostProvider.notifier).updatePriceInfo(
+    ref.read(editRoomPostProvider.notifier).updateRentType(widget.rentType);
+    ref.read(editRoomPostProvider.notifier).updatePriceInfo(
       deposit: int.tryParse(depositController.text),
       monthlyRent: int.tryParse(monthlyRentController.text),
       maintenanceFee: int.tryParse(maintenanceController.text),

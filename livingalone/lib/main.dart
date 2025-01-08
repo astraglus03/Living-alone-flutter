@@ -12,7 +12,7 @@ import 'package:livingalone/handover/view/add_room_handover_screen8.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen1.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen3.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen5.dart';
-import 'package:livingalone/home/view/edit_post_screen.dart';
+import 'package:livingalone/post_modify/view/edit_post_screen.dart';
 import 'package:livingalone/home/view/home_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -60,7 +60,7 @@ class MyApp extends ConsumerWidget {
             ),
             debugShowCheckedModeBanner: false,
             // home: LivingDetailScreen(postType: PostType.room, postId: '10',),
-            home: RootTab()
+            home: LoginScreen()
             // home: AddRoomHandoverScreen7(rentType: RentType.shortRent,),
             // home: AddRoomHandoverScreen6(),
           ),

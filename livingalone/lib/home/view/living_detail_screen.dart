@@ -20,7 +20,7 @@ import 'package:livingalone/home/component/room_info_card.dart';
 import 'package:livingalone/home/component/stat_item.dart';
 import 'package:livingalone/home/component/ticket_info_card.dart';
 import 'package:livingalone/home/models/comment_model.dart';
-import 'package:livingalone/home/view/edit_post_screen.dart';
+import 'package:livingalone/post_modify/view/edit_post_screen.dart';
 import 'package:livingalone/home/view_models/living_detail_screen_provider.dart';
 import 'package:livingalone/report/report_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

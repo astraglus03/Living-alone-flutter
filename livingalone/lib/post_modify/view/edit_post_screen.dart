@@ -4,15 +4,15 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/enum/room_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
-import 'package:livingalone/home/view/edit_handover_room_screen2.dart';
-import 'package:livingalone/home/view/edit_handover_room_screen3.dart';
-import 'package:livingalone/home/view/edit_handover_room_screen4.dart';
-import 'package:livingalone/home/view/edit_handover_room_screen5.dart';
-import 'package:livingalone/home/view/edit_handover_room_screen6.dart';
-import 'package:livingalone/home/view/edit_handover_room_screen7.dart';
-import 'package:livingalone/home/view/edit_handover_room_screen8.dart';
+import 'package:livingalone/post_modify/view/edit_handover_room_screen2.dart';
+import 'package:livingalone/post_modify/view/edit_handover_room_screen3.dart';
+import 'package:livingalone/post_modify/view/edit_handover_room_screen4.dart';
+import 'package:livingalone/post_modify/view/edit_handover_room_screen5.dart';
+import 'package:livingalone/post_modify/view/edit_handover_room_screen6.dart';
+import 'package:livingalone/post_modify/view/edit_handover_room_screen7.dart';
 import 'package:livingalone/home/view/home_screen.dart';
-import 'package:livingalone/home/view_models/edit_provider.dart';
+import 'package:livingalone/post_modify/view/edit_handover_room_screen8.dart';
+import 'package:livingalone/post_modify/view_models/edit_room_provider.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/view/login_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,7 +29,7 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(editPostProvider);
+    final state = ref.watch(editRoomPostProvider);
     return DefaultLayout(
       title: '게시물 수정하기',
       showCloseButton: true,
@@ -166,7 +166,7 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
   }
 
   Widget _buildListTile1(String title, String rentType, VoidCallback onTap) {
-    final state = ref.watch(editPostProvider);
+    final state = ref.watch(editRoomPostProvider);
     List<Map<String, String>> priceConditions = [];
     if (rentType == '월세') {
       priceConditions = [
@@ -225,7 +225,7 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
   }
 
   Widget _buildListTile2(String title, String rentType, VoidCallback onTap) {
-    final state = ref.watch(editPostProvider);
+    final state = ref.watch(editRoomPostProvider);
     List<Map<String, String>> roomInfo = [
       {'title': '면적', 'value': '${state.area}'},
       {'title': '층', 'value': '${state.currentFloor} / ${state.totalFloor} 층'},
