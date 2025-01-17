@@ -4,7 +4,7 @@ import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/enum/ticket_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:livingalone/handover/view/add_ticket_handover_screen5.dart';
+import 'package:livingalone/handover/view/add_ticket_handover_screen6.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:livingalone/post_modify/view_models/edit_ticket_provider.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';

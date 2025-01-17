@@ -5,33 +5,33 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:livingalone/handover/view_models/handover_check_provider.dart';
-import 'package:livingalone/handover/view_models/room_handover_provider.dart';
+import 'package:livingalone/handover/view_models/ticket_handover_provider.dart';
 import 'package:livingalone/home/component/custom_double_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:reorderables/reorderables.dart';
 
-class AddRoomHandoverScreen8 extends ConsumerStatefulWidget {
-  const AddRoomHandoverScreen8({super.key});
+class AddTicketHandoverScreen6 extends ConsumerStatefulWidget {
+  const AddTicketHandoverScreen6({super.key});
 
   @override
-  ConsumerState<AddRoomHandoverScreen8> createState() => _AddRoomHandoverScreen8State();
+  ConsumerState<AddTicketHandoverScreen6> createState() => _AddTicketHandoverScreen6State();
 }
 
-class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8> {
+class _AddTicketHandoverScreen6State extends ConsumerState<AddTicketHandoverScreen6> {
   final titleController = TextEditingController();
   final titleFocus = FocusNode();
   final List<File> _images = [];
   final _scrollController = ScrollController();
   final _introduceController = TextEditingController();
-  final _introduceFocus = FocusNode();
+  final introduceFocus = FocusNode();
+
   bool showImageError = false;
   bool showTitleError = false;
   bool showIntroduceError = false;
+
 
   Future<void> _pickImage() async {
     if (_images.length >= 10) {
@@ -46,10 +46,10 @@ class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8>
       imageQuality: 80,
       limit: 10 - _images.length,
     );
-    
+
     if (images.isNotEmpty) {
       final files = images.map((xFile) => File(xFile.path)).toList();
-      ref.read(roomHandoverProvider.notifier).addImages(files);
+      ref.read(ticketHandoverProvider.notifier).addImages(files);
       setState(() {
         _images.insertAll(0, files);
         if (showImageError) showImageError = false;
@@ -58,7 +58,7 @@ class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8>
   }
 
   void _removeImage(int index) {
-    ref.read(roomHandoverProvider.notifier).removeImage(index);
+    ref.read(ticketHandoverProvider.notifier).removeImage(index);
     setState(() {
       _images.removeAt(index);
       if (_images.isEmpty) showImageError = true;
@@ -72,9 +72,9 @@ class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8>
       }
       final File item = _images.removeAt(oldIndex);
       _images.insert(newIndex, item);
-      
+
       // Provider 상태 업데이트
-      ref.read(roomHandoverProvider.notifier).update(
+      ref.read(ticketHandoverProvider.notifier).update(
         images: _images,
       );
     });
@@ -108,86 +108,25 @@ class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8>
     });
 
     if (!showImageError && !showTitleError && !showIntroduceError) {
-      // Provider에 최종 데이터 저장
-      ref.read(roomHandoverProvider.notifier).update(
+      // 다음 화면으로 이동 또는 데이터 처리
+      ref.read(ticketHandoverProvider.notifier).update(
         images: _images,
+        title: titleController.text.trim(),
         description: _introduceController.text,
       );
 
-      // final roomState = ref.watch(roomHandoverProvider);
-      // final checkState = ref.watch(roomHandoverCheckProvider);
-      //
-      // // 주소 정보
-      // print('\n=== 위치 정보 ===');
-      // print({
-      //   '주소': roomState.address,
-      //   '상세주소': roomState.detailAddress,
-      // });
-      //
-      // // 건물 정보
-      // print('\n=== 건물 정보 ===');
-      // print({
-      //   '건물 유형': roomState.buildingType,
-      //   '매물 종류': roomState.propertyType,
-      //   '층수': roomState.floor,
-      //   '면적': roomState.area,
-      // });
-      //
-      // // 계약 정보
-      // print('\n=== 계약 정보 ===');
-      // print({
-      //   '임대 방식': roomState.rentType,
-      //   '보증금': roomState.deposit,
-      //   '월세': roomState.monthlyRent,
-      //   '관리비': roomState.maintenance,
-      // });
-      //
-      // // 입주 정보
-      // print('\n=== 입주 정보 ===');
-      // print({
-      //   '입주 가능일': roomState.availableDate,
-      //   '즉시 입주 가능': roomState.immediateIn,
-      // });
-      //
-      // // 추가 정보
-      // print('\n=== 추가 정보 ===');
-      // print({
-      //   '시설': roomState.facilities.map((e) => e.label).toList(),
-      //   '조건': roomState.conditions.map((e) => e.label).toList(),
-      // });
-      //
-      // // 설명
-      // print('\n=== 상세 설명 ===');
-      // print({
-      //   '설명': roomState.description,
-      // });
-      //
-      // // 이미지
-      // print('\n=== 이미지 정보 ===');
-      // print({
-      //   '이미지 개수': roomState.images.length,
-      //   '이미지 경로': roomState.images.map((e) => e.path).toList(),
-      // });
-      //
-      // // 개인정보 동의
-      // print('\n=== 개인정보 동의 ===');
-      // print({
-      //   '게시물 타입': checkState.postType?.label,
-      //   '동의 여부': checkState.isChecked,
-      //   '동의 시간': checkState.checkedAt?.toIso8601String(),
-      // });
+      final state = ref.watch(ticketHandoverProvider);
 
-
-      // // API 호출
-      // ref.read(roomHandoverProvider.notifier).submit().then((_) {
-      //   // 성공 시 처리
-      //   Navigator.of(context).pop(); // 또는 완료 화면으로 이동
-      // }).catchError((error) {
-      //   // 에러 처리
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(content: Text('업로드 실패: ${error.toString()}')),
-      //   );
-      // });
+      print(state.address);
+      print(state.detailAddress);
+      print(state.ticketType);
+      print(state.price);
+      print(state.remainingCount);
+      print(state.remainingHours);
+      print(state.expiryDate);
+      print(state.images);
+      print(state.description);
+      print(state.title);
     }
   }
 
@@ -197,7 +136,7 @@ class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8>
     titleFocus.dispose();
     _scrollController.dispose();
     _introduceController.dispose();
-    _introduceFocus.dispose();
+    introduceFocus.dispose();
     super.dispose();
   }
 
@@ -314,13 +253,13 @@ class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8>
     return DefaultLayout(
       title: '자취방 양도하기',
       showCloseButton: true,
-      currentStep: 8,
-      totalSteps: 8,
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Column(
-          children: [
-            Expanded(
+      currentStep: 5,
+      totalSteps: 5,
+      child: Column(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
               child: SingleChildScrollView(
                 controller: _scrollController,
                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -333,9 +272,7 @@ class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       20.verticalSpace,
-                      Text('양도할 방의 사진과\n소개 글을 올려주세요', style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),),
-                      4.verticalSpace,
-                      Text('사진과 소개 글은 자세히 올릴수록 효과적 이에요.', style: AppTextStyles.subtitle.copyWith(color: GRAY600_COLOR),),
+                      Text('양도할 이용권의 시설을\n소개하는 사진과 글을 올려주세요', style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),),
                       20.verticalSpace,
                       Row(
                         children: [
@@ -379,7 +316,7 @@ class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8>
                               onPressed: titleController.clear,
                               icon: SvgPicture.asset('assets/image/signupDelete.svg',fit: BoxFit.cover,),
                             ),
-                            hintText: '모양아파트 101동, 모양빌라',
+                            hintText: '예) 모양헬스 강남점, 모양독서실 압구정점',
                             hintStyle: AppTextStyles.subtitle.copyWith(
                               color: GRAY400_COLOR,
                             ),
@@ -421,14 +358,14 @@ class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8>
                           border: Border.all(color: GRAY200_COLOR),
                         ),
                         child: TextFormField(
-                          controller: _introduceController,
-                          focusNode: _introduceFocus,
                           scrollPadding: EdgeInsets.only(
                             bottom: 180,
                           ),
+                          controller: _introduceController,
+                          focusNode: introduceFocus,
                           maxLines: null,
                           decoration: InputDecoration(
-                            hintText: '방의 특징과 장점을 소개해 주세요. 자세한 정보를\n제공하면 더 많은 관심을 받을 수 있어요.',
+                            hintText: '이용권의 종류와 특징을 자세히 소개해 주세요. 양도 수수료 무담 주체 등 추가 정보를 제공하면 더 많은 관심을 받을 수 있어요.',
                             hintStyle: AppTextStyles.subtitle.copyWith(
                               color: GRAY400_COLOR,
                             ),
@@ -459,11 +396,11 @@ class _AddRoomHandoverScreen8State extends ConsumerState<AddRoomHandoverScreen8>
                 ),
               ),
             ),
-            CustomDoubleButton(
-              onTap: _validateForm,
-            ),
-          ],
-        ),
+          ),
+          CustomDoubleButton(
+            onTap: _validateForm,
+          ),
+        ],
       ),
     );
   }

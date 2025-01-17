@@ -4,7 +4,6 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/report/report_detail_screen.dart';
-import 'package:livingalone/report/report_postman_screen.dart';
 
 class ReportScreen extends StatefulWidget {
   static String get routeName => 'report';
@@ -18,10 +17,14 @@ class ReportScreen extends StatefulWidget {
 class _ReportScreenState extends State<ReportScreen> {
   final List<String> reportReasons = [
     '양도와 관련 없는 게시글이에요',
-    '양도 과정에서 문제가 발생했어요',
+    '거래 금지 물품이에요',
     '사기가 의심돼요',
+    '게시글에 부적절한 내용을 담고 있어요',
+    '비매너 사용자에요',
+    '사기 또는 부정행위를 했어요',
+    '욕설 및 비하 표현을 해요',
+    '부적절한 대화 및 만남을 시도해요',
     '기타',
-    '작성자 신고하기'
   ];
 
   @override
@@ -54,7 +57,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 return ListTile(
                   title: Text(
                     reportReasons[index],
-                    style: index == 4 ? AppTextStyles.subtitle.copyWith(color: BLUE400_COLOR) :AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
+                    style: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
                   ),
                   trailing: Icon(
                     Icons.arrow_forward_ios,
@@ -63,11 +66,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   ),
                   onTap: () {
                     // TODO: 신고 사유 선택 시 처리
-                    if(index == 4){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ReportPostmanScreen()));
-                    }else{
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ReportDetailScreen(reason: reportReasons[index],)));
-                    }
+                     Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ReportDetailScreen(reason: reportReasons[index],)));
                   },
                 );
               },

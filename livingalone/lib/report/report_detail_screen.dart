@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/common/component/show_error_text.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
@@ -63,7 +64,6 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '게시글 신고하기',
-      showCloseButton: true,
       child: Column(
         children: [
           Expanded(
@@ -133,13 +133,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                       ),
                     ),
                     if (showError)
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.h),
-                        child: Text(
-                          '신고 내용을 입력해 주세요',
-                          style: AppTextStyles.caption2.copyWith(color: ERROR_TEXT_COLOR),
-                        ),
-                      ),
+                      const ShowErrorText(errorText: '신고 내용을 입력해 주세요'),
                   ],
                 ),
               ),

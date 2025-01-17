@@ -14,6 +14,7 @@ class TicketHandoverState {
   final String? detailAddress;
   final String? ticketType;
   final int? price;
+  final int? transferPrice;
   final int? remainingCount;
   final int? remainingHours;
   final DateTime? expiryDate;
@@ -26,6 +27,7 @@ class TicketHandoverState {
     this.detailAddress,
     this.ticketType,
     this.price,
+    this.transferPrice,
     this.remainingCount,
     this.remainingHours,
     this.expiryDate,
@@ -39,6 +41,7 @@ class TicketHandoverState {
     String? detailAddress,
     String? ticketType,
     int? price,
+    int? transferPrice,
     int? remainingCount,
     int? remainingHours,
     DateTime? expiryDate,
@@ -51,6 +54,7 @@ class TicketHandoverState {
       detailAddress: detailAddress ?? this.detailAddress,
       ticketType: ticketType ?? this.ticketType,
       price: price ?? this.price,
+      transferPrice : transferPrice ?? this.transferPrice,
       remainingCount: remainingCount ?? this.remainingCount,
       remainingHours: remainingHours ?? this.remainingHours,
       expiryDate: expiryDate ?? this.expiryDate,
@@ -65,6 +69,7 @@ class TicketHandoverState {
         detailAddress == null ||
         ticketType == null || 
         price == null ||
+        transferPrice == null ||
         images.isEmpty ||
         title == null || 
         description == null) {
@@ -93,6 +98,7 @@ class TicketHandoverNotifier extends StateNotifier<TicketHandoverState> {
     String? detailAddress,
     String? ticketType,
     int? price,
+    int? transferPrice,
     int? remainingCount,
     int? remainingHours,
     DateTime? expiryDate,
@@ -105,6 +111,7 @@ class TicketHandoverNotifier extends StateNotifier<TicketHandoverState> {
       detailAddress: detailAddress,
       ticketType: ticketType,
       price: price,
+      transferPrice: transferPrice,
       remainingCount: remainingCount,
       remainingHours: remainingHours,
       expiryDate: expiryDate,
@@ -132,6 +139,7 @@ class TicketHandoverNotifier extends StateNotifier<TicketHandoverState> {
       'detailAddress': state.detailAddress,
       'ticketType': state.ticketType,
       'price': state.price.toString(),
+      'transferPrice': state.transferPrice.toString(),
       'remainingCount': state.remainingCount?.toString(),
       'remainingHours': state.remainingHours?.toString(),
       'expiryDate': state.expiryDate?.toIso8601String(),

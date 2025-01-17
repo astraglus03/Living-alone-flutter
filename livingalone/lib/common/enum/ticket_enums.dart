@@ -28,6 +28,8 @@ enum TicketType {
   skinCare,     //피부관리
   massage,      //마사지
   practiceRoom,  //연습실
+  nailArt,      //네일아트
+  hairshop,     //미용실
   etc;          // 기타
 
   String get label {
@@ -43,6 +45,8 @@ enum TicketType {
       case TicketType.skinCare: return '피부관리';
       case TicketType.massage: return '마사지';
       case TicketType.practiceRoom: return '연습실';
+      case TicketType.nailArt: return '네일아트';
+      case TicketType.hairshop: return '미용실';
       case TicketType.etc: return '기타';
     }
   }
