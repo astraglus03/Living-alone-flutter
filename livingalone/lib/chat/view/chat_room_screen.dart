@@ -3,7 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:livingalone/chat/models/message_model.dart';
+import 'package:livingalone/chat/view/chat_list_screen.dart';
+import 'package:livingalone/chat/view_models/chat_list_provider.dart';
 import 'package:livingalone/chat/view_models/chat_room_provider.dart';
+import 'package:livingalone/common/component/confirm_dialog.dart';
+import 'package:livingalone/common/component/options_menu.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
@@ -11,10 +15,12 @@ import 'package:livingalone/common/layout/default_layout.dart';
 class ChatRoomScreen extends ConsumerStatefulWidget {
   final String roomId;
   final String opponentName;
+  final String opponentProfileUrl;
 
   const ChatRoomScreen({
     required this.roomId,
     required this.opponentName,
+    required this.opponentProfileUrl,
     Key? key,
   }) : super(key: key);
 
@@ -62,7 +68,9 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     );
 
     if (image != null) {
-      ref.read(chatMessagesProvider(widget.roomId).notifier).sendImage(image.path);
+      ref
+          .read(chatMessagesProvider(widget.roomId).notifier)
+          .sendImage(image.path);
     }
   }
 
@@ -83,8 +91,9 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
 
     return DefaultLayout(
       title: widget.opponentName,
-      actions:
-          IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz_rounded)),
+      actions: IconButton(
+          onPressed: () => _showOptionsMenu(context),
+          icon: Icon(Icons.more_horiz_rounded)),
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -126,10 +135,21 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                               messages[messages.length - 2 - index].timestamp,
                             );
 
+                        final showTime = index == 0 || // 가장 최근 메시지
+                            !_isSameTime(
+                              message.timestamp,
+                              messages[messages.length - index].timestamp,
+                            ) || message.isMe != messages[messages.length - index].isMe; // 이전 메시지와 보낸 사람이 다름
+
+
                         return Column(
                           children: [
                             if (showDate) _DateDivider(date: message.timestamp),
-                            _MessageBubble(message: message),
+                            _MessageBubble(
+                              message: message,
+                              showTime: showTime,
+                              opponentProfileUrl: widget.opponentProfileUrl,
+                            ),
                           ],
                         );
                       },
@@ -172,7 +192,9 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                   AnimatedContainer(
                     duration: Duration(milliseconds: 200), // 애니메이션 지속 시간
                     curve: Curves.easeOut, // 부드러운 애니메이션 적용
-                    height: MediaQuery.of(context).viewInsets.bottom == 0 ? 34.h : 0,
+                    height: MediaQuery.of(context).viewInsets.bottom == 0
+                        ? 34.h
+                        : 0,
                   ),
                 ],
               ),
@@ -180,6 +202,31 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showOptionsMenu(BuildContext context) {
+    final List<OptionMenuItem> options = [
+      OptionMenuItem(
+        text: '채팅방 나가기',
+        icon: 'assets/icons/edit.svg',
+        onTap: () async {
+          final result = await ConfirmDialog.show(
+              context: context,
+              title: '채팅방을 나가시겠습니까?',
+              content: '채팅방의 내용은 복구되지 않으며, 삭제됩니다');
+
+          if (result) {
+            ref.read(chatRoomsProvider.notifier).leaveChatRoom(widget.roomId);
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => ChatListScreen()));
+          }
+        },
+      ),
+    ];
+
+    OptionsMenu.show(
+      context: context,
+      options: options,
     );
   }
 
@@ -286,6 +333,14 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
         date1.month == date2.month &&
         date1.day == date2.day;
   }
+
+  bool _isSameTime(DateTime time1, DateTime time2) {
+    return time1.year == time2.year &&
+        time1.month == time2.month &&
+        time1.day == time2.day &&
+        time1.hour == time2.hour &&
+        time1.minute == time2.minute;
+  }
 }
 
 class _DateDivider extends StatelessWidget {
@@ -312,15 +367,19 @@ class _DateDivider extends StatelessWidget {
   String _formatDate(DateTime date) {
     final weekDays = ['월', '화', '수', '목', '금', '토', '일'];
     final weekDay = weekDays[date.weekday - 1];
-    return '${date.year}년 ${date.month}월 ${date.day}일 ${weekDay}요일';
+    return '${date.year}년 ${date.month}월 ${date.day}일 $weekDay요일';
   }
 }
 
 class _MessageBubble extends StatelessWidget {
   final ChatMessage message;
+  final bool showTime;
+  final String opponentProfileUrl;
 
   const _MessageBubble({
     required this.message,
+    required this.showTime,
+    required this.opponentProfileUrl,
     Key? key,
   }) : super(key: key);
 
@@ -338,7 +397,22 @@ class _MessageBubble extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (message.isMe) ...[
+              if (!message.isMe) ...[
+                Container(
+                  width: 40.w,
+                  height: 40.w,
+                  margin: EdgeInsets.only(right: 8.w),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                            image: NetworkImage(opponentProfileUrl),
+                            fit: BoxFit.cover,
+                          ),
+                    color: GRAY200_COLOR,
+                  ),
+                ),
+              ],
+              if (message.isMe && showTime) ...[
                 Text(
                   _formatTime(message.timestamp),
                   style: AppTextStyles.caption2.copyWith(color: GRAY400_COLOR),
@@ -396,7 +470,7 @@ class _MessageBubble extends StatelessWidget {
                   ],
                 ),
               ),
-              if (!message.isMe) ...[
+              if (!message.isMe && showTime) ...[
                 4.horizontalSpace,
                 Text(
                   _formatTime(message.timestamp),

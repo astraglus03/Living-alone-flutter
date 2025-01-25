@@ -126,47 +126,54 @@ class _ChatRoomTile extends ConsumerWidget {
     return Dismissible(
       key: Key(room.roomId),
       direction: DismissDirection.endToStart,
+      dismissThresholds: const {
+        DismissDirection.endToStart: 0.3,
+      },
+      movementDuration: const Duration(milliseconds: 200),
+      resizeDuration: const Duration(milliseconds: 200),
       background: Container(
         alignment: Alignment.centerRight,
         color: Colors.red,
-        padding: EdgeInsets.only(right: 16.w),
-        child: Text(
-          '나가기',
-          style: AppTextStyles.body1.copyWith(color: Colors.white),
+        child: Padding(
+          padding: EdgeInsets.only(right: 24.w),
+          child: GestureDetector(
+            onTap: () async {
+              final shouldDelete = await _showDeleteDialog(context);
+              if (shouldDelete) {
+                ref.read(chatRoomsProvider.notifier).leaveChatRoom(room.roomId);
+              }
+            },
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
+              size: 24.w,
+            ),
+          ),
         ),
       ),
       confirmDismiss: (direction) async {
-        return await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('채팅방 나가기'),
-            content: Text('채팅방을 나가시겠습니까?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text('취소'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text('나가기'),
-              ),
-            ],
-          ),
-        );
+        if (direction == DismissDirection.endToStart) {
+          // 두 번째 스와이프인 경우에만 다이얼로그 표시
+          final position = direction == DismissDirection.endToStart ? -1.0 : 1.0;
+          if (position <= -0.8) { // 80% 이상 스와이프된 경우
+            return await _showDeleteDialog(context);
+          }
+        }
+        return false; // 항상 false를 반환하여 자동 dismiss 방지
       },
       onDismissed: (direction) {
         ref.read(chatRoomsProvider.notifier).leaveChatRoom(room.roomId);
       },
       child: InkWell(
         onTap: () {
-          pushScreenWithoutNavBar(context, ChatRoomScreen(roomId: room.roomId, opponentName: room.opponentName));
+          pushScreenWithoutNavBar(context, ChatRoomScreen(roomId: room.roomId, opponentName: room.opponentName,opponentProfileUrl: room.opponentProfileUrl,));
         },
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24,vertical: 16).w,
           child: Row(
             children: [
               CircleAvatar(
-                radius: 24.r,
+                radius: 32.r,
                 backgroundImage: room.opponentProfileUrl.isNotEmpty
                     ? NetworkImage(room.opponentProfileUrl)
                     : null,
@@ -247,5 +254,37 @@ class _ChatRoomTile extends ConsumerWidget {
       return '${difference.inMinutes}분 전';
     }
     return '방금 전';
+  }
+
+  Future<bool> _showDeleteDialog(BuildContext context) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          '채팅방 나가기',
+          style: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
+        ),
+        content: Text(
+          '채팅방을 나가시겠습니까?',
+          style: AppTextStyles.body1.copyWith(color: GRAY600_COLOR),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              '취소',
+              style: AppTextStyles.body1.copyWith(color: GRAY600_COLOR),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(
+              '나가기',
+              style: AppTextStyles.body1.copyWith(color: BLUE400_COLOR),
+            ),
+          ),
+        ],
+      ),
+    ) ?? false;
   }
 }

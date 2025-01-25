@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:livingalone/common/component/confirm_dialog.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,10 +77,18 @@ class DefaultLayout extends StatelessWidget {
         splashColor: Colors.transparent,
         disabledColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        onPressed: onClosePressed ??
-            () {
-              Navigator.of(context).popUntil((route) => route.isFirst);
-            },
+        onPressed: onClosePressed ?? () async {
+          final result = await ConfirmDialog.show(
+            context: context,
+            title: '작성을 종료할까요?',
+            content: '작성 중인 내용은 저장되지 않으며, 종료 시 모두 삭제됩니다.',
+          );
+
+          if (result) {
+            // 종료하기 선택시 RootTab으로 이동
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          }
+        },
       );
     } else if (showBackButton) {
       leadingWidget = IconButton(
