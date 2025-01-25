@@ -300,7 +300,7 @@ class _RootTabState extends State<RootTab> {
                           Future.delayed(Duration(milliseconds: 100), () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (_) => WriteCommunityPostScreen(),
+                                builder: (_) => WriteCommunityPostScreen(communityId: '1',),
                               ),
                             );
                           });
