@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:livingalone/chat/view/chat_screen.dart';
+import 'package:livingalone/chat/view/chat_list_screen.dart';
 import 'package:livingalone/common/component/colored_image.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
@@ -57,7 +57,7 @@ class _RootTabState extends State<RootTab> {
                 ),
               ),
               PersistentTabConfig(
-                screen: const ChatScreen(),
+                screen: const ChatListScreen(),
                 item: _buildTabItem(
                   imagePath: 'assets/image/chat.svg',
                   title: '채팅',

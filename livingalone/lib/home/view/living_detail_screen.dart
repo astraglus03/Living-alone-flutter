@@ -85,51 +85,51 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen>
       ref.read(LivingDetailScreenProvider.notifier).updateCurrentSection(scrollController, _tabController, widget.postType);
     });
     // 초기 댓글 데이터 설정
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   // 더미데이터
-    //   final initialComments = widget.postType == PostType.room
-    //       ? <CommentModel>[
-    //           CommentModel(
-    //             username: '서은',
-    //             content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
-    //             time: '2024.12.15 16:12',
-    //             replies: [
-    //               CommentModel(
-    //                 username: '고얌미123424123',
-    //                 content: '네! 체크해보겠습니다',
-    //                 time: '2024.12.15 16:15',
-    //                 isAuthor: true,
-    //               ),
-    //             ],
-    //           ),
-    //           CommentModel(
-    //             username: '건동',
-    //             content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
-    //             time: '2024.12.15 16:17',
-    //           ),
-    //         ] // 명시적으로 타입 지정
-    //       : <CommentModel>[
-    //           CommentModel(
-    //             username: '서은',
-    //             content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
-    //             time: '2024.12.15 16:12',
-    //             replies: [
-    //               CommentModel(
-    //                 username: '고얌미',
-    //                 content: '네! 체크해보겠습니다',
-    //                 time: '2024.12.15 16:15',
-    //                 isAuthor: true,
-    //               ),
-    //             ],
-    //           ),
-    //           CommentModel(
-    //             username: '건동',
-    //             content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
-    //             time: '2024.12.15 16:17',
-    //           ),
-    //         ];
-    //   ref.read(LivingDetailScreenProvider.notifier).setComments(initialComments);
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 더미데이터
+      final initialComments = widget.postType == PostType.room
+          ? <CommentModel>[
+              CommentModel(
+                username: '서은',
+                content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
+                time: '2024.12.15 16:12',
+                replies: [
+                  CommentModel(
+                    username: '고얌미123424123',
+                    content: '네! 체크해보겠습니다',
+                    time: '2024.12.15 16:15',
+                    isAuthor: true,
+                  ),
+                ],
+              ),
+              CommentModel(
+                username: '건동',
+                content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
+                time: '2024.12.15 16:17',
+              ),
+            ] // 명시적으로 타입 지정
+          : <CommentModel>[
+              CommentModel(
+                username: '서은',
+                content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
+                time: '2024.12.15 16:12',
+                replies: [
+                  CommentModel(
+                    username: '고얌미',
+                    content: '네! 체크해보겠습니다',
+                    time: '2024.12.15 16:15',
+                    isAuthor: true,
+                  ),
+                ],
+              ),
+              CommentModel(
+                username: '건동',
+                content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
+                time: '2024.12.15 16:17',
+              ),
+            ];
+      ref.read(LivingDetailScreenProvider.notifier).setComments(initialComments);
+    });
   }
 
   @override
@@ -586,7 +586,10 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen>
                 {
                   'text': '게시글 숨기기',
                   'icon': 'assets/icons/hide.svg',
-                  'onTap': () {}
+                  'onTap': () {
+                    //TODO: 임시로 라우트 여기로해놓음.
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ReportScreen()));
+                  }
                 },
                 {
                   'text': 'URL 공유하기',

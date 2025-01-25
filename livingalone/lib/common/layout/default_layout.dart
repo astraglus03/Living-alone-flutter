@@ -20,6 +20,8 @@ class DefaultLayout extends StatelessWidget {
   final int? currentStep;
   final int? totalSteps;
   final bool? appbarBorder;
+  final bool? leadingText;
+  final String? leadingTitle;
 
   const DefaultLayout({
     this.backgroundColor,
@@ -38,6 +40,8 @@ class DefaultLayout extends StatelessWidget {
     this.currentStep,
     this.totalSteps,
     this.appbarBorder = true,
+    this.leadingText,
+    this.leadingTitle,
     super.key,
   });
 
@@ -46,8 +50,8 @@ class DefaultLayout extends StatelessWidget {
     return Theme(
       data: Theme.of(context).copyWith(
         textTheme: Theme.of(context).textTheme.apply(
-          fontFamily: 'SUIT',
-        ),
+              fontFamily: 'SUIT',
+            ),
       ),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -65,30 +69,48 @@ class DefaultLayout extends StatelessWidget {
       return null;
     }
 
+    Widget? leadingWidget;
+    if (showCloseButton == true) {
+      leadingWidget = IconButton(
+        icon: const Icon(Icons.close),
+        splashColor: Colors.transparent,
+        disabledColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onPressed: onClosePressed ??
+            () {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+      );
+    } else if (showBackButton) {
+      leadingWidget = IconButton(
+        icon: const Icon(Icons.arrow_back_ios_sharp),
+        onPressed: () => Navigator.of(context).pop(),
+      );
+    } else if (leadingText == true && leadingTitle != null) {
+      leadingWidget = Padding(
+        padding: EdgeInsets.only(left: 24.0).r,
+        child: Text(
+          leadingTitle!,
+          style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
+        ),
+      );
+    }
+
     return PreferredSize(
-      preferredSize: Size.fromHeight((height ?? 48.h) + (bottom?.preferredSize.height ?? 0)),
+      preferredSize: Size.fromHeight(
+          (height ?? 48.h) + (bottom?.preferredSize.height ?? 0)),
       child: AppBar(
         title: Text(title!),
         titleTextStyle: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
         centerTitle: true,
-        leading: showCloseButton == true
-            ? IconButton(
-                icon: const Icon(Icons.close),
-                splashColor: Colors.transparent,
-                disabledColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: onClosePressed ?? () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                },
-              )
-            : showBackButton
-                ? IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_sharp),
-                    onPressed: () => Navigator.of(context).pop(),
-                  )
-                : null,
+        leading: leadingWidget,
+        leadingWidth: 80,
         actions: [
-          if (actions != null) actions!,
+          if (actions != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 15).r,
+              child: actions!,
+            ),
           if (currentStep != null && totalSteps != null)
             Padding(
               padding: const EdgeInsets.only(right: 24).r,
@@ -98,14 +120,17 @@ class DefaultLayout extends StatelessWidget {
               ),
             ),
         ],
+
         scrolledUnderElevation: 0,
         backgroundColor: appbarTitleBackgroundColor,
-        shape: appbarBorder! ?Border(
-          bottom: BorderSide(
-            width: 1,
-            color: appbarBorderColor,
-          ),
-        ):null,
+        shape: appbarBorder!
+            ? Border(
+                bottom: BorderSide(
+                  width: 1,
+                  color: appbarBorderColor,
+                ),
+              )
+            : null,
         bottom: bottom,
       ),
     );

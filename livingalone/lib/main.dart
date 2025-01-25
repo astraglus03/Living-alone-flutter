@@ -61,7 +61,7 @@ class MyApp extends ConsumerWidget {
             ),
             debugShowCheckedModeBanner: false,
             // home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
-            home: ReportScreen()
+            home: RootTab()
             // home: AddRoomHandoverScreen7(rentType: RentType.shortRent,),
             // home: AddTicketHandoverScreen2()
           ),

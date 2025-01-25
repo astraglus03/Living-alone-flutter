@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:livingalone/chat/view/chat_screen.dart';
+import 'package:livingalone/chat/view/chat_list_screen.dart';
 import 'package:livingalone/common/view/root_tab.dart';
 import 'package:livingalone/common/view/splash_screen.dart';
 import 'package:livingalone/map/view/map_screen.dart';
@@ -83,7 +83,7 @@ final GoRouter router = GoRouter(
       path: '/chat',
       name: 'chat',
       builder: (_,state){
-        return ChatScreen();
+        return ChatListScreen();
       }
     ),
     GoRoute(
