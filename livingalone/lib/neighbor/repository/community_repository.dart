@@ -4,6 +4,7 @@ import 'package:livingalone/common/const/const.dart';
 import 'package:livingalone/common/dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:livingalone/neighbor/models/post_community_model.dart';
+import 'package:livingalone/neighbor/models/post_detail_model.dart';
 part 'community_repository.g.dart';
 
 
@@ -49,6 +50,29 @@ abstract class CommunityRepository {
   // 5. 게시글 삭제
   // @DELETE("/communities/{communityId}/posts/{postId}")
   // Future<void> deletePost({
+  //   @Path("communityId") required String communityId,
+  //   @Path("postId") required String postId,
+  // });
+
+  // 게시글 상세 조회
+  // @GET("/communities/{communityId}/posts/{postId}")
+  // Future<PostDetailModel> getPostDetail({
+  //   @Path("communityId") required String communityId,
+  //   @Path("postId") required String postId,
+  // });
+
+  // 게시글 좋아요
+  // @POST("/communities/{communityId}/posts/{postId}/like")
+  // @Headers({"accessToken": "true"})
+  // Future<void> likePost({
+  //   @Path("communityId") required String communityId,
+  //   @Path("postId") required String postId,
+  // });
+
+  // 게시글 좋아요 취소
+  // @DELETE("/communities/{communityId}/posts/{postId}/like")
+  // @Headers({"accessToken": "true"})
+  // Future<void> unlikePost({
   //   @Path("communityId") required String communityId,
   //   @Path("postId") required String postId,
   // });

@@ -1,88 +1,85 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:livingalone/common/utils/data_utils.dart';
-import 'package:intl/intl.dart';
 
-part 'comment_model.g.dart';
+part 'neighbor_comment_model.g.dart';
 
 @JsonSerializable()
-class CommentModel {
+class NeighborCommentModel {
+  final String id;
   final String username;
   final String content;
-  // @JsonKey(
-  //   toJson: DataUtils.stringtoDateTime,
-  // )
   final String time;
-  final List<CommentModel>? replies;
+  final List<NeighborCommentModel>? replies;
   final bool isAuthor;
   final bool isDeleted;
+  final String? userProfileUrl;
 
-  CommentModel({
+  NeighborCommentModel({
+    required this.id,
     required this.username,
     required this.content,
     required this.time,
     this.replies,
     this.isAuthor = false,
     this.isDeleted = false,
+    this.userProfileUrl,
   });
 
-  factory CommentModel.fromJson(Map<String,dynamic> json)
-  => _$CommentModelFromJson(json);
+  factory NeighborCommentModel.fromJson(Map<String, dynamic> json) =>
+      _$NeighborCommentModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CommentModelToJson(this);
+  Map<String, dynamic> toJson() => _$NeighborCommentModelToJson(this);
 
-  CommentModel copyWith({
+  NeighborCommentModel copyWith({
+    String? id,
     String? username,
     String? content,
     String? time,
+    List<NeighborCommentModel>? replies,
     bool? isAuthor,
     bool? isDeleted,
-    List<CommentModel>? replies,
+    String? userProfileUrl,
   }) {
-    return CommentModel(
+    return NeighborCommentModel(
+      id: id ?? this.id,
       username: username ?? this.username,
       content: content ?? this.content,
       time: time ?? this.time,
+      replies: replies ?? this.replies,
       isAuthor: isAuthor ?? this.isAuthor,
       isDeleted: isDeleted ?? this.isDeleted,
-      replies: replies ?? this.replies,
-    );
-  }
-
-  CommentModel copyWithDeleted() {
-    final formatDate = DateFormat('yy/mm/dd - HH:MM:ss').format(DateTime.now());
-    return CommentModel(
-      username: '',
-      content: '삭제된 메시지입니다.',
-      time: formatDate,
-      replies: replies,
-      isAuthor: isAuthor,
-      isDeleted: true,
+      userProfileUrl: userProfileUrl ?? this.userProfileUrl,
     );
   }
 
   // 더미 데이터 생성
-  static List<CommentModel> getDummyComments() {
+  static List<NeighborCommentModel> getDummyComments() {
     return [
-      CommentModel(
+      NeighborCommentModel(
+        id: '1',
         username: "김철수",
         content: "저도 필요했었는데 감사합니다!",
         time: "2024.01.15 14:30",
+        userProfileUrl: "https://picsum.photos/50/50",
         isAuthor: false,
         replies: [
-          CommentModel(
+          NeighborCommentModel(
+            id: '2',
             username: "네이름은 코난",
             content: "네 필요하시다면 연락주세요~",
             time: "2024.01.15 14:35",
+            userProfileUrl: "https://picsum.photos/50/51",
             isAuthor: true,
           ),
         ],
       ),
-      CommentModel(
+      NeighborCommentModel(
+        id: '3',
         username: "이영희",
         content: "혹시 아직 빌려주실 수 있나요?",
         time: "2024.01.15 15:00",
+        userProfileUrl: "https://picsum.photos/50/52",
         isAuthor: false,
       ),
     ];
   }
-}
+} 
