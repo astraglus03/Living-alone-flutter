@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/component/colored_image.dart';
 import 'package:livingalone/common/component/common_divider.dart';
+import 'package:livingalone/common/component/options_menu.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
@@ -12,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:livingalone/home/component/comments_section.dart';
 import 'package:livingalone/neighbor/view_models/neighbor_comments_provider.dart';
 import 'package:livingalone/neighbor/component/neighbor_comments_section.dart';
+import 'package:livingalone/report/report_screen.dart';
 
 class NeighborDetailScreen extends ConsumerWidget {
   final String postId;
@@ -68,7 +70,7 @@ class NeighborDetailScreen extends ConsumerWidget {
             style: IconButton.styleFrom(
               overlayColor: Colors.transparent,
             ),
-            onPressed: () {},
+            onPressed: () => _showOptionsMenu(context),
             icon: Icon(Icons.more_horiz_rounded),
           ),
         ],
@@ -248,6 +250,53 @@ class NeighborDetailScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showOptionsMenu(BuildContext context) {
+    const bool isMyPost = true; // TODO: 실제 게시물 소유자 체크 로직 필요
+    final List<OptionMenuItem> options = isMyPost
+        ? [
+      OptionMenuItem(
+        text: '게시글 수정',
+        icon: 'assets/icons/edit.svg',
+        onTap: () {
+          // Navigator.of(context).push(MaterialPageRoute(
+          //   builder: (_) => EditRoomPostScreen(),
+          //   settings: RouteSettings(name: "EditRoomPage"),
+          // ));
+        },
+      ),
+      OptionMenuItem(
+        text: '게시글 숨기기',
+        icon: 'assets/icons/hide.svg',
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => ReportScreen(),
+          ));
+        },
+      ),
+      OptionMenuItem(
+        text: '게시글 삭제',
+        icon: 'assets/icons/delete.svg',
+        onTap: () {},
+      ),
+    ]
+        : [
+      OptionMenuItem(
+        text: '신고하기',
+        icon: 'assets/icons/report.svg',
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => ReportScreen()),
+          );
+        },
+      ),
+    ];
+
+    OptionsMenu.show(
+      context: context,
+      options: options,
     );
   }
 
