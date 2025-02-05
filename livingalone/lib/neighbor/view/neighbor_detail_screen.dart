@@ -7,6 +7,7 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/common/utils/data_utils.dart';
+import 'package:livingalone/neighbor/view/edit_community_post_screen.dart';
 import 'package:livingalone/neighbor/view_models/post_detail_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -61,16 +62,7 @@ class NeighborDetailScreen extends ConsumerWidget {
             style: IconButton.styleFrom(
               overlayColor: Colors.transparent,
             ),
-            onPressed: () {
-              DataUtils.sharePost(title: '커뮤니티 게시글 공유하기', price: '', location: '');
-            },
-            icon: Icon(Icons.ios_share_outlined),
-          ),
-          IconButton(
-            style: IconButton.styleFrom(
-              overlayColor: Colors.transparent,
-            ),
-            onPressed: () => _showOptionsMenu(context),
+            onPressed: () => _showOptionsMenu(context,ref),
             icon: Icon(Icons.more_horiz_rounded),
           ),
         ],
@@ -175,13 +167,25 @@ class NeighborDetailScreen extends ConsumerWidget {
                           ),
                         ),
                       ],
-                      6.verticalSpace,
+                      20.verticalSpace,
+                      if(commentsState.totalCommentsCount >0)
+                        Row(
+                          children: [
+                            ColoredImage(imagePath: 'assets/image/comment1.svg', isActive: false),
+                            4.horizontalSpace,
+                            Text('${commentsState.totalCommentsCount}',style: AppTextStyles.caption2.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: GRAY500_COLOR,
+                            ),)
+                          ],
+                        ),
+                      8.verticalSpace,
                       Row(
                         children: [
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10).w,
                             decoration: BoxDecoration(
-                              color: post.likeCount >0 ? BLUE100_COLOR : GRAY100_COLOR,
+                              color: post.isLiked ? BLUE100_COLOR : GRAY100_COLOR,
                               borderRadius: BorderRadius.circular(20).r,
                             ),
                             child: InkWell(
@@ -209,31 +213,6 @@ class NeighborDetailScreen extends ConsumerWidget {
                             ),
                           ),
                           8.horizontalSpace,
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10).w,
-                            decoration: BoxDecoration(
-                              color: post.likeCount >0 ? BLUE100_COLOR : GRAY100_COLOR,
-                              borderRadius: BorderRadius.circular(20).r,
-                            ),
-                            child: Row(
-                              children: [
-                                ColoredImage(imagePath: 'assets/image/comment1.svg', isActive: commentsState.totalCommentsCount >0),
-                                4.horizontalSpace,
-                                Text(
-                                  '댓글 ',
-                                    style: AppTextStyles.caption2.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: commentsState.totalCommentsCount >0 ? GRAY700_COLOR : GRAY500_COLOR,
-                                    ),
-                                ),
-                                if(commentsState.totalCommentsCount >0)
-                                  Text('${commentsState.totalCommentsCount}',style: AppTextStyles.caption2.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    color: GRAY700_COLOR,
-                                  ),)
-                              ],
-                            ),
-                          ),
                         ],
                       ),
                       20.verticalSpace,
@@ -253,18 +232,25 @@ class NeighborDetailScreen extends ConsumerWidget {
     );
   }
 
-  void _showOptionsMenu(BuildContext context) {
-    const bool isMyPost = true; // TODO: 실제 게시물 소유자 체크 로직 필요
+  void _showOptionsMenu(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(postDetailProvider(postId));
+    final post = state.post;
+    if (post == null) return;
+
+    final bool isMyPost = true; // TODO: 실제 게시물 소유자 체크 로직 필요
     final List<OptionMenuItem> options = isMyPost
         ? [
       OptionMenuItem(
         text: '게시글 수정',
         icon: 'assets/icons/edit.svg',
         onTap: () {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //   builder: (_) => EditRoomPostScreen(),
-          //   settings: RouteSettings(name: "EditRoomPage"),
-          // ));
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => EditCommunityPostScreen(
+              communityId: '1',
+              postId: postId,
+              initialData: post,  // state.post 대신 post 사용
+            ),
+          ));
         },
       ),
       OptionMenuItem(
@@ -277,12 +263,37 @@ class NeighborDetailScreen extends ConsumerWidget {
         },
       ),
       OptionMenuItem(
+        text: 'URL 공유하기',
+        icon: 'assets/icons/share_nocolor.svg',
+        onTap: () {
+          DataUtils.sharePost(
+            title: '[모양] 자취방 양도 게시물 공유하기',
+            price: '41만원',
+            location: '천안시 동남구 각원사길 59-5',
+          );
+        },
+      ),
+      OptionMenuItem(
         text: '게시글 삭제',
         icon: 'assets/icons/delete.svg',
         onTap: () {},
+        textStyle: AppTextStyles.body2.copyWith(color: ERROR_TEXT_COLOR),
+        iconColor: ERROR_TEXT_COLOR,
       ),
     ]
         : [
+      OptionMenuItem(
+        text: 'URL 공유하기',
+        icon: 'assets/icons/share_nocolor.svg',
+        onTap: () {
+          // TODO: 추후 내용 변경 예정
+          DataUtils.sharePost(
+            title: '[모양] 자취방 양도 게시물 공유하기',
+            price: '41만원',
+            location: '천안시 동남구 각원사길 59-5',
+          );
+        },
+      ),
       OptionMenuItem(
         text: '신고하기',
         icon: 'assets/icons/report.svg',

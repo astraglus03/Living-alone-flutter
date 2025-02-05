@@ -13,7 +13,9 @@ import 'package:livingalone/handover/view/add_ticket_handover_screen1.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen2.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen4.dart';
 import 'package:livingalone/handover/view/add_ticket_handover_screen6.dart';
+import 'package:livingalone/neighbor/view/edit_community_post_screen.dart';
 import 'package:livingalone/neighbor/view/neighbor_detail_screen.dart';
+import 'package:livingalone/neighbor/view/write_community_post_screen.dart';
 import 'package:livingalone/post_modify/view/edit_room_post_screen.dart';
 import 'package:livingalone/home/view/home_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,7 +64,8 @@ class MyApp extends ConsumerWidget {
             ),
             debugShowCheckedModeBanner: false,
             // home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
-            home: NeighborDetailScreen(postId: '1')
+            // home: WriteCommunityPostScreen(communityId: '1'),
+            home: NeighborDetailScreen(postId: '1'),
             // home: AddRoomHandoverScreen7(rentType: RentType.shortRent,),
             // home: AddTicketHandoverScreen2()
           ),

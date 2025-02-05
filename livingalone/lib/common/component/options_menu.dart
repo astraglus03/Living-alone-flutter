@@ -5,18 +5,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 
-
-
 // Blur처리 및 옵션 메뉴 선택
 class OptionMenuItem {
   final String text;
   final String icon;
   final VoidCallback onTap;
+  final TextStyle? textStyle;
+  final Color? iconColor;
 
   OptionMenuItem({
     required this.text,
     required this.icon,
     required this.onTap,
+    this.textStyle,
+    this.iconColor,
   });
 }
 
@@ -90,11 +92,17 @@ class OptionsMenu {
                                   vertical: 10.h, horizontal: 16.w),
                               child: Row(
                                 children: [
-                                  SvgPicture.asset(option.icon,width: 18, height: 18,),
+                                  SvgPicture.asset(
+                                    option.icon,
+                                    colorFilter: ColorFilter.mode(
+                                      option.iconColor ?? GRAY400_COLOR,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
                                   6.horizontalSpace,
                                   Text(
                                     option.text,
-                                    style: AppTextStyles.body2.copyWith(
+                                    style: option.textStyle ?? AppTextStyles.body2.copyWith(
                                       color: GRAY800_COLOR,
                                       fontWeight: FontWeight.w500,
                                     ),
