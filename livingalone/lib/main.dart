@@ -65,8 +65,8 @@ class MyApp extends ConsumerWidget {
             debugShowCheckedModeBanner: false,
             // home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
             // home: WriteCommunityPostScreen(communityId: '1'),
-            home: NeighborDetailScreen(postId: '1'),
-            // home: AddRoomHandoverScreen7(rentType: RentType.shortRent,),
+            // home: NeighborDetailScreen(postId: '1'),
+            home: RootTab()
             // home: AddTicketHandoverScreen2()
           ),
         );
