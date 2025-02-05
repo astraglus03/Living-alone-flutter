@@ -5,15 +5,29 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/enum/language_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
-import 'package:livingalone/mypage/view_models/language_setting_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/mypage/view_models/mypage_provider.dart';
 
-class LanguageDetailScreen extends ConsumerWidget {
+class LanguageDetailScreen extends ConsumerStatefulWidget {
   const LanguageDetailScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentLanguage = ref.watch(languageSettingProvider);
+  ConsumerState<LanguageDetailScreen> createState() => _LanguageDetailScreenState();
+}
+
+class _LanguageDetailScreenState extends ConsumerState<LanguageDetailScreen> {
+  String? selectedLanguage;
+
+  @override
+  void initState() {
+    super.initState();
+    // 초기값 설정
+    selectedLanguage = ref.read(myPageProvider).profile!.language;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final currentLanguage = ref.watch(myPageProvider);
 
     return DefaultLayout(
       title: '언어 설정',
@@ -26,7 +40,7 @@ class LanguageDetailScreen extends ConsumerWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
                   child: Text(
-                    '모앱에서 사용할 언어를\n선택해 주세요',
+                    '모양에서 사용할 언어를\n선택해 주세요',
                     style: AppTextStyles.heading2.copyWith(color: GRAY800_COLOR),
                   ),
                 ),
@@ -34,9 +48,11 @@ class LanguageDetailScreen extends ConsumerWidget {
                   padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: CustomSelectList(
                     items: Language.values.map((e) => e.label).toList(),
-                    selected: currentLanguage,
+                    selected: selectedLanguage,
                     onItemSelected: (language) {
-                      ref.read(languageSettingProvider.notifier).setLanguage(language);
+                      setState(() {
+                        selectedLanguage = language;
+                      });
                     },
                     showError: false,
                     multiSelect: false,
@@ -52,6 +68,10 @@ class LanguageDetailScreen extends ConsumerWidget {
               height: 50.h,
               child: ElevatedButton(
                 onPressed: () {
+                  if (selectedLanguage != null && 
+                      selectedLanguage != currentLanguage.profile!.language) {
+                    ref.read(myPageProvider.notifier).updateLanguage(selectedLanguage!);
+                  }
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(

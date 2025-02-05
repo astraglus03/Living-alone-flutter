@@ -6,13 +6,15 @@ import 'package:livingalone/common/component/confirm_dialog.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/mypage/view/account_management_screen.dart';
+import 'package:livingalone/mypage/view/address_setting_screen.dart';
 import 'package:livingalone/mypage/view/edit_profile_screen.dart';
-import 'package:livingalone/mypage/view/inquiry_list_screen.dart';
 import 'package:livingalone/mypage/view/inquiry_screen.dart';
 import 'package:livingalone/mypage/view/language_screen.dart';
 import 'package:livingalone/mypage/view/notice_list_screen.dart';
 import 'package:livingalone/mypage/view/notification_screen.dart';
 import 'package:livingalone/mypage/view/terms_screen.dart';
+import 'package:livingalone/mypage/view_models/mypage_provider.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class MyPageScreen extends ConsumerWidget {
@@ -20,6 +22,14 @@ class MyPageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(myPageProvider);
+
+    if(state.isLoading){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return DefaultLayout(
       title: '',
       showBackButton: false,
@@ -36,20 +46,15 @@ class MyPageScreen extends ConsumerWidget {
                   Row(
                     children: [
                       CircleAvatar(
-                        radius: 30.r,
-                        backgroundColor: GRAY100_COLOR,
-                        child: Icon(
-                          Icons.person,
-                          size: 40.r,
-                          color: GRAY400_COLOR,
-                        ),
+                        radius: 32.r,
+                        backgroundImage: NetworkImage(state.profile!.profileImage!)
                       ),
                       20.horizontalSpace,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '서울대 입시생',
+                            state.profile!.nickname,
                             style: AppTextStyles.subtitle.copyWith(
                               color: GRAY800_COLOR,
                             ),
@@ -74,8 +79,9 @@ class MyPageScreen extends ConsumerWidget {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => EditProfileScreen()));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (_) => EditProfileScreen()));
+                        pushScreenWithoutNavBar(context, EditProfileScreen());
                       },
                       child: Text(
                         '프로필 수정',
@@ -116,11 +122,15 @@ class MyPageScreen extends ConsumerWidget {
               ),
             ),
             6.verticalSpace,
-            _buildListTile('계정 관리', onTap: () {}),
+            _buildListTile('계정 관리', onTap: () {
+              pushScreenWithoutNavBar(context, AccountManagementScreen());
+            }),
             _buildListTile('알림 설정', onTap: () {
               pushScreenWithoutNavBar(context, NotificationScreen());
             }),
-            _buildListTile('우리집 설정', onTap: () {}),
+            _buildListTile('우리집 설정', onTap: () {
+              pushScreenWithoutNavBar(context, AddressSettingScreen());
+            }),
             _buildListTile('언어 설정', onTap: () {
               pushScreenWithoutNavBar(context, LanguageScreen());
             }),

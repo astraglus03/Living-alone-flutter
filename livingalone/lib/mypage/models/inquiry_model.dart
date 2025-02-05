@@ -9,6 +9,7 @@ class InquiryModel {
   final String title;
   final String content;
   final DateTime createdAt;
+  // final String status;
   final String? answer;
   final DateTime? answeredAt;
 
@@ -18,6 +19,7 @@ class InquiryModel {
     required this.title,
     required this.content,
     required this.createdAt,
+    // required this.status,
     this.answer,
     this.answeredAt,
   });

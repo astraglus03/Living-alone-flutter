@@ -1,4 +1,3 @@
-// lib/mypage/view/language_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/const/colors.dart';
@@ -6,14 +5,14 @@ import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/mypage/view/language_detail_screen.dart';
-import 'package:livingalone/mypage/view_models/language_setting_provider.dart';
+import 'package:livingalone/mypage/view_models/mypage_provider.dart';
 
 class LanguageScreen extends ConsumerWidget {
   const LanguageScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(languageSettingProvider);
+    final state = ref.watch(myPageProvider);
 
     return DefaultLayout(
       title: '언어 설정',
@@ -31,7 +30,7 @@ class LanguageScreen extends ConsumerWidget {
                 ),
               ),
               trailing: Text(
-                state,
+                state.profile!.language,
                 style: AppTextStyles.body2.copyWith(
                   color: GRAY600_COLOR,
                 ),

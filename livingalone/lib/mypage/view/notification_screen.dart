@@ -12,7 +12,7 @@ import 'package:livingalone/mypage/view_models/notification_provider.dart';
 class NotificationScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(notificationSettingsProvider);
+    final profile = ref.watch(notificationSettingsProvider);
 
     return DefaultLayout(
       title: '알림 설정',
@@ -21,14 +21,54 @@ class NotificationScreen extends ConsumerWidget {
         child: Column(
           children: [
             20.verticalSpace,
-            ...NotificationType.values.map((type) => _buildNotificationItem(
+            _buildNotificationItem(
               context: context,
-              type: type,
-              isEnabled: settings[type]!,
+              type: NotificationType.all,
+              isEnabled: profile.pushNotificationEnabled,
               onChanged: (value) {
-                ref.read(notificationSettingsProvider.notifier).toggleNotification(type);
+                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.all);
               },
-            )),
+            ),
+            _buildNotificationItem(
+              context: context,
+              type: NotificationType.chat,
+              isEnabled: profile.chatNotificationEnabled,
+              onChanged: (value) {
+                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.chat);
+              },
+            ),
+            _buildNotificationItem(
+              context: context,
+              type: NotificationType.neighborhoodPost,
+              isEnabled: profile.neighborNotificationEnabled,
+              onChanged: (value) {
+                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.neighborhoodPost);
+              },
+            ),
+            _buildNotificationItem(
+              context: context,
+              type: NotificationType.comment,
+              isEnabled: profile.handoverNotificationEnabled,
+              onChanged: (value) {
+                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.comment);
+              },
+            ),
+            _buildNotificationItem(
+              context: context,
+              type: NotificationType.community,
+              isEnabled: profile.communityNotificationEnabled,
+              onChanged: (value) {
+                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.community);
+              },
+            ),
+            _buildNotificationItem(
+              context: context,
+              type: NotificationType.official,
+              isEnabled: profile.noticeNotificationEnabled,
+              onChanged: (value) {
+                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.official);
+              },
+            ),
           ],
         ),
       ),
@@ -74,20 +114,20 @@ class NotificationScreen extends ConsumerWidget {
               ),
               Platform.isIOS
                   ? CupertinoSwitch(
-                value: isEnabled,
-                onChanged: onChanged,
-                activeColor: BLUE400_COLOR,
-              )
+                      value: isEnabled,
+                      onChanged: onChanged,
+                      activeColor: BLUE400_COLOR,
+                    )
                   : Switch(
-                value: isEnabled,
-                onChanged: onChanged,
-                activeColor: BLUE400_COLOR,
-                trackColor: MaterialStateProperty.resolveWith(
-                      (states) => states.contains(MaterialState.selected)
-                      ? BLUE100_COLOR
-                      : GRAY200_COLOR,
-                ),
-              ),
+                      value: isEnabled,
+                      onChanged: onChanged,
+                      activeColor: BLUE400_COLOR,
+                      trackColor: MaterialStateProperty.resolveWith(
+                        (states) => states.contains(MaterialState.selected)
+                            ? BLUE100_COLOR
+                            : GRAY200_COLOR,
+                      ),
+                    ),
             ],
           ),
         ),

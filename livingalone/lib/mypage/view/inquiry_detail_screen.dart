@@ -12,14 +12,15 @@ class InquiryDetailScreen extends ConsumerWidget {
 
   const InquiryDetailScreen({
     required this.inquiry,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       title: '문의내역',
       child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

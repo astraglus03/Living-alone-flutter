@@ -1,40 +1,107 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/mypage/enum/notification_settings.dart';
+import 'package:livingalone/mypage/models/user_profile_model.dart';
+import 'package:livingalone/mypage/repository/mypage_repository.dart';
 
-final notificationSettingsProvider = StateNotifierProvider<NotificationSettingsNotifier, Map<NotificationType, bool>>((ref) {
-  return NotificationSettingsNotifier();
+final notificationSettingsProvider = StateNotifierProvider<NotificationSettingsNotifier, UserProfileModel>((ref) {
+  final repository = ref.watch(myPageRepositoryProvider);
+  return NotificationSettingsNotifier(repository);
 });
 
-class NotificationSettingsNotifier extends StateNotifier<Map<NotificationType, bool>> {
-  NotificationSettingsNotifier() : super({
-    NotificationType.all: true,
-    NotificationType.chat: true,
-    NotificationType.comment: true,
-    NotificationType.neighborhoodPost: true,
-    NotificationType.community: true,
-    NotificationType.official: true,
-  });
+class NotificationSettingsNotifier extends StateNotifier<UserProfileModel> {
+  final MyPageRepository _repository;
+
+  NotificationSettingsNotifier(this._repository) : super(UserProfileModel(
+    id: '',
+    email: '',
+    nickname: '',
+    phoneNumber: '',
+    language: 'ko',
+  )) {
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    try {
+      state = await _repository.getProfile();
+    } catch (e) {
+      print('Failed to load profile: $e');
+    }
+  }
 
   void toggleNotification(NotificationType type) {
-    if (type == NotificationType.all) {
-      final newValue = !state[NotificationType.all]!;
-      state = {
-        for (var type in NotificationType.values)
-          type: newValue
-      };
-    } else {
-      state = {
-        ...state,
-        type: !state[type]!,
-        // 모든 개별 알림이 꺼지면 전체 알림도 꺼짐
-        NotificationType.all: state[NotificationType.all]! && type != NotificationType.all
-      };
+    switch (type) {
+      case NotificationType.all:
+        final newValue = !state.pushNotificationEnabled;
+        state = state.copyWith(
+          pushNotificationEnabled: newValue,
+          chatNotificationEnabled: newValue,
+          neighborNotificationEnabled: newValue,
+          handoverNotificationEnabled: newValue,
+          communityNotificationEnabled: newValue,
+          noticeNotificationEnabled: newValue,
+        );
+        break;
+      case NotificationType.chat:
+        state = state.copyWith(
+          chatNotificationEnabled: !state.chatNotificationEnabled,
+          pushNotificationEnabled: _shouldEnableAllNotifications(type),
+        );
+        break;
+      case NotificationType.neighborhoodPost:
+        state = state.copyWith(
+          neighborNotificationEnabled: !state.neighborNotificationEnabled,
+          pushNotificationEnabled: _shouldEnableAllNotifications(type),
+        );
+        break;
+      case NotificationType.comment:
+        state = state.copyWith(
+          handoverNotificationEnabled: !state.handoverNotificationEnabled,
+          pushNotificationEnabled: _shouldEnableAllNotifications(type),
+        );
+        break;
+      case NotificationType.community:
+        state = state.copyWith(
+          communityNotificationEnabled: !state.communityNotificationEnabled,
+          pushNotificationEnabled: _shouldEnableAllNotifications(type),
+        );
+        break;
+      case NotificationType.official:
+        state = state.copyWith(
+          noticeNotificationEnabled: !state.noticeNotificationEnabled,
+          pushNotificationEnabled: _shouldEnableAllNotifications(type),
+        );
+        break;
     }
     _updateNotificationSettings();
   }
 
+  bool _shouldEnableAllNotifications(NotificationType excludedType) {
+    return state.chatNotificationEnabled &&
+           state.neighborNotificationEnabled &&
+           state.handoverNotificationEnabled &&
+           state.communityNotificationEnabled &&
+           state.noticeNotificationEnabled;
+  }
+
   Future<void> _updateNotificationSettings() async {
-    // TODO: SharedPreferences에 저장
-    // TODO: 서버에 알림 설정 업데이트
+    try {
+      final updatedProfile = await _repository.updateNotificationSettings(
+        body: {
+          'pushNotificationEnabled': state.pushNotificationEnabled,
+          'chatNotificationEnabled': state.chatNotificationEnabled,
+          'neighborNotificationEnabled': state.neighborNotificationEnabled,
+          'handoverNotificationEnabled': state.handoverNotificationEnabled,
+          'communityNotificationEnabled': state.communityNotificationEnabled,
+          'noticeNotificationEnabled': state.noticeNotificationEnabled,
+        },
+      );
+      state = updatedProfile;
+    } catch (e) {
+      // TODO: 에러 처리
+      print('Failed to update notification settings: $e');
+      // 실패 시 이전 상태로 롤백
+      _loadSettings();
+    }
   }
 }
