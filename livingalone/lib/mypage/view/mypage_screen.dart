@@ -9,6 +9,7 @@ import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/mypage/view/edit_profile_screen.dart';
 import 'package:livingalone/mypage/view/inquiry_list_screen.dart';
 import 'package:livingalone/mypage/view/inquiry_screen.dart';
+import 'package:livingalone/mypage/view/notice_list_screen.dart';
 import 'package:livingalone/mypage/view/terms_screen.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
@@ -139,7 +140,8 @@ class MyPageScreen extends ConsumerWidget {
               pushScreenWithoutNavBar(context, InquiryScreen());
             }),
             _buildListTile('약관 및 개인정보 처리', onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (_) => TermsScreen()));
+              // Navigator.of(context).push(MaterialPageRoute(builder: (_) => TermsScreen()));
+              pushScreenWithoutNavBar(context, TermsScreen());
             }),
             CommonDivider(),
             20.verticalSpace,
@@ -155,7 +157,8 @@ class MyPageScreen extends ConsumerWidget {
             ),
             6.verticalSpace,
             _buildListTile('공지사항', onTap: () {
-
+              // Navigator.of(context).push(MaterialPageRoute(builder: (_)=> NoticeListScreen()));
+              pushScreenWithoutNavBar(context, NoticeListScreen());
             }),
             _buildListTile(
               '로그아웃',
