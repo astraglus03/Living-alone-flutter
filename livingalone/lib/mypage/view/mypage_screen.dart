@@ -9,6 +9,7 @@ import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/mypage/view/edit_profile_screen.dart';
 import 'package:livingalone/mypage/view/inquiry_list_screen.dart';
 import 'package:livingalone/mypage/view/inquiry_screen.dart';
+import 'package:livingalone/mypage/view/language_screen.dart';
 import 'package:livingalone/mypage/view/notice_list_screen.dart';
 import 'package:livingalone/mypage/view/terms_screen.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -117,7 +118,9 @@ class MyPageScreen extends ConsumerWidget {
             _buildListTile('계정 관리', onTap: () {}),
             _buildListTile('알림 설정', onTap: () {}),
             _buildListTile('우리집 설정', onTap: () {}),
-            _buildListTile('언어 설정', onTap: () {}),
+            _buildListTile('언어 설정', onTap: () {
+              pushScreenWithoutNavBar(context, LanguageScreen());
+            }),
             CommonDivider(),
             20.verticalSpace,
             // 고객지원 섹션
@@ -132,11 +135,6 @@ class MyPageScreen extends ConsumerWidget {
             ),
             6.verticalSpace,
             _buildListTile('문의하기', onTap: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (_) => InquiryScreen(),
-              //   ),
-              // );
               pushScreenWithoutNavBar(context, InquiryScreen());
             }),
             _buildListTile('약관 및 개인정보 처리', onTap: () {
