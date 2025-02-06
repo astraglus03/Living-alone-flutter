@@ -1,103 +1,92 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/common/enum/post_type.dart';
+import 'package:livingalone/common/enum/room_enums.dart';
 import 'package:livingalone/mypage/models/favorite_model.dart';
 import 'package:livingalone/mypage/repository/favorite_repository.dart';
 
-final favoriteProvider = StateNotifierProvider<FavoriteNotifier, FavoriteState>((ref) {
-  // API 연동 시 사용할 코드
-  // final repository = ref.watch(favoriteRepositoryProvider);
-  
-  // 더미 데이터용
-  final repository = ref.watch(dummyFavoriteRepositoryProvider);
-  return FavoriteNotifier(repository);
+// TODO: API 연동 시 사용할 코드
+// final favoriteRepositoryProvider = Provider<FavoriteRepository>((ref) {
+//   final dio = ref.watch(dioProvider);
+//   return FavoriteRepository(dio);
+// });
+
+// Repository Provider
+final favoriteRepositoryProvider = Provider<DummyFavoriteRepository>((ref) {
+  return DummyFavoriteRepository();
 });
 
-class FavoriteState {
-  final List<FavoriteModel> allFavorites;
-  final List<FavoriteModel> filteredFavorites;
-  final bool isLoading;
-  final String? error;
-  final String? selectedType;
+// Main State Provider
+final favoriteProvider = StateNotifierProvider<FavoriteNotifier, AsyncValue<List<FavoriteModel>>>((ref) {
+  final repository = ref.watch(favoriteRepositoryProvider);
+  return FavoriteNotifier(repository: repository);
+});
 
-  FavoriteState({
-    this.allFavorites = const [],
-    this.filteredFavorites = const [],
-    this.isLoading = false,
-    this.error,
-    this.selectedType,
-  });
+// Filtered Favorites Provider
+final filteredFavoriteProvider = Provider.family<List<FavoriteModel>, String>((ref, filter) {
+  final favoritesState = ref.watch(favoriteProvider);
+  
+  return favoritesState.when(
+    data: (favorites) => _filterFavorites(favorites, filter),
+    loading: () => [],
+    error: (_, __) => [],
+  );
+});
 
-  FavoriteState copyWith({
-    List<FavoriteModel>? allFavorites,
-    List<FavoriteModel>? filteredFavorites,
-    bool? isLoading,
-    String? error,
-    String? selectedType,
-  }) {
-    return FavoriteState(
-      allFavorites: allFavorites ?? this.allFavorites,
-      filteredFavorites: filteredFavorites ?? this.filteredFavorites,
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
-      selectedType: selectedType ?? this.selectedType,
-    );
+// Count Provider
+final favoriteCountProvider = Provider<Map<String, int>>((ref) {
+  final favoritesState = ref.watch(favoriteProvider);
+  
+  return favoritesState.when(
+    data: (favorites) => _calculateCounts(favorites),
+    loading: () => _getEmptyCounts(),
+    error: (_, __) => _getEmptyCounts(),
+  );
+});
+
+// Helper Functions
+List<FavoriteModel> _filterFavorites(List<FavoriteModel> favorites, String filter) {
+  if (filter == '전체') {
+    return favorites;
   }
+  return favorites.where((item) => 
+    filter == '자취방' ? item.type == PostType.room : item.type == PostType.ticket
+  ).toList();
 }
 
-class FavoriteNotifier extends StateNotifier<FavoriteState> {
-  final FavoriteRepository repository;
+Map<String, int> _calculateCounts(List<FavoriteModel> favorites) {
+  return {
+    '전체': favorites.length,
+    '자취방': favorites.where((item) => item.type == PostType.room).length,
+    '이용권': favorites.where((item) => item.type == PostType.ticket).length,
+  };
+}
 
-  FavoriteNotifier(this.repository) : super(FavoriteState()) {
+Map<String, int> _getEmptyCounts() {
+  return {'전체': 0, '자취방': 0, '이용권': 0};
+}
+
+// Main Notifier
+class FavoriteNotifier extends StateNotifier<AsyncValue<List<FavoriteModel>>> {
+  // final FavoriteRepository repository;
+  final DummyFavoriteRepository repository;
+
+  FavoriteNotifier({
+    required this.repository,
+  }) : super(const AsyncValue.loading()) {
     getFavorites();
   }
 
   Future<void> getFavorites({String? type}) async {
-    // 이미 데이터가 있고 타입만 변경하는 경우 로컬 필터링
-    if (state.allFavorites.isNotEmpty && type != null) {
-      _filterFavorites(type);
-      return;
+    if (state is! AsyncLoading) {
+      state = const AsyncValue.loading();
     }
-
-    state = state.copyWith(isLoading: true, error: null);
+    
     try {
-      final favorites = await repository.getFavorites();
-      // 시간순 정렬 (최신순)
-      favorites.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      
-      final filteredList = type == null 
-          ? favorites 
-          : favorites.where((f) => f.type.toString() == type).toList();
-
-      state = state.copyWith(
-        allFavorites: favorites,
-        filteredFavorites: filteredList,
-        isLoading: false,
-        selectedType: type,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        error: e.toString(),
-        isLoading: false,
-      );
+      final favorites = await repository.getFavorites(type: type);
+      state = AsyncValue.data(favorites);
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
-  }
-
-  void _filterFavorites(String? type) {
-    if (type == null) {
-      state = state.copyWith(
-        filteredFavorites: state.allFavorites,
-        selectedType: null,
-      );
-      return;
-    }
-
-    final filtered = state.allFavorites
-        .where((favorite) => favorite.type.toString() == type)
-        .toList();
-
-    state = state.copyWith(
-      filteredFavorites: filtered,
-      selectedType: type,
-    );
   }
 
   Future<void> toggleFavorite({
@@ -106,59 +95,20 @@ class FavoriteNotifier extends StateNotifier<FavoriteState> {
     required bool isFavorite,
   }) async {
     try {
-      // UI 상태 즉시 업데이트 (전체 목록과 필터링된 목록 모두 업데이트)
-      final updatedAllFavorites = state.allFavorites.map((favorite) {
-        if (favorite.itemId == itemId) {
-          favorite.isFavorite = !isFavorite;
-        }
-        return favorite;
-      }).toList();
-
-      final updatedFilteredFavorites = state.filteredFavorites.map((favorite) {
-        if (favorite.itemId == itemId) {
-          favorite.isFavorite = !isFavorite;
-        }
-        return favorite;
-      }).toList();
-      
-      state = state.copyWith(
-        allFavorites: updatedAllFavorites,
-        filteredFavorites: updatedFilteredFavorites,
-      );
-
-      // API 호출
       if (isFavorite) {
-        await repository.removeFavorite(
-          itemId: itemId,
-          type: type,
-        );
+        await repository.removeFavorite(itemId: itemId, type: type);
+        state.whenData((favorites) {
+          final updatedFavorites = favorites.where((item) => item.itemId != itemId).toList();
+          state = AsyncValue.data(updatedFavorites);
+        });
       } else {
-        await repository.addFavorite(
-          itemId: itemId,
-          type: type,
-        );
+        final newFavorite = await repository.addFavorite(itemId: itemId, type: type);
+        state.whenData((favorites) {
+          state = AsyncValue.data([...favorites, newFavorite]);
+        });
       }
-    } catch (e) {
-      // API 호출 실패 시 UI 상태 복구
-      final revertedAllFavorites = state.allFavorites.map((favorite) {
-        if (favorite.itemId == itemId) {
-          favorite.isFavorite = isFavorite;
-        }
-        return favorite;
-      }).toList();
-
-      final revertedFilteredFavorites = state.filteredFavorites.map((favorite) {
-        if (favorite.itemId == itemId) {
-          favorite.isFavorite = isFavorite;
-        }
-        return favorite;
-      }).toList();
-      
-      state = state.copyWith(
-        allFavorites: revertedAllFavorites,
-        filteredFavorites: revertedFilteredFavorites,
-        error: e.toString(),
-      );
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
   }
 } 

@@ -93,7 +93,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
           Padding(
             padding: EdgeInsets.all(24.w),
             child: SizedBox(
-              width: double.infinity,
+              width: MediaQuery.of(context).size.width,
               height: 50.h,
               child: ElevatedButton(
                 onPressed: state.isLoading

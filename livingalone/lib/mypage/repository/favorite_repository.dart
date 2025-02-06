@@ -79,6 +79,8 @@ class DummyFavoriteRepository implements FavoriteRepository {
       viewCount: 23,
       commentCount: 4,
       chatCount: 1,
+      remainingDays: 50,
+      price: 20,
       createdAt: DateTime.now().subtract(Duration(hours: 1, minutes: 10)),
       isFavorite: true,
     ),

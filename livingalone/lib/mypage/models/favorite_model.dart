@@ -24,6 +24,8 @@ class FavoriteModel {
   
   // 이용권 관련 필드
   final String? ticketType;      // 헬스장, PT, 필라테스 등
+  final int? remainingDays;
+  final int? price;
   
   // 공통 필드
   final int viewCount;
@@ -47,6 +49,8 @@ class FavoriteModel {
     this.monthlyRent,
     this.maintenance,
     this.ticketType,
+    this.remainingDays,
+    this.price,
     required this.viewCount,
     required this.commentCount,
     required this.chatCount,

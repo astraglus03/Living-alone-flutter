@@ -20,11 +20,13 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 }
 
 class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
-  String _selectedFilter = '전체';
+  String _currentFilter = '전체';
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(favoriteProvider);
+    final counts = ref.watch(favoriteCountProvider);
+    final filteredFavorites = ref.watch(filteredFavoriteProvider(_currentFilter));
+    final favoritesState = ref.watch(favoriteProvider);
 
     return DefaultLayout(
       title: '관심 목록',
@@ -33,19 +35,22 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
           12.verticalSpace,
           _buildFilterChips(),
           10.verticalSpace,
-          if (state.isLoading)
+          if (favoritesState.isLoading)
             Expanded(
               child: Center(
                 child: CircularProgressIndicator(),
               ),
             )
-          else if (state.error != null)
+          else if (favoritesState.hasError)
             Expanded(
               child: Center(
-                child: Text(state.error!),
+                child: Text(
+                  '관심 목록을 불러오는데 실패했습니다.',
+                  style: AppTextStyles.body1.copyWith(color: ERROR_TEXT_COLOR),
+                ),
               ),
             )
-          else if (state.filteredFavorites.isEmpty)
+          else if (filteredFavorites.isEmpty)
             Expanded(
               child: _buildEmptyState(),
             )
@@ -53,14 +58,14 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
             Expanded(
               child: ListView.separated(
                 padding: EdgeInsets.zero,
-                itemCount: state.filteredFavorites.length,
+                itemCount: filteredFavorites.length,
                 separatorBuilder: (context, index) => Divider(
                   height: 1.h,
                   thickness: 1.h,
                   color: GRAY200_COLOR,
                 ),
                 itemBuilder: (context, index) {
-                  final favorite = state.filteredFavorites[index];
+                  final favorite = filteredFavorites[index];
                   return _buildFavoriteItem(favorite);
                 },
               ),
@@ -71,17 +76,20 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   }
 
   Widget _buildFilterChips() {
+    final counts = ref.watch(favoriteCountProvider);
     return Container(
       height: 36.h,
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Row(
         children: ['전체', '자취방', '이용권'].map((filter) {
-          final isSelected = _selectedFilter == filter;
+          final isSelected = _currentFilter == filter;
+          // final count = counts[filter] ?? 0;
           return Padding(
             padding: EdgeInsets.only(right: 6.w),
             child: FilterChip(
               labelPadding: EdgeInsets.symmetric(horizontal: 6.w),
               label: Text(
+                // '$filter ${count > 0 ? '($count)' : ''}',
                 filter,
                 style: AppTextStyles.subtitle.copyWith(
                   color: isSelected ? WHITE100_COLOR : GRAY600_COLOR,
@@ -92,14 +100,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
               selected: isSelected,
               onSelected: (selected) {
                 if (selected) {
-                  setState(() => _selectedFilter = filter);
-                  String? type;
-                  if (filter == '자취방') {
-                    type = PostType.room.toString();
-                  } else if (filter == '이용권') {
-                    type = PostType.ticket.toString();
-                  }
-                  ref.read(favoriteProvider.notifier).getFavorites(type: type);
+                  setState(() => _currentFilter = filter);
                 }
               },
               backgroundColor: GRAY100_COLOR,
@@ -120,9 +121,9 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
 
   Widget _buildEmptyState() {
     String message = '관심 목록이 없습니다.';
-    if (_selectedFilter == '자취방') {
+    if (_currentFilter == '자취방') {
       message = '관심 있는 자취방이 없습니다.';
-    } else if (_selectedFilter == '이용권') {
+    } else if (_currentFilter == '이용권') {
       message = '관심 있는 이용권이 없습니다.';
     }
 
