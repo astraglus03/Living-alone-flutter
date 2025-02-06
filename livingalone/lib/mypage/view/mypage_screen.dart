@@ -9,6 +9,7 @@ import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/mypage/view/account_management_screen.dart';
 import 'package:livingalone/mypage/view/address_setting_screen.dart';
 import 'package:livingalone/mypage/view/edit_profile_screen.dart';
+import 'package:livingalone/mypage/view/favorite_screen.dart';
 import 'package:livingalone/mypage/view/inquiry_screen.dart';
 import 'package:livingalone/mypage/view/language_screen.dart';
 import 'package:livingalone/mypage/view/notice_list_screen.dart';
@@ -106,7 +107,9 @@ class MyPageScreen extends ConsumerWidget {
               ),
             ),
             6.verticalSpace,
-            _buildListTile('관심 목록', onTap: () {}),
+            _buildListTile('관심 목록', onTap: () {
+              pushScreenWithoutNavBar(context, FavoriteScreen());
+            }),
             _buildListTile('양도 내역', onTap: () {}),
             _buildListTile('이웃소통 활동', onTap: () {}),
             CommonDivider(),

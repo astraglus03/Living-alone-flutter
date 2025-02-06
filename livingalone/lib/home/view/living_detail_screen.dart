@@ -31,6 +31,8 @@ import 'package:livingalone/home/view_models/like_provider.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:livingalone/common/component/options_menu.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 class LivingDetailScreen extends ConsumerStatefulWidget {
   final PostType postType;
@@ -340,20 +342,31 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen>
   Widget _buildImageSlider() {
     return Stack(
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 393.h,
-          child: PageView.builder(
-            controller: pController,
-            itemCount: imageUrls.length,
-            itemBuilder: (context, index) {
-              return Image.asset(
-                imageUrls[index],
-                width: 393.w,
-                height: 393.h,
-                fit: BoxFit.fill,
-              );
-            },
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => ImagePreviewDialog(
+                imageUrls: imageUrls,
+                initialIndex: pController.page?.round() ?? 0,
+              ),
+            );
+          },
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 393.h,
+            child: PageView.builder(
+              controller: pController,
+              itemCount: imageUrls.length,
+              itemBuilder: (context, index) {
+                return Image.asset(
+                  imageUrls[index],
+                  width: 393.w,
+                  height: 393.h,
+                  fit: BoxFit.fill,
+                );
+              },
+            ),
           ),
         ),
         Positioned(
@@ -672,5 +685,53 @@ class _TabBarPersistentHeader extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return true;
+  }
+}
+
+class ImagePreviewDialog extends StatelessWidget {
+  final List<String> imageUrls;
+  final int initialIndex;
+
+  const ImagePreviewDialog({
+    Key? key,
+    required this.imageUrls,
+    required this.initialIndex,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.zero,
+      child: Stack(
+        children: [
+          PhotoViewGallery.builder(
+            scrollPhysics: const BouncingScrollPhysics(),
+            builder: (BuildContext context, int index) {
+              return PhotoViewGalleryPageOptions(
+                imageProvider: NetworkImage(imageUrls[index]),
+                initialScale: PhotoViewComputedScale.contained,
+                minScale: PhotoViewComputedScale.contained,
+                maxScale: PhotoViewComputedScale.covered * 2,
+              );
+            },
+            itemCount: imageUrls.length,
+            loadingBuilder: (context, event) => Center(
+              child: CircularProgressIndicator(),
+            ),
+            pageController: PageController(initialPage: initialIndex),
+            backgroundDecoration: BoxDecoration(color: Colors.black),
+          ),
+          Positioned(
+            top: 40.h,
+            right: 20.w,
+            child: IconButton(
+              icon: Icon(Icons.close, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

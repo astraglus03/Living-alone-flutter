@@ -11,6 +11,7 @@ import 'package:livingalone/common/component/options_menu.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/report/report_screen.dart';
 
 class ChatRoomScreen extends ConsumerStatefulWidget {
   final String roomId;
@@ -208,8 +209,24 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
   void _showOptionsMenu(BuildContext context) {
     final List<OptionMenuItem> options = [
       OptionMenuItem(
+        text: '신고하기',
+        icon: 'assets/icons/report.svg',
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => ReportScreen()),
+          );
+        },
+      ),
+      OptionMenuItem(
+        text: '알림 끄기',
+        icon: 'assets/icons/alarm.svg',
+        onTap: () async {
+
+        },
+      ),
+      OptionMenuItem(
         text: '채팅방 나가기',
-        icon: 'assets/icons/edit.svg',
+        icon: 'assets/icons/exit.svg',
         onTap: () async {
           final result = await ConfirmDialog.show(
               context: context,

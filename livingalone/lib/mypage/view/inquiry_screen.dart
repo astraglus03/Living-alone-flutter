@@ -107,6 +107,7 @@ class InquiryScreen extends ConsumerWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
+                      shadowColor: Colors.transparent,
                     ),
                     child: Text(
                       '1:1 문의하기',
@@ -129,6 +130,7 @@ class InquiryScreen extends ConsumerWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
+                      shadowColor: Colors.transparent,
                     ),
                     child: Text(
                       '문의 내역',

@@ -10,15 +10,12 @@ class OptionMenuItem {
   final String text;
   final String icon;
   final VoidCallback onTap;
-  final TextStyle? textStyle;
-  final Color? iconColor;
 
   OptionMenuItem({
     required this.text,
     required this.icon,
     required this.onTap,
-    this.textStyle,
-    this.iconColor,
+
   });
 }
 
@@ -54,31 +51,35 @@ class OptionsMenu {
                       final isFirst = index == 0;
                       final isLast = index == options.length - 1;
 
+                      // 마지막 항목일 경우 에러 색상 적용
+                      final textStyle = isLast
+                          ? AppTextStyles.body2.copyWith(
+                        color: ERROR_TEXT_COLOR,
+                        fontWeight: FontWeight.w500,
+                      )
+                          : AppTextStyles.body2.copyWith(
+                        color: GRAY800_COLOR,
+                        fontWeight: FontWeight.w500,
+                      );
+                      final iconColor = isLast ? ERROR_TEXT_COLOR : GRAY400_COLOR;
+
                       return Expanded(
                         child: Material(
                           color: Colors.transparent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
-                              topLeft:
-                                  isFirst ? Radius.circular(10.r) : Radius.zero,
-                              topRight:
-                                  isFirst ? Radius.circular(10.r) : Radius.zero,
-                              bottomLeft:
-                                  isLast ? Radius.circular(10.r) : Radius.zero,
-                              bottomRight:
-                                  isLast ? Radius.circular(10.r) : Radius.zero,
+                              topLeft: isFirst ? Radius.circular(10.r) : Radius.zero,
+                              topRight: isFirst ? Radius.circular(10.r) : Radius.zero,
+                              bottomLeft: isLast ? Radius.circular(10.r) : Radius.zero,
+                              bottomRight: isLast ? Radius.circular(10.r) : Radius.zero,
                             ),
                           ),
                           child: InkWell(
                             borderRadius: BorderRadius.only(
-                              topLeft:
-                                  isFirst ? Radius.circular(10.r) : Radius.zero,
-                              topRight:
-                                  isFirst ? Radius.circular(10.r) : Radius.zero,
-                              bottomLeft:
-                                  isLast ? Radius.circular(10.r) : Radius.zero,
-                              bottomRight:
-                                  isLast ? Radius.circular(10.r) : Radius.zero,
+                              topLeft: isFirst ? Radius.circular(10.r) : Radius.zero,
+                              topRight: isFirst ? Radius.circular(10.r) : Radius.zero,
+                              bottomLeft: isLast ? Radius.circular(10.r) : Radius.zero,
+                              bottomRight: isLast ? Radius.circular(10.r) : Radius.zero,
                             ),
                             hoverColor: BLUE200_COLOR,
                             splashColor: BLUE200_COLOR,
@@ -93,19 +94,18 @@ class OptionsMenu {
                               child: Row(
                                 children: [
                                   SvgPicture.asset(
+                                    width: 18.w,
+                                    height: 18.h,
                                     option.icon,
-                                    colorFilter: ColorFilter.mode(
-                                      option.iconColor ?? GRAY400_COLOR,
+                                    colorFilter: isLast ? ColorFilter.mode(
+                                      iconColor,
                                       BlendMode.srcIn,
-                                    ),
+                                    ): null,
                                   ),
                                   6.horizontalSpace,
                                   Text(
                                     option.text,
-                                    style: option.textStyle ?? AppTextStyles.body2.copyWith(
-                                      color: GRAY800_COLOR,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                    style: textStyle,
                                   ),
                                 ],
                               ),
@@ -123,4 +123,4 @@ class OptionsMenu {
       },
     );
   }
-} 
+}

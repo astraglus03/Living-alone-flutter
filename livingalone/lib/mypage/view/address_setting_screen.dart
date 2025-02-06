@@ -124,18 +124,15 @@ class _AddressSettingScreenState extends ConsumerState<AddressSettingScreen> {
                           borderRadius: BorderRadius.circular(10.0.r),
                           borderSide: BorderSide.none,
                         ),
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.only(right: 8),
-                          child: IconButton(
-                            style: ButtonStyle(
-                              overlayColor: MaterialStateProperty.all(Colors.transparent),
-                            ),
-                            onPressed: _openAddressSearch,
-                            icon: Icon(
-                              Icons.search,
-                              color: GRAY600_COLOR,
-                              size: 24,
-                            ),
+                        suffixIcon: IconButton(
+                          style: ButtonStyle(
+                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                          ),
+                          onPressed: _openAddressSearch,
+                          icon: Icon(
+                            Icons.search,
+                            color: GRAY600_COLOR,
+                            size: 24,
                           ),
                         ),
                         hintText: '예) 상명대길 31, 안서동 300',
@@ -189,6 +186,7 @@ class _AddressSettingScreenState extends ConsumerState<AddressSettingScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.r),
                   ),
+                  shadowColor: Colors.transparent,
                 ),
                 child: Text(
                   '변경하기',

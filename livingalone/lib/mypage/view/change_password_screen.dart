@@ -111,6 +111,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.r),
                   ),
+                  shadowColor: Colors.transparent,
                 ),
                 child: state.isLoading
                     ? CircularProgressIndicator(color: Colors.white)

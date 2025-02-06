@@ -135,7 +135,6 @@ class TermsDetailScreen extends StatelessWidget {
                         '· 개인정보 보유 및 이용 기간 : 행정자치부에서는 이미 보유하고 있는 개인정보이기 때문에 별도로 저장하지 않음',
                     style: AppTextStyles.body2.copyWith(color: GRAY600_COLOR),
                   ),
-                  100.verticalSpace,
                 ],
               ),
             ),

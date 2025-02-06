@@ -277,8 +277,6 @@ class NeighborDetailScreen extends ConsumerWidget {
         text: '게시글 삭제',
         icon: 'assets/icons/delete.svg',
         onTap: () {},
-        textStyle: AppTextStyles.body2.copyWith(color: ERROR_TEXT_COLOR),
-        iconColor: ERROR_TEXT_COLOR,
       ),
     ]
         : [

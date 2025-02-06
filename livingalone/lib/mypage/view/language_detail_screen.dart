@@ -79,6 +79,7 @@ class _LanguageDetailScreenState extends ConsumerState<LanguageDetailScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.r),
                   ),
+                  shadowColor: Colors.transparent,
                 ),
                 child: Text(
                   '확인',
