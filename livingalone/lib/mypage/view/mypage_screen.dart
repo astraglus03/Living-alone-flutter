@@ -13,6 +13,7 @@ import 'package:livingalone/mypage/view/favorite_screen.dart';
 import 'package:livingalone/mypage/view/handover_history_screen.dart';
 import 'package:livingalone/mypage/view/inquiry_screen.dart';
 import 'package:livingalone/mypage/view/language_screen.dart';
+import 'package:livingalone/mypage/view/neighbor_activity_screen.dart';
 import 'package:livingalone/mypage/view/notice_list_screen.dart';
 import 'package:livingalone/mypage/view/notification_screen.dart';
 import 'package:livingalone/mypage/view/terms_screen.dart';
@@ -61,12 +62,12 @@ class MyPageScreen extends ConsumerWidget {
                               color: GRAY800_COLOR,
                             ),
                           ),
-                          Text(
-                            '구매 0 | 판매 0',
-                            style: AppTextStyles.caption2.copyWith(
-                              color: GRAY500_COLOR,
-                            ),
-                          ),
+                          // Text(
+                          //   '구매 0 | 판매 0',
+                          //   style: AppTextStyles.caption2.copyWith(
+                          //     color: GRAY500_COLOR,
+                          //   ),
+                          // ),
                         ],
                       )
                     ],
@@ -114,7 +115,9 @@ class MyPageScreen extends ConsumerWidget {
             _buildListTile('양도 내역', onTap: () {
               pushScreenWithoutNavBar(context, HandoverHistoryScreen());
             }),
-            _buildListTile('이웃소통 활동', onTap: () {}),
+            _buildListTile('이웃소통 활동', onTap: () {
+              pushScreenWithoutNavBar(context, NeighborActivityScreen());
+            }),
             CommonDivider(),
             20.verticalSpace,
             // 설정 섹션
