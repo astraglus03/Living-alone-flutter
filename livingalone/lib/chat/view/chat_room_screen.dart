@@ -2,26 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:livingalone/chat/models/message_model.dart';
+import 'package:livingalone/chat/models/chat_message_model.dart';
 import 'package:livingalone/chat/view/chat_list_screen.dart';
-import 'package:livingalone/chat/view_models/chat_list_provider.dart';
-import 'package:livingalone/chat/view_models/chat_room_provider.dart';
+import 'package:livingalone/chat/view_models/chat_provider.dart';
 import 'package:livingalone/common/component/confirm_dialog.dart';
 import 'package:livingalone/common/component/options_menu.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
+import 'package:livingalone/common/enum/room_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/report/report_screen.dart';
+import 'package:livingalone/chat/models/chat_room_model.dart';
 
 class ChatRoomScreen extends ConsumerStatefulWidget {
   final String roomId;
   final String opponentName;
   final String opponentProfileUrl;
+  final ChatRoom chatRoom;
 
   const ChatRoomScreen({
     required this.roomId,
     required this.opponentName,
     required this.opponentProfileUrl,
+    required this.chatRoom,
     Key? key,
   }) : super(key: key);
 
@@ -42,6 +45,8 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     _messageController.addListener(() {
       setState(() {});
     });
+    // 읽음 처리
+    ref.read(chatMessagesProvider.notifier).markAsRead(widget.roomId);
   }
 
   @override
@@ -69,9 +74,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     );
 
     if (image != null) {
-      ref
-          .read(chatMessagesProvider(widget.roomId).notifier)
-          .sendImage(image.path);
+      // TODO: 이미지 전송 구현
     }
   }
 
@@ -88,13 +91,14 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final messages = ref.watch(chatMessagesProvider(widget.roomId));
+    final messageState = ref.watch(chatMessageProvider(widget.roomId));
 
     return DefaultLayout(
       title: widget.opponentName,
       actions: IconButton(
-          onPressed: () => _showOptionsMenu(context),
-          icon: Icon(Icons.more_horiz_rounded)),
+        onPressed: () => _showOptionsMenu(context),
+        icon: Icon(Icons.more_horiz_rounded),
+      ),
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -109,56 +113,176 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
               ),
               child: Row(
                 children: [
-                  //TODO: 게시글 내용 부분 이벤트 처리 및 텍스트 넣기
+                  Container(
+                    width: 48.w,
+                    height: 48.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.r),
+                      color: GRAY200_COLOR,
+                      image: widget.chatRoom.thumbnailUrl != null
+                          ? DecorationImage(
+                              image: NetworkImage(widget.chatRoom.thumbnailUrl!),
+                              fit: BoxFit.cover,
+                            )
+                          : null,
+                    ),
+                  ),
+                  12.horizontalSpace,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.chatRoom.title,
+                          style: AppTextStyles.body2.copyWith(
+                            color: GRAY800_COLOR,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        4.verticalSpace,
+                        Row(
+                          children: [
+                            if(widget.chatRoom.rentType == RentType.shortRent.label)
+                              Container(
+                                padding: EdgeInsets.only(right: 4.w),
+                                decoration: BoxDecoration(
+                                  color: BLUE100_COLOR,
+                                  borderRadius: BorderRadius.circular(4.r),
+                                ),
+                                child: Text(
+                                  '단기',
+                                  style: AppTextStyles.caption2.copyWith(
+                                      color: BLUE400_COLOR,
+                                      fontWeight: FontWeight.w700
+                                  ),
+                                ),
+                              ),
+                            Text(
+                              widget.chatRoom.location,
+                              style: AppTextStyles.caption2.copyWith(
+                                color: GRAY600_COLOR,
+                              ),
+                            ),
+                            if (widget.chatRoom.type == 'ROOM') ...[
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 4.w),
+                                width: 1.w,
+                                height: 10.h,
+                                color: GRAY400_COLOR,
+                              ),
+                              Text(
+                                widget.chatRoom.buildingType ?? '',
+                                style: AppTextStyles.caption2.copyWith(
+                                  color: GRAY600_COLOR,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 4.w),
+                                width: 1.w,
+                                height: 10.h,
+                                color: GRAY400_COLOR,
+                              ),
+                              Text(
+                                widget.chatRoom.monthlyRent != null
+                                    ? '월세 ${widget.chatRoom.monthlyRent}'
+                                    : widget.chatRoom.deposit != null
+                                        ? '전세 ${widget.chatRoom.deposit}'
+                                        : '',
+                                style: AppTextStyles.caption2.copyWith(
+                                  color: GRAY600_COLOR,
+                                ),
+                              ),
+                            ] else if (widget.chatRoom.type == 'TICKET') ...[
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 4.w),
+                                width: 1.w,
+                                height: 10.h,
+                                color: GRAY400_COLOR,
+                              ),
+                              Text(
+                                widget.chatRoom.ticketType ?? '',
+                                style: AppTextStyles.caption2.copyWith(
+                                  color: GRAY600_COLOR,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
             Expanded(
-              child: messages.isEmpty
-                  ? Center(
-                      child: Text(
-                        '메시지가 없습니다.',
-                        style:
-                            AppTextStyles.body1.copyWith(color: GRAY600_COLOR),
-                      ),
-                    )
-                  : ListView.builder(
-                      controller: _scrollController,
-                      reverse: true,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                      itemCount: messages.length,
-                      itemBuilder: (context, index) {
-                        final message = messages[messages.length - 1 - index];
-                        final showDate = index == messages.length - 1 ||
-                            !_isSameDay(
-                              message.timestamp,
-                              messages[messages.length - 2 - index].timestamp,
-                            );
+              child: messageState.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : messageState.error != null
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                messageState.error!,
+                                style: AppTextStyles.body1.copyWith(
+                                  color: ERROR_TEXT_COLOR,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  ref.read(chatMessageProvider(widget.roomId).notifier).loadMessages();
+                                },
+                                child: Text('다시 시도'),
+                              ),
+                            ],
+                          ),
+                        )
+                      : messageState.messages.isEmpty
+                          ? Center(
+                              child: Text(
+                                '메시지가 없습니다.',
+                                style: AppTextStyles.body1.copyWith(color: GRAY600_COLOR),
+                              ),
+                            )
+                          : ListView.builder(
+                              controller: _scrollController,
+                              reverse: false,
+                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                              itemCount: messageState.messages.length,
+                              itemBuilder: (context, index) {
+                                final message = messageState.messages[index];
+                                final showDate = index == 0 ||
+                                    !_isSameDay(
+                                      message.createdAt,
+                                      messageState.messages[index > 0 ? index - 1 : index].createdAt,
+                                    );
 
-                        final showTime = index == 0 || // 가장 최근 메시지
-                            !_isSameTime(
-                              message.timestamp,
-                              messages[messages.length - index].timestamp,
-                            ) || message.isMe != messages[messages.length - index].isMe; // 이전 메시지와 보낸 사람이 다름
+                                final showTime = index == 0 || // 첫 메시지
+                                    !_isSameTime(
+                                      message.createdAt,
+                                      messageState.messages[index > 0 ? index - 1 : index].createdAt,
+                                    ) ||
+                                    message.senderId != messageState.messages[index > 0 ? index - 1 : index].senderId;
 
-
-                        return Column(
-                          children: [
-                            if (showDate) _DateDivider(date: message.timestamp),
-                            _MessageBubble(
-                              message: message,
-                              showTime: showTime,
-                              opponentProfileUrl: widget.opponentProfileUrl,
+                                return Column(
+                                  children: [
+                                    if (showDate) _DateDivider(date: message.createdAt),
+                                    _MessageBubble(
+                                      message: message,
+                                      showTime: showTime,
+                                      opponentProfileUrl: widget.opponentProfileUrl,
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
-                          ],
-                        );
-                      },
-                    ),
             ),
             Padding(
               padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -191,11 +315,9 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                     child: _buildCommentInput(),
                   ),
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 200), // 애니메이션 지속 시간
-                    curve: Curves.easeOut, // 부드러운 애니메이션 적용
-                    height: MediaQuery.of(context).viewInsets.bottom == 0
-                        ? 34.h
-                        : 0,
+                    duration: Duration(milliseconds: 200),
+                    curve: Curves.easeOut,
+                    height: MediaQuery.of(context).viewInsets.bottom == 0 ? 34.h : 0,
                   ),
                 ],
               ),
@@ -220,21 +342,20 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       OptionMenuItem(
         text: '알림 끄기',
         icon: 'assets/icons/alarm.svg',
-        onTap: () async {
-
-        },
+        onTap: () async {},
       ),
       OptionMenuItem(
         text: '채팅방 나가기',
         icon: 'assets/icons/exit.svg',
         onTap: () async {
           final result = await ConfirmDialog.show(
-              context: context,
-              title: '채팅방을 나가시겠습니까?',
-              content: '채팅방의 내용은 복구되지 않으며, 삭제됩니다');
+            context: context,
+            title: '채팅방을 나가시겠습니까?',
+            content: '채팅방의 내용은 복구되지 않으며, 삭제됩니다',
+          );
 
           if (result) {
-            ref.read(chatRoomsProvider.notifier).leaveChatRoom(widget.roomId);
+            // TODO: 채팅방 나가기 구현
             Navigator.of(context).push(MaterialPageRoute(builder: (_) => ChatListScreen()));
           }
         },
@@ -250,7 +371,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
   Widget _buildCommentInput() {
     return Container(
       height: 48.h,
-      // padding: EdgeInsets.symmetric(horizontal: 12.w),
       decoration: BoxDecoration(
         color: GRAY100_COLOR,
         borderRadius: BorderRadius.circular(10.r),
@@ -272,7 +392,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                 ? null
                 : () {
                     ref
-                        .read(chatMessagesProvider(widget.roomId).notifier)
+                        .read(chatMessageProvider(widget.roomId).notifier)
                         .sendMessage(_messageController.text.trim());
                     _messageController.clear();
                     _scrollToBottom();
@@ -289,9 +409,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
             ),
             icon: Icon(
               Icons.arrow_circle_up_rounded,
-              color: _messageController.text.trim().isEmpty
-                  ? GRAY400_COLOR
-                  : BLUE400_COLOR,
+              color: _messageController.text.trim().isEmpty ? GRAY400_COLOR : BLUE400_COLOR,
               size: 24.w,
             ),
           ),
@@ -402,8 +520,10 @@ class _MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMe = message.senderId == 'user1'; // TODO: AuthProvider에서 현재 사용자 ID를 가져와야 함
+
     return Align(
-      alignment: message.isMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: EdgeInsets.only(
           top: 4.h,
@@ -414,7 +534,7 @@ class _MessageBubble extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (!message.isMe) ...[
+              if (!isMe) ...[
                 Container(
                   width: 40.w,
                   height: 40.w,
@@ -422,16 +542,16 @@ class _MessageBubble extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                            image: NetworkImage(opponentProfileUrl),
-                            fit: BoxFit.cover,
-                          ),
+                      image: NetworkImage(opponentProfileUrl),
+                      fit: BoxFit.cover,
+                    ),
                     color: GRAY200_COLOR,
                   ),
                 ),
               ],
-              if (message.isMe && showTime) ...[
+              if (isMe && showTime) ...[
                 Text(
-                  _formatTime(message.timestamp),
+                  _formatTime(message.createdAt),
                   style: AppTextStyles.caption2.copyWith(color: GRAY400_COLOR),
                 ),
                 4.horizontalSpace,
@@ -439,11 +559,10 @@ class _MessageBubble extends StatelessWidget {
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 200.w),
                 child: Column(
-                  crossAxisAlignment: message.isMe
-                      ? CrossAxisAlignment.end
-                      : CrossAxisAlignment.start,
+                  crossAxisAlignment:
+                      isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                   children: [
-                    if (message.imageUrl != null)
+                    if (message.messageType == 'IMAGE')
                       GestureDetector(
                         onTap: () {
                           // 이미지 상세보기
@@ -451,21 +570,21 @@ class _MessageBubble extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12.r),
                           child: Image.network(
-                            message.imageUrl!,
+                            message.content,
                             width: 200.w,
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    if (message.content.isNotEmpty)
+                    if (message.messageType == 'TEXT')
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 12.w,
                           vertical: 8.h,
                         ),
                         decoration: BoxDecoration(
-                          color: message.isMe ? BLUE400_COLOR : GRAY100_COLOR,
-                          borderRadius: message.isMe
+                          color: isMe ? BLUE400_COLOR : GRAY100_COLOR,
+                          borderRadius: isMe
                               ? BorderRadius.only(
                                   topLeft: Radius.circular(20).r,
                                   bottomRight: Radius.circular(20).r,
@@ -480,17 +599,17 @@ class _MessageBubble extends StatelessWidget {
                         child: Text(
                           message.content,
                           style: AppTextStyles.body1.copyWith(
-                            color: message.isMe ? WHITE100_COLOR : GRAY800_COLOR,
+                            color: isMe ? WHITE100_COLOR : GRAY800_COLOR,
                           ),
                         ),
                       ),
                   ],
                 ),
               ),
-              if (!message.isMe && showTime) ...[
+              if (!isMe && showTime) ...[
                 4.horizontalSpace,
                 Text(
-                  _formatTime(message.timestamp),
+                  _formatTime(message.createdAt),
                   style: AppTextStyles.caption2.copyWith(color: GRAY400_COLOR),
                 ),
               ],
