@@ -67,74 +67,79 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
       child: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
-              controller: scrollController,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    20.verticalSpace,
-                    Text(
-                      '신고 유형',
-                      style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
-                    ),
-                    8.verticalSpace,
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 16.h,
+            child: GestureDetector(
+              onTap: (){
+                FocusScope.of(context).unfocus();
+              },
+              child: SingleChildScrollView(
+                controller: scrollController,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      20.verticalSpace,
+                      Text(
+                        '신고 유형',
+                        style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.r),
-                        border: Border.all(color: GRAY200_COLOR,)
-                      ),
-                      child: Text(
-                        widget.reason,
-                        style: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
-                      ),
-                    ),
-                    24.verticalSpace,
-                    Text(
-                      '상세 내용',
-                      style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
-                    ),
-                    8.verticalSpace,
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      constraints: BoxConstraints(
-                        minHeight: 180.h,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.r),
-                        border: Border.all(color: GRAY200_COLOR)
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 16,vertical: 12).w,
-                      child: TextField(
-                        style: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
-                        controller: _contentController,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: '신고 내용을 자세히 작성해 주세요.',
-                          hintStyle: AppTextStyles.subtitle.copyWith(
-                            color: GRAY400_COLOR,
-                          ),
+                      8.verticalSpace,
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 16.h,
                         ),
-                        onChanged: (value) {
-                          if (showError && value.trim().isNotEmpty) {
-                            setState(() {
-                              showError = false;
-                            });
-                          }
-                        },
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.r),
+                          border: Border.all(color: GRAY200_COLOR,)
+                        ),
+                        child: Text(
+                          widget.reason,
+                          style: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
+                        ),
                       ),
-                    ),
-                    if (showError)
-                      const ShowErrorText(errorText: '신고 내용을 입력해 주세요'),
-                  ],
+                      24.verticalSpace,
+                      Text(
+                        '상세 내용',
+                        style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
+                      ),
+                      8.verticalSpace,
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        constraints: BoxConstraints(
+                          minHeight: 180.h,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.r),
+                          border: Border.all(color: GRAY200_COLOR)
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 12).w,
+                        child: TextField(
+                          style: AppTextStyles.subtitle.copyWith(color: GRAY800_COLOR),
+                          controller: _contentController,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '신고 내용을 자세히 작성해 주세요.',
+                            hintStyle: AppTextStyles.subtitle.copyWith(
+                              color: GRAY400_COLOR,
+                            ),
+                          ),
+                          onChanged: (value) {
+                            if (showError && value.trim().isNotEmpty) {
+                              setState(() {
+                                showError = false;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      if (showError)
+                        const ShowErrorText(errorText: '신고 내용을 입력해 주세요'),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -214,9 +214,19 @@ class _ChatRoomTile extends ConsumerWidget {
                         ),
                         8.horizontalSpace,
                         Expanded(
+                          flex: 2,
                           child: Text(
                             room.title,
                             style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            getTimeAgo(room.lastMessageTime),
+                            style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
+                            textAlign: TextAlign.right,
                           ),
                         ),
                       ],
@@ -274,5 +284,21 @@ class _ChatRoomTile extends ConsumerWidget {
         ],
       ),
     ) ?? false;
+  }
+
+  String getTimeAgo(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays}일 전';
+    }
+    if (difference.inHours > 0) {
+      return '${difference.inHours}시간 전';
+    }
+    if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}분 전';
+    }
+    return '방금 전';
   }
 }

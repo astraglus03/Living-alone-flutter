@@ -31,7 +31,6 @@ class _ReportScreenState extends State<ReportScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '게시글 신고하기',
-      showCloseButton: true,
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,

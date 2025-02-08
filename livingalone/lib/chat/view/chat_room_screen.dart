@@ -78,17 +78,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     }
   }
 
-  void _toggleKeyboard() {
-    setState(() {
-      _showKeyboard = !_showKeyboard;
-      if (_showKeyboard) {
-        FocusScope.of(context).requestFocus(_focusNode);
-      } else {
-        _focusNode.unfocus();
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final messageState = ref.watch(chatMessageProvider(widget.roomId));
@@ -102,6 +91,11 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
+          if (!_showKeyboard) {
+            setState(() {
+              _showKeyboard = true;
+            });
+          }
         },
         child: Column(
           children: [
@@ -252,19 +246,23 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                               itemCount: messageState.messages.length,
                               itemBuilder: (context, index) {
-                                final message = messageState.messages[index];
+                                final messages = messageState.messages;
+                                final message = messages[index];
                                 final showDate = index == 0 ||
                                     !_isSameDay(
                                       message.createdAt,
-                                      messageState.messages[index > 0 ? index - 1 : index].createdAt,
+                                      messages[index - 1].createdAt,
                                     );
 
-                                final showTime = index == 0 || // 첫 메시지
-                                    !_isSameTime(
-                                      message.createdAt,
-                                      messageState.messages[index > 0 ? index - 1 : index].createdAt,
-                                    ) ||
-                                    message.senderId != messageState.messages[index > 0 ? index - 1 : index].senderId;
+                                final isLastMessage = index == messages.length - 1;
+                                final showTime = isLastMessage ||
+                                    (index < messages.length - 1 && (
+                                      !_isSameTime(
+                                        message.createdAt,
+                                        messages[index + 1].createdAt,
+                                      ) ||
+                                      message.senderId != messages[index + 1].senderId
+                                    ));
 
                                 return Column(
                                   children: [
@@ -279,48 +277,125 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                               },
                             ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (!_showKeyboard)
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildActionButton(
-                            icon: Icons.camera_alt,
-                            label: '카메라',
-                            onTap: () {},
-                          ),
-                          _buildActionButton(
-                            icon: Icons.image,
-                            label: '앨범',
-                            onTap: _pickImage,
-                          ),
-                          _buildActionButton(
-                            icon: Icons.location_on,
-                            label: '장소',
-                            onTap: () {},
-                          ),
-                        ],
-                      ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AnimatedPadding(
+                  duration: Duration(milliseconds: 100),
+                  padding: EdgeInsets.fromLTRB(12.w, 8.h, 12.w, 8.h ),
+                  child: Container(
+                    height: 48.h,
+                    decoration: BoxDecoration(
+                      color: GRAY100_COLOR,
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(12.w, 6.h, 12.w, 10.h),
-                    child: _buildCommentInput(),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          style: IconButton.styleFrom(
+                            overlayColor: Colors.transparent,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _showKeyboard = !_showKeyboard;
+                              if (_showKeyboard) {
+                                FocusScope.of(context).requestFocus(_focusNode);
+                              } else {
+                                FocusScope.of(context).unfocus();
+                              }
+                            });
+                          },
+                          icon: Icon(
+                            _showKeyboard ? Icons.add : Icons.close,
+                            color: GRAY600_COLOR,
+                          ),
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(
+                            minWidth: 40.w,
+                            minHeight: 40.h,
+                          ),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: _messageController,
+                            focusNode: _focusNode,
+                            onTap: () {
+                              if (!_showKeyboard) {
+                                setState(() {
+                                  _showKeyboard = true;
+                                });
+                              }
+                            },
+                            style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
+                            decoration: InputDecoration(
+                              hintText: '메시지를 입력하세요',
+                              hintStyle: AppTextStyles.body1.copyWith(color: GRAY400_COLOR),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          style: IconButton.styleFrom(
+                            overlayColor: Colors.transparent,
+                          ),
+                          onPressed: _messageController.text.trim().isEmpty
+                              ? null
+                              : () {
+                                  ref.read(chatMessageProvider(widget.roomId).notifier).sendMessage(_messageController.text.trim());
+                                  _messageController.clear();
+                                  _scrollToBottom();
+                                },
+                          icon: Icon(
+                            Icons.send_rounded,
+                            color: _messageController.text.trim().isEmpty ? GRAY400_COLOR : BLUE400_COLOR,
+                          ),
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(
+                            minWidth: 40.w,
+                            minHeight: 40.h,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  AnimatedContainer(
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.easeOut,
-                    height: MediaQuery.of(context).viewInsets.bottom == 0 ? 34.h : 0,
+                ),
+                10.verticalSpace,
+                if (!_showKeyboard)
+                  Container(
+                    height: 280.h,
+                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 24.w),
+                    child: GridView.count(
+                      crossAxisCount: 4,
+                      mainAxisSpacing: 20.h,
+                      crossAxisSpacing: 20.w,
+                      childAspectRatio: 0.75,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
+                        _buildActionButton(
+                          icon: Icons.camera_alt,
+                          label: '카메라',
+                          color: BLUE400_COLOR,
+                          onTap: () {},
+                        ),
+                        _buildActionButton(
+                          icon: Icons.image,
+                          label: '앨범',
+                          color: Color(0xFFF7CE45),
+                          onTap: _pickImage,
+                        ),
+                        _buildActionButton(
+                          icon: Icons.location_on,
+                          label: '장소',
+                          color: Color(0xFF4DA6A6),
+                          onTap: () {},
+                        ),
+                        // 추가 버튼들을 여기에 넣을 수 있습니다
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                SizedBox(height: _showKeyboard ? MediaQuery.of(context).viewInsets.bottom : 0),
+              ],
             ),
           ],
         ),
@@ -352,6 +427,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
             context: context,
             title: '채팅방을 나가시겠습니까?',
             content: '채팅방의 내용은 복구되지 않으며, 삭제됩니다',
+            confirmText: '채팅방 나가기'
           );
 
           if (result) {
@@ -368,76 +444,11 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     );
   }
 
-  Widget _buildCommentInput() {
-    return Container(
-      height: 48.h,
-      decoration: BoxDecoration(
-        color: GRAY100_COLOR,
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: TextFormField(
-        controller: _messageController,
-        focusNode: _focusNode,
-        style: AppTextStyles.body1.copyWith(color: GRAY800_COLOR),
-        decoration: InputDecoration(
-          prefixIcon: IconButton(
-            icon: Icon(
-              _showKeyboard ? Icons.add : Icons.close,
-              color: GRAY600_COLOR,
-            ),
-            onPressed: _toggleKeyboard,
-          ),
-          suffixIcon: IconButton(
-            onPressed: _messageController.text.trim().isEmpty
-                ? null
-                : () {
-                    ref
-                        .read(chatMessageProvider(widget.roomId).notifier)
-                        .sendMessage(_messageController.text.trim());
-                    _messageController.clear();
-                    _scrollToBottom();
-                  },
-            padding: EdgeInsets.zero,
-            constraints: BoxConstraints(
-              minWidth: 24.w,
-              minHeight: 24.h,
-            ),
-            style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              splashFactory: NoSplash.splashFactory,
-              mouseCursor: MaterialStateProperty.all(MouseCursor.defer),
-            ),
-            icon: Icon(
-              Icons.arrow_circle_up_rounded,
-              color: _messageController.text.trim().isEmpty ? GRAY400_COLOR : BLUE400_COLOR,
-              size: 24.w,
-            ),
-          ),
-          hintText: '메시지를 입력하세요',
-          hintStyle: AppTextStyles.body1.copyWith(color: GRAY400_COLOR),
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(10.0.r),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0.r),
-            borderSide: BorderSide.none,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0.r),
-            borderSide: BorderSide.none,
-          ),
-          isDense: true,
-          contentPadding: EdgeInsets.zero,
-        ),
-      ),
-    );
-  }
-
   Widget _buildActionButton({
     required IconData icon,
     required String label,
     required VoidCallback onTap,
+    required Color color,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -448,12 +459,12 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
             width: 44.w,
             height: 44.w,
             decoration: BoxDecoration(
-              color: GRAY100_COLOR,
+              color: color,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: GRAY600_COLOR),
+            child: Icon(icon, color: WHITE100_COLOR),
           ),
-          4.verticalSpace,
+          8.verticalSpace,
           Text(
             label,
             style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),

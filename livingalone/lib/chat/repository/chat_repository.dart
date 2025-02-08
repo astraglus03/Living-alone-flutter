@@ -27,11 +27,6 @@ abstract class ApiChatRepository implements ChatRepository {
 }
 */
 
-// Repository Provider
-final chatRepositoryProvider = Provider<ChatRepository>((ref) {
-  return DummyChatRepository();
-});
-
 // API Repository Interface
 abstract class ChatRepository {
   Future<List<ChatRoom>> getChatRooms();
