@@ -23,61 +23,78 @@ class CustomBottomButton extends StatelessWidget {
     required this.onTap,
     this.isEnabled = true,
     this.disabledBackgroundColor,
-    this.disabledForegroundColor, this.appbarBorder = false,
+    this.disabledForegroundColor,
+    this.appbarBorder = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration:appbarBorder == true ? BoxDecoration(
-        color: WHITE100_COLOR,
-        border: Border(
-          top: BorderSide(
-            color: GRAY200_COLOR,
-            width: 1.w,
-          ),
-        ),
-      ) : null,
-      padding: EdgeInsets.only(
-        left: 24.w,
-        right: 24.w,
-        bottom: MediaQuery.of(context).viewInsets.bottom > 0
-            ? MediaQuery.of(context).viewInsets.bottom + 10
-            : 34.h,
-        top: 12.h,
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final targetPadding = bottomInset > 0 ? bottomInset + 10 : 34.0;
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(
+        begin: bottomInset > 0 ? 34 : targetPadding,
+        end: targetPadding,
       ),
-      child: CommonButton(
-        child: ElevatedButton(
-          onPressed: isEnabled ? onTap : null,
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-              if (states.contains(MaterialState.disabled)) {
-                return disabledBackgroundColor ?? backgroundColor;
-              }
-              return backgroundColor;
-            }),
-            foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-              if (states.contains(MaterialState.disabled)) {
-                return disabledForegroundColor ?? foregroundColor;
-              }
-              return foregroundColor;
-            }),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+      duration: Duration(milliseconds: bottomInset > 0 ? 100 : 300),
+      // 올라갈 때 100ms, 내려올 때 300ms
+      curve: bottomInset > 0 ? Curves.easeOut : Curves.easeInOut,
+      builder: (context, value, child) {
+        return Container(
+          decoration: appbarBorder == true
+              ? BoxDecoration(
+                  color: WHITE100_COLOR,
+                  border: Border(
+                    top: BorderSide(
+                      color: GRAY200_COLOR,
+                      width: 1.w,
+                    ),
+                  ),
+                )
+              : null,
+          padding: EdgeInsets.only(
+            left: 24.w,
+            right: 24.w,
+            bottom: value,
+            top: 12.h,
+          ),
+          child: CommonButton(
+            child: ElevatedButton(
+              onPressed: isEnabled ? onTap : null,
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.resolveWith<Color>((states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return disabledBackgroundColor ?? backgroundColor;
+                  }
+                  return backgroundColor;
+                }),
+                foregroundColor:
+                    MaterialStateProperty.resolveWith<Color>((states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return disabledForegroundColor ?? foregroundColor;
+                  }
+                  return foregroundColor;
+                }),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                animationDuration: Duration.zero,
+              ),
+              child: Text(
+                text,
+                style: textStyle.copyWith(
+                  color: isEnabled ? foregroundColor : disabledForegroundColor,
+                ),
               ),
             ),
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            animationDuration: Duration.zero,
           ),
-          child: Text(
-            text,
-            style: textStyle.copyWith(
-              color: isEnabled ? foregroundColor : disabledForegroundColor,
-            ),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

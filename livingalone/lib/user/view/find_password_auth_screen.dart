@@ -39,6 +39,7 @@ class _FindPasswordAuthScreenState extends ConsumerState<FindPasswordAuthScreen>
   void dispose() {
     controller.dispose();
     focusNode.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -58,66 +59,68 @@ class _FindPasswordAuthScreenState extends ConsumerState<FindPasswordAuthScreen>
       appbarTitleBackgroundColor: BLUE100_COLOR,
       backgroundColor: BLUE100_COLOR,
       appbarBorderColor: BLUE200_COLOR,
-      child: Stack(
+      child: Column(
         children: [
-          GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: SingleChildScrollView(
-              controller: scrollController,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                margin: EdgeInsets.symmetric(horizontal: 24).r,
-                child: Column(
-                  children: [
-                    20.verticalSpace,
-                    Text(
-                      '가입하신 이메일을 입력해주세요.',
-                      style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
-                      textAlign: TextAlign.center,
-                    ),
-                    20.verticalSpace,
-                    ComponentButton2(
-                      controller: controller,
-                      hintText: '숫자 6자리 입력',
-                      type: TextInputType.number,
-                      onPressed: controller.clear,
-                      onChanged: validatePassword,
-                      backgroundColor: GRAY100_COLOR,
-                      timerText: timerNotifier.formatTime(),
-                      showTimer: timerState.isActive,
-                    ),
-                    4.verticalSpace,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '인증 번호를 받지 못하셨나요?',
-                              style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
-                            ),
-                            6.horizontalSpace,
-                            GestureDetector(
-                              onTap: timerState.isActive ? null : timerNotifier.startTimer,
-                              child: Text(
-                                '다시보내기',
-                                style: AppTextStyles.caption2.copyWith(
-                                  color: timerState.isActive ? GRAY400_COLOR : ERROR_TEXT_COLOR,
-                                  decoration: timerState.isActive ? null : TextDecoration.underline,
-                                  decorationColor: ERROR_TEXT_COLOR,
-                                  decorationStyle: TextDecorationStyle.solid,
-                                  decorationThickness: 0.07 * 12.sp,
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: SingleChildScrollView(
+                controller: scrollController,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  margin: EdgeInsets.symmetric(horizontal: 24).r,
+                  child: Column(
+                    children: [
+                      20.verticalSpace,
+                      Text(
+                        '가입하신 이메일을 입력해주세요.',
+                        style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
+                        textAlign: TextAlign.center,
+                      ),
+                      20.verticalSpace,
+                      ComponentButton2(
+                        controller: controller,
+                        hintText: '숫자 6자리 입력',
+                        type: TextInputType.number,
+                        onPressed: controller.clear,
+                        onChanged: validatePassword,
+                        backgroundColor: GRAY100_COLOR,
+                        timerText: timerNotifier.formatTime(),
+                        showTimer: timerState.isActive,
+                      ),
+                      4.verticalSpace,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                '인증 번호를 받지 못하셨나요?',
+                                style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
+                              ),
+                              6.horizontalSpace,
+                              GestureDetector(
+                                onTap: timerState.isActive ? null : timerNotifier.startTimer,
+                                child: Text(
+                                  '다시보내기',
+                                  style: AppTextStyles.caption2.copyWith(
+                                    color: timerState.isActive ? GRAY400_COLOR : ERROR_TEXT_COLOR,
+                                    decoration: timerState.isActive ? null : TextDecoration.underline,
+                                    decorationColor: ERROR_TEXT_COLOR,
+                                    decorationStyle: TextDecorationStyle.solid,
+                                    decorationThickness: 0.07 * 12.sp,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

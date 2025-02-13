@@ -10,6 +10,8 @@ class ConfirmDialog {
     required String content,
     String confirmText = '종료하기',
     String cancelText = '취소',
+    VoidCallback? onConfirm,  // 확인 버튼 커스텀 동작
+    VoidCallback? onCancel,   // 취소 버튼 커스텀 동작
   }) async {
     return await showDialog<bool>(
       context: context,
@@ -29,13 +31,11 @@ class ConfirmDialog {
                 Text(
                   title,
                   style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
-                  // textAlign: TextAlign.center,
                 ),
                 12.verticalSpace,
                 Text(
                   content,
                   style: AppTextStyles.body2.copyWith(color: GRAY600_COLOR),
-                  // textAlign: TextAlign.center,
                 ),
                 24.verticalSpace,
                 Column(
@@ -44,7 +44,12 @@ class ConfirmDialog {
                       width: 252.w,
                       height: 44.h,
                       child: TextButton(
-                        onPressed: () => Navigator.of(context).pop(true),
+                        onPressed: () {
+                          if (onConfirm != null) {
+                            onConfirm();  // 커스텀 동작 실행
+                          }
+                          Navigator.of(context).pop(true);
+                        },
                         style: TextButton.styleFrom(
                           backgroundColor: BLUE400_COLOR,
                           shape: RoundedRectangleBorder(
@@ -62,7 +67,12 @@ class ConfirmDialog {
                       width: 252.w,
                       height: 44.h,
                       child: TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
+                        onPressed: () {
+                          if (onCancel != null) {
+                            onCancel();  // 커스텀 동작 실행
+                          }
+                          Navigator.of(context).pop(false);
+                        },
                         style: TextButton.styleFrom(
                           backgroundColor: BLUE100_COLOR,
                           shape: RoundedRectangleBorder(

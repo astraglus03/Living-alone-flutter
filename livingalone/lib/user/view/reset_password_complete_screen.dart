@@ -16,20 +16,21 @@ class ResetPasswordCompleteScreen extends StatelessWidget {
     return DefaultLayout(
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: Stack(
-          alignment: Alignment.center,
+        child: Column(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/image/Check.svg'),
-                20.verticalSpace,
-                Text('회원가입 재설정 완료',style: AppTextStyles.title.copyWith(color: BLUE400_COLOR)),
-                8.verticalSpace,
-                // TODO: 닉네임으로 추후 변경
-                Text('다시 로그인해 주세요', style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR),)
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/image/Check.svg'),
+                  20.verticalSpace,
+                  Text('회원가입 재설정 완료',style: AppTextStyles.title.copyWith(color: BLUE400_COLOR)),
+                  8.verticalSpace,
+                  // TODO: 닉네임으로 추후 변경
+                  Text('다시 로그인해 주세요', style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR),)
+                ],
+              ),
             ),
             CustomButton(
               backgroundColor: BLUE400_COLOR,
@@ -40,7 +41,7 @@ class ResetPasswordCompleteScreen extends StatelessWidget {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (_) => LoginScreen()),
-                  (route) => false,
+                      (route) => false,
                 );
               },
             )

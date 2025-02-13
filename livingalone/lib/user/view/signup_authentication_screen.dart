@@ -152,19 +152,6 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
     );
   }
 
-  void _scrollToField(GlobalKey key) {
-    Future.delayed(Duration(milliseconds: 300), () {
-      final RenderObject? renderObject = key.currentContext?.findRenderObject();
-      if (renderObject != null) {
-        Scrollable.ensureVisible(
-          key.currentContext!,
-          alignment: 0.1,
-          duration: Duration(milliseconds: 300),
-        );
-      }
-    });
-  }
-
   bool _validateSchool() {
     if (schoolController.text.isEmpty) {
       CustomSnackBar.show(
@@ -372,12 +359,12 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
               if (!_validateVerificationCode()) return;
 
               if (_formKey.currentState!.validate()) {
-                ref.read(timerProvider.notifier).resetTimer();
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => SignupPhoneVerifyScreen(),
                   ),
                 );
+                ref.read(timerProvider.notifier).resetTimer();
               }
             },
           ),
@@ -389,7 +376,6 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
   Widget _buildEmailField() {
     return CustomSignupField(
       key: _emailKey,
-      onTextFieldTap: () => _scrollToField(_emailKey),
       controller: schoolEmailController,
       focusNode: emailFocus,
       hintText: '학교 이메일을 입력해주세요',
@@ -412,7 +398,6 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
 
     return CustomSignupField(
       key: _verifyKey,
-      onTextFieldTap: () => _scrollToField(_verifyKey),
       controller: verifyNumController,
       focusNode: verifyFocus,
       hintText: '인증번호를 입력해주세요',

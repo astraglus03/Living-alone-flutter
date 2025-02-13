@@ -48,27 +48,34 @@ class _FindPasswordScreenState extends State<FindPasswordScreen> {
       appbarTitleBackgroundColor: BLUE100_COLOR,
       backgroundColor: BLUE100_COLOR,
       appbarBorderColor: BLUE200_COLOR,
-      child: Stack(
+      child: Column(
         children: [
-          Container(
-            // width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            margin: EdgeInsets.symmetric(horizontal: 24).r,
-            child: Column(
-              children: [
-                20.verticalSpace,
-                Text('가입하신 이메일을 입력해주세요.',style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),textAlign: TextAlign.center,),
-                20.verticalSpace,
-                Text('이메일로 인증번호를 보내드립니다.\n이메일 확인 후 인증 번호를 입력하고 안내에 따라\n 비밀번호를 재설정해 주세요.', style: AppTextStyles.body1.copyWith(color: GRAY600_COLOR),textAlign: TextAlign.center,),
-                20.verticalSpace,
-                ComponentButton2(
-                  controller: controller,
-                  hintText: '학교 이메일',
-                  type:  TextInputType.emailAddress,
-                  onPressed: controller.clear,
-                  onChanged: onEmailChanged,
+          Expanded(
+            child: GestureDetector(
+              onTap: (){
+                FocusScope.of(context).unfocus();
+              },
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 24).r,
+                  child: Column(
+                    children: [
+                      20.verticalSpace,
+                      Text('가입하신 이메일을 입력해주세요.',style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),textAlign: TextAlign.center,),
+                      20.verticalSpace,
+                      Text('이메일로 인증번호를 보내드립니다.\n이메일 확인 후 인증 번호를 입력하고 안내에 따라\n 비밀번호를 재설정해 주세요.', style: AppTextStyles.body1.copyWith(color: GRAY600_COLOR),textAlign: TextAlign.center,),
+                      20.verticalSpace,
+                      ComponentButton2(
+                        controller: controller,
+                        hintText: '학교 이메일',
+                        type:  TextInputType.emailAddress,
+                        onPressed: controller.clear,
+                        onChanged: onEmailChanged,
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
           ),
           CustomButton(

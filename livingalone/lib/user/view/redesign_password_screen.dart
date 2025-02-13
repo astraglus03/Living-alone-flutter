@@ -63,61 +63,63 @@ class _RedesignPasswordScreenState extends State<RedesignPasswordScreen> {
       appbarTitleBackgroundColor: BLUE100_COLOR,
       appbarBorderColor: BLUE200_COLOR,
       title: '비밀번호 찾기',
-      child: Stack(
+      child: Column(
         children: [
-          GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              controller: _scrollController,
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                padding: EdgeInsets.symmetric(horizontal: 24.0.w),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    26.verticalSpace,
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '비밀번호를 재설정해 주세요',
-                        style: AppTextStyles.title,
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: SingleChildScrollView(
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                controller: _scrollController,
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.symmetric(horizontal: 24.0.w),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      26.verticalSpace,
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '비밀번호를 재설정해 주세요',
+                          style: AppTextStyles.title,
+                        ),
                       ),
-                    ),
-                    20.verticalSpace,
-                    CustomSignupField(
-                      controller: mobileNumController,
-                      focusNode: passwordFocus,
-                      hintText: '6자 이상 입력(영문+숫자)',
-                      obscureText: isLooking,
-                      type: TextInputType.visiblePassword,
-                      // validateText: '6자 이상의 비밀번호를',
-                      subTitle: '비밀번호',
-                      submitButtonTitle: isLooking ? '비밀번호 보기' : '비밀번호 숨기기',
-                      buttonBackground: WHITE100_COLOR,
-                      formFieldBackground: WHITE100_COLOR,
-                      onPressed: (){
-                        mobileNumController.clear();
-                        setState(() {
-                          isPwValid = false;
-                        });
-                      },
-                      // FIXME: 피그마 101 113
-                      width: isLooking ? 105.w : 117.w,
-                      errorText: errorMessage,
-                      onChanged: (value) {
-                        validatePassword(value);
-                      },
-                      onTap: () {
-                        setState(() {
-                          isLooking = !isLooking;
-                        });
-                      },
-                    ),
-                  ],
+                      20.verticalSpace,
+                      CustomSignupField(
+                        controller: mobileNumController,
+                        focusNode: passwordFocus,
+                        hintText: '6자 이상 입력(영문+숫자)',
+                        obscureText: isLooking,
+                        type: TextInputType.visiblePassword,
+                        // validateText: '6자 이상의 비밀번호를',
+                        subTitle: '비밀번호',
+                        submitButtonTitle: isLooking ? '비밀번호 보기' : '비밀번호 숨기기',
+                        buttonBackground: WHITE100_COLOR,
+                        formFieldBackground: WHITE100_COLOR,
+                        onPressed: (){
+                          mobileNumController.clear();
+                          setState(() {
+                            isPwValid = false;
+                          });
+                        },
+                        // FIXME: 피그마 101 113
+                        width: isLooking ? 105.w : 117.w,
+                        errorText: errorMessage,
+                        onChanged: (value) {
+                          validatePassword(value);
+                        },
+                        onTap: () {
+                          setState(() {
+                            isLooking = !isLooking;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

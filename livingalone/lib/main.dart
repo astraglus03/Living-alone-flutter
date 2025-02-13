@@ -66,7 +66,7 @@ class MyApp extends ConsumerWidget {
             // home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
             // home: WriteCommunityPostScreen(communityId: '1'),
             // home: NeighborDetailScreen(postId: '1'),
-            home: RootTab()
+            home: LoginScreen()
             // home: AddTicketHandoverScreen2()
           ),
         );

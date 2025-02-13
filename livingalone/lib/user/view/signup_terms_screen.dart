@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/handover/component/agree_container.dart';
 import 'package:livingalone/user/component/custom_agree_button.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/component/custom_button.dart';

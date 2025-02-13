@@ -10,6 +10,7 @@ import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ChatListScreen extends ConsumerStatefulWidget {
   const ChatListScreen({Key? key}) : super(key: key);
@@ -42,8 +43,9 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
         showBadge: true,
         badgeStyle: badges.BadgeStyle(
           badgeColor: BLUE400_COLOR,
+          padding: EdgeInsets.all(4).w,
         ),
-        child: Icon(Icons.notifications, size: 24, color: GRAY400_COLOR,),
+        child: SvgPicture.asset('assets/image/bell.svg'),
       ),
       child: Column(
         children: [
@@ -168,7 +170,15 @@ class _ChatRoomTile extends ConsumerWidget {
         if (direction == DismissDirection.endToStart) {
           final position = direction == DismissDirection.endToStart ? -1.0 : 1.0;
           if (position <= -0.8) {
-            return await _showDeleteDialog(context);
+            return await ConfirmDialog.show(
+                context: context,
+                title: '채팅방을 나가시겠습니까?',
+                content: '채팅방의 내용은 복구되지 않으며, 삭제됩니다',
+                confirmText: '채팅방 나가기',
+                onConfirm: (){
+                  // ref.read(chatMessagesProvider.notifier);
+            },
+            );
           }
         }
         return false;

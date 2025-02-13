@@ -68,19 +68,6 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
     setState(() {});
   }
 
-  void _scrollToField(GlobalKey key) {
-    Future.delayed(Duration(milliseconds: 300), () {
-      final RenderObject? renderObject = key.currentContext?.findRenderObject();
-      if (renderObject != null) {
-        Scrollable.ensureVisible(
-          key.currentContext!,
-          alignment: 0.1,
-          duration: Duration(milliseconds: 300),
-        );
-      }
-    });
-  }
-
   bool _validatePhone() {
     final phone = phoneController.text;
     if (phone.isEmpty) {
@@ -251,12 +238,12 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
               if (!_validateVerificationCode()) return;
 
               if (_formKey.currentState!.validate()) {
-                ref.read(timerProvider.notifier).resetTimer();
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => SignupSettingPasswordScreen(),
                   ),
                 );
+                ref.read(timerProvider.notifier).resetTimer();
               }
             },
           ),
@@ -268,7 +255,6 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
   Widget _buildPhoneField() {
     return CustomSignupField(
       key: _phoneKey,
-      onTextFieldTap: () => _scrollToField(_phoneKey),
       controller: phoneController,
       focusNode: phoneFocus,
       hintText: '휴대폰 번호를 입력해주세요',
@@ -290,7 +276,6 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
 
     return CustomSignupField(
       key: _verifyKey,
-      onTextFieldTap: () => _scrollToField(_verifyKey),
       controller: verifyNumController,
       focusNode: verifyFocus,
       hintText: '인증번호를 입력해주세요',

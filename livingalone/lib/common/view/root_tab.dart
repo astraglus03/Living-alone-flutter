@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:livingalone/chat/view/chat_list_screen.dart';
 import 'package:livingalone/common/component/colored_image.dart';
+import 'package:livingalone/common/component/roottab_colored_image.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
@@ -53,8 +54,8 @@ class _RootTabState extends State<RootTab> {
               PersistentTabConfig(
                 screen: const NeighborCommunicationScreen(),
                 item: _buildTabItem(
-                  imagePath: 'assets/image/neighbor.svg',
-                  title: '이웃소통',
+                  imagePath: 'assets/image/community_24.svg',
+                  title: '커뮤니티',
                 ),
               ),
               PersistentTabConfig(
@@ -360,10 +361,10 @@ class _RootTabState extends State<RootTab> {
     required String title,
   }) {
     return ItemConfig(
-      activeForegroundColor: BLUE400_COLOR,
+      activeForegroundColor: GRAY800_COLOR,
       inactiveForegroundColor: GRAY400_COLOR,
-      icon: ColoredImage(imagePath: imagePath, isActive: true),
-      inactiveIcon: ColoredImage(imagePath: imagePath, isActive: false),
+      icon: RootTabColoredImage(imagePath: imagePath, isActive: true),
+      inactiveIcon: RootTabColoredImage(imagePath: imagePath, isActive: false),
       title: title,
       textStyle: AppTextStyles.body2,
     );
