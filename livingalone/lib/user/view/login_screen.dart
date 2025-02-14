@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:livingalone/common/component/common_button.dart';
+import 'package:livingalone/common/view_models/go_router.dart';
 import 'package:livingalone/user/component/custom_input_field.dart';
 import 'package:livingalone/user/component/find_signup_button.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/user/models/user_model.dart';
 import 'package:livingalone/user/view/find_password_screen.dart';
 import 'package:livingalone/user/view/signup_terms_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/user/view_models/user_me_provider.dart';
 
 //FIXME: 생체인증에 관련된 코드는 아래에 모두 주석처리해 놓았음. 현재는 아이디 비밀번호 입력으로 진행. or flutter secure storage에 토큰 + 키체인 내용 둘다 저장하고 불러오기.
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   static String get routeName => 'login';
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -29,12 +34,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(userMeProvider);
+
     return DefaultLayout(
       backgroundColor: BLUE100_COLOR,
       appbarTitleBackgroundColor: BLUE100_COLOR,
       appbarBorderColor: BLUE200_COLOR,
       title: '로그인',
       showBackButton: false,
+      showCloseButton: false,
       child: GestureDetector(
         onTap: (){
           FocusScope.of(context).unfocus();
@@ -72,7 +80,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       shadowColor: Colors.transparent,
                     ),
                     onPressed: () {
-                      // TODO: go router 나중에 적용하기.
+                      state is UserModelLoading ? null : () async {
+                        ref.read(userMeProvider.notifier).login(email: idController.text, password: passwordController.text);
+                      };
                     },
                     child: Text('로그인', style: AppTextStyles.title),
                   ),
@@ -85,16 +95,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       FindSignupButton(
                           onTap: () {
-                            // TODO: 비밀번호 찾기 페이지 라우팅 임시처리
-                            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> FindPasswordScreen()));
+                            context.pushNamed(FindPasswordScreen.routeName);
                           },
                           text: '비밀번호 찾기'
                       ),
                       9.horizontalSpace,
                       FindSignupButton(
                           onTap: () {
-                            // TODO: 회원가입 페이지 라우팅 임시처리
-                            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SignupTermsScreen()));
+                            context.pushNamed(SignupTermsScreen.routeName);
                           },
                           text: '회원가입'
                       ),

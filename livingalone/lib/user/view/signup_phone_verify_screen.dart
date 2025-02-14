@@ -177,7 +177,6 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
                 child: Form(
                   key: _formKey,
                   child: Container(
-                    height: MediaQuery.of(context).size.height + 200.h,
                     padding: EdgeInsets.symmetric(horizontal: 24.w),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -192,6 +191,7 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
                         24.verticalSpace,
                         _buildVerifyField(),
                         4.verticalSpace,
+                        if(isPhoneSent == true)
                         Row(
                           children: [
                             Text(

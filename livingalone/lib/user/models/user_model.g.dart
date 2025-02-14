@@ -7,29 +7,21 @@ part of 'user_model.dart';
 // **************************************************************************
 
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
-      id: json['id'] as String,
-      username: json['username'] as String,
+      id: json['id'] as String?,
       email: json['email'] as String,
-      phoneNumber: json['phoneNumber'] as String,
-      imageUrl: json['imageUrl'] as String?,
+      nickname: json['nickname'] as String?,
+      phoneNumber: json['phoneNumber'] as String?,
+      profileImage: json['profileImage'] as String?,
+      isVerified: json['isVerified'] as bool?,
+      university: json['university'] as String?,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'id': instance.id,
-      'username': instance.username,
       'email': instance.email,
+      'nickname': instance.nickname,
       'phoneNumber': instance.phoneNumber,
-      'imageUrl': instance.imageUrl,
-    };
-
-LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
-    LoginResponse(
-      accessToken: json['accessToken'] as String,
-      refreshToken: json['refreshToken'] as String,
-    );
-
-Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
-    <String, dynamic>{
-      'accessToken': instance.accessToken,
-      'refreshToken': instance.refreshToken,
+      'profileImage': instance.profileImage,
+      'isVerified': instance.isVerified,
+      'university': instance.university,
     };

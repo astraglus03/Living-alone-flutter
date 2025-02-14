@@ -92,6 +92,9 @@ class DefaultLayout extends StatelessWidget {
       );
     } else if (showBackButton) {
       leadingWidget = IconButton(
+        style: IconButton.styleFrom(
+          overlayColor: Colors.transparent,
+        ),
         icon: const Icon(Icons.arrow_back_ios_sharp),
         onPressed: () => Navigator.of(context).pop(),
       );

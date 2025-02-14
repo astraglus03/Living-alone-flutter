@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/enum/post_type.dart';
 import 'package:livingalone/common/view/root_tab.dart';
+import 'package:livingalone/common/view/splash_screen.dart';
+import 'package:livingalone/common/view_models/go_router.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen1.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen2.dart';
 import 'package:livingalone/handover/view/add_room_handover_screen3.dart';
@@ -33,44 +35,44 @@ import 'package:flutter/services.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   // 가로모드로 하게되면 심각한 overflow와 폰트, 깨짐. 모든 반은형으로 하기전까지 코드 필수.
-  SystemChrome.setPreferredOrientations(([
-    DeviceOrientation.portraitUp
-  ]));
-  initializeDateFormatting('ko_KR').then((_) => runApp(ProviderScope(child:MyApp())));
+  SystemChrome.setPreferredOrientations(([DeviceOrientation.portraitUp]));
+  initializeDateFormatting('ko_KR')
+      .then((_) => runApp(ProviderScope(child: MyApp())));
 }
 
 class MyApp extends ConsumerWidget {
-
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context,ref) {
-    // final router = ref.watch(routerProvider);
-    // return MaterialApp.router(
-    //     debugShowCheckedModeBanner: false,
-    //     routerConfig: MyApp()._router,
-    //     title: 'Living Alone',
-    // );
+  Widget build(BuildContext context, ref) {
+    final router = ref.watch(routerProvider);
     return ScreenUtilInit(
-      designSize: const Size(393, 852),
-      minTextAdapt: true,  // 텍스트 크기 자동 조정
-      splitScreenMode: true,  // 분할 화면 모드
-      builder:(_ ,child){
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-          child: MaterialApp(
-            theme: ThemeData(
-              fontFamily: 'SUIT',
+        designSize: const Size(393, 852),
+        minTextAdapt: true, // 텍스트 크기 자동 조정
+        splitScreenMode: true, // 분할 화면 모드
+        builder: (_, child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            // child: MaterialApp(
+            //   theme: ThemeData(
+            //     fontFamily: 'SUIT',
+            //   ),
+            //   debugShowCheckedModeBanner: false,
+            //   // home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
+            //   // home: WriteCommunityPostScreen(communityId: '1'),
+            //   // home: NeighborDetailScreen(postId: '1'),
+            //   home: SplashScreen()
+            //   // home: AddTicketHandoverScreen2()
+            // ),
+            child: MaterialApp.router(
+              theme: ThemeData(
+                fontFamily: 'SUIT',
+              ),
+              debugShowCheckedModeBanner: false,
+              routerConfig: router,
+              title: 'Living Alone',
             ),
-            debugShowCheckedModeBanner: false,
-            // home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
-            // home: WriteCommunityPostScreen(communityId: '1'),
-            // home: NeighborDetailScreen(postId: '1'),
-            home: LoginScreen()
-            // home: AddTicketHandoverScreen2()
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 }
