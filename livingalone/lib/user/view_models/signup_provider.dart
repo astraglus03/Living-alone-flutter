@@ -120,7 +120,7 @@ class SignupStateNotifier extends StateNotifier<SignUpRequest?> {
   }
 
   // 휴대폰 인증 요청
-  Future<PhoneVerificationRequest> sendPhoneVerification({
+  Future<VerificationResponse> sendPhoneVerification({
     required String phoneNumber,
     required String carrier,
   }) async {

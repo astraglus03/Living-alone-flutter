@@ -18,6 +18,8 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 abstract class AuthRepository {
   factory AuthRepository(Dio dio, {String baseUrl}) = _AuthRepository;
 
+  // TODO: 추후 requestBody 및 response 수정 예정
+
   // 로그인((user/view/login_screen.dart)
   @POST('/login')
   Future<LoginResponse> login({
@@ -49,7 +51,7 @@ abstract class AuthRepository {
 
   // 휴대폰 인증 코드 전송(user/view/signup_phone_verify_screen.dart)
   @POST('/verify-phone')
-  Future<PhoneVerificationRequest> sendPhoneVerification({
+  Future<VerificationResponse> sendPhoneVerification({
     @Field('phoneNumber') required String phoneNumber,
     @Field('carrier') required String carrier,
   });

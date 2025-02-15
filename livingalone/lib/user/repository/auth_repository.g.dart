@@ -158,7 +158,7 @@ class _AuthRepository implements AuthRepository {
   }
 
   @override
-  Future<PhoneVerificationRequest> sendPhoneVerification({
+  Future<VerificationResponse> sendPhoneVerification({
     required String phoneNumber,
     required String carrier,
   }) async {
@@ -170,7 +170,7 @@ class _AuthRepository implements AuthRepository {
       'carrier': carrier,
     };
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PhoneVerificationRequest>(Options(
+        _setStreamType<VerificationResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -186,7 +186,7 @@ class _AuthRepository implements AuthRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = PhoneVerificationRequest.fromJson(_result.data!);
+    final value = VerificationResponse.fromJson(_result.data!);
     return value;
   }
 
