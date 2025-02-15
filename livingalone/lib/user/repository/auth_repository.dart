@@ -1,12 +1,11 @@
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/const/const.dart';
 import 'package:livingalone/common/dio/dio.dart';
 import 'package:livingalone/user/models/login_response.dart';
-import 'package:livingalone/user/models/signup_request_model.dart';
 import 'package:livingalone/user/models/verification_model.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:livingalone/user/models/user_model.dart';
 
 part 'auth_repository.g.dart';
 
@@ -26,10 +25,12 @@ abstract class AuthRepository {
     @Field('password') required String password,
   });
 
-  // 회원가입 완료(user/view/signup_nickname_screen.dart)
+  // 회원가입 완료(user/view/signup_nickname_screen.dart) // 멀티파트
   @POST('/register')
-  Future<UserModel> register({
-    @Body() required SignUpRequest request,
+  @MultiPart()
+  Future<void> register({
+    @Part(name: 'request', contentType: 'application/json') required String request,
+    @Part(name: 'profileImage') File? profileImage,
   });
 
   // 대학생 이메일 인증 코드 전송(user/view/signup_authentication_screen.dart)
@@ -42,12 +43,13 @@ abstract class AuthRepository {
   @POST('/verify-code')
   Future<VerificationResponse> verifyEmailCode({
     @Field('email') required String email,
+    @Field('university') required String university,
     @Field('code') required String code,
   });
 
   // 휴대폰 인증 코드 전송(user/view/signup_phone_verify_screen.dart)
   @POST('/verify-phone')
-  Future<VerificationResponse> sendPhoneVerification({
+  Future<PhoneVerificationRequest> sendPhoneVerification({
     @Field('phoneNumber') required String phoneNumber,
     @Field('carrier') required String carrier,
   });
@@ -56,6 +58,7 @@ abstract class AuthRepository {
   @POST('/verify-phone-code')
   Future<VerificationResponse> verifyPhoneCode({
     @Field('phoneNumber') required String phoneNumber,
+    @Field('carrier') required String carrier,
     @Field('code') required String code,
   });
 

@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/common/view_models/go_router.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:livingalone/user/view/signup_terms_screen.dart';
+import 'package:livingalone/user/view_models/signup_provider.dart';
 
-class SignupTermsDetailScreen extends StatefulWidget {
-  final Function(bool) onRead;
+class SignupTermsDetailScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'termsDetail';
+  final bool isFirstTerms;
+  final Function(bool) onAgree;
 
   const SignupTermsDetailScreen({
-    required this.onRead,
     Key? key,
+    required this.isFirstTerms,
+    required this.onAgree,
   }) : super(key: key);
 
   @override
-  State<SignupTermsDetailScreen> createState() => _SignupTermsDetailScreenState();
+  ConsumerState<SignupTermsDetailScreen> createState() => _SignupTermsDetailScreenState();
 }
 
-class _SignupTermsDetailScreenState extends State<SignupTermsDetailScreen> {
+class _SignupTermsDetailScreenState extends ConsumerState<SignupTermsDetailScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isButtonEnabled = false;
 
@@ -41,7 +49,7 @@ class _SignupTermsDetailScreenState extends State<SignupTermsDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '이용약관',
+      title: widget.isFirstTerms ? '개인정보 수집 및 이용 동의' : '서비스 이용약관',
       backgroundColor: WHITE100_COLOR,
       child: Column(
         children: [
@@ -181,24 +189,24 @@ class _SignupTermsDetailScreenState extends State<SignupTermsDetailScreen> {
               ),
             ),
           ),
-        CustomBottomButton(
-          appbarBorder: true,
-          backgroundColor: _isButtonEnabled ? BLUE400_COLOR : GRAY200_COLOR,
-          foregroundColor: _isButtonEnabled ? WHITE100_COLOR : GRAY800_COLOR,
-          text: '동의',
-          textStyle: AppTextStyles.title,
-          isEnabled: _isButtonEnabled,
-          onTap: () {
-            if (_isButtonEnabled) {
-              widget.onRead(true);
-              Navigator.pop(context);
-            }
-          },
-        ),
-      ],
-    ),
-  );
-}
+          CustomBottomButton(
+            appbarBorder: true,
+            backgroundColor: _isButtonEnabled ? BLUE400_COLOR : GRAY200_COLOR,
+            foregroundColor: _isButtonEnabled ? WHITE100_COLOR : GRAY800_COLOR,
+            text: '동의',
+            textStyle: AppTextStyles.title,
+            isEnabled: _isButtonEnabled,
+            onTap: () {
+              if (_isButtonEnabled) {
+                widget.onAgree(true);
+                Navigator.pop(context);
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void dispose() {

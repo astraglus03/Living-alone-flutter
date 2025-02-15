@@ -10,33 +10,32 @@ import 'package:livingalone/user/view/signup_authentication_screen.dart';
 import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/user/component/custom_terms_item.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/user/view_models/signup_provider.dart';
 
-class SignupTermsScreen extends StatefulWidget {
+class SignupTermsScreen extends ConsumerStatefulWidget {
   static String get routeName => 'terms';
 
   const SignupTermsScreen({super.key});
 
   @override
-  State<SignupTermsScreen> createState() => _SignupTermsScreenState();
+  ConsumerState<SignupTermsScreen> createState() => _SignupTermsScreenState();
 }
 
-class _SignupTermsScreenState extends State<SignupTermsScreen> {
-  bool firstAgreedSelected = false;
-  bool secondAgreedSelected = false;
-
+class _SignupTermsScreenState extends ConsumerState<SignupTermsScreen> {
   void _navigateToTermsDetail(bool isFirst) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => SignupTermsDetailScreen(
-          onRead: (agreed) {
-            setState(() {
-              if (isFirst) {
-                firstAgreedSelected = agreed;
-              } else {
-                secondAgreedSelected = agreed;
-              }
-            });
+          isFirstTerms: isFirst,
+          onAgree: (agreed) {
+            if (isFirst) {
+              ref.read(signupProvider.notifier).setPrivacyAgreement(agreed);
+            } else {
+              ref.read(signupProvider.notifier).setTermsAgreement(agreed);
+            }
+            setState(() {});
           },
         ),
       ),
@@ -45,6 +44,11 @@ class _SignupTermsScreenState extends State<SignupTermsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final signupState = ref.watch(signupProvider.notifier);
+    final termsAgreed = signupState.isTermsAgreed;
+    final privacyAgreed = signupState.isPrivacyAgreed;
+    final alarmAgreed = signupState.isAlarmAgreed;
+
     return DefaultLayout(
       title: '이용동의',
       showBackButton: false,
@@ -60,24 +64,32 @@ class _SignupTermsScreenState extends State<SignupTermsScreen> {
               child: Column(
                 children: [
                   CustomTermsItem(
-                    isSelected: firstAgreedSelected,
+                    isSelected: privacyAgreed,
                     onIconTap: () => _navigateToTermsDetail(true),
                     title: '[필수]개인정보 수집 및 이용 동의',
                     onAgreeChanged: () {
-                      setState(() {
-                        firstAgreedSelected = !firstAgreedSelected;
-                      });
+                      ref.read(signupProvider.notifier).setPrivacyAgreement(!privacyAgreed);
+                      setState(() {});
                     },
                   ),
                   10.verticalSpace,
                   CustomTermsItem(
-                    isSelected: secondAgreedSelected,
+                    isSelected: termsAgreed,
                     onIconTap: () => _navigateToTermsDetail(false),
-                    title: '[필수]개인정보 수집 및 이용 동의',
+                    title: '[필수]서비스 이용약관',
                     onAgreeChanged: () {
-                      setState(() {
-                        secondAgreedSelected = !secondAgreedSelected;
-                      });
+                      ref.read(signupProvider.notifier).setTermsAgreement(!termsAgreed);
+                      setState(() {});
+                    },
+                  ),
+                  10.verticalSpace,
+                  AgreeContainer(
+                    text: '[선택] 서비스 알림 수신 동의',
+                    isSelected: alarmAgreed,
+                    lineColor: BLUE200_COLOR,
+                    onTap: () {
+                      ref.read(signupProvider.notifier).setAlarmAgreement(!alarmAgreed);
+                      setState(() {});
                     },
                   ),
                 ],
@@ -92,7 +104,7 @@ class _SignupTermsScreenState extends State<SignupTermsScreen> {
             disabledForegroundColor: GRAY800_COLOR,
             text: '다음',
             textStyle: AppTextStyles.title,
-            isEnabled: secondAgreedSelected && firstAgreedSelected,
+            isEnabled: signupState.isAllTermsAgreed,
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(

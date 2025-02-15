@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/common/view_models/go_router.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,27 +13,28 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/user/component/custom_snackbar.dart';
 import 'package:livingalone/user/view/signup_phone_verify_screen.dart';
+import 'package:livingalone/user/view_models/signup_provider.dart';
 import 'package:livingalone/user/view_models/timer_provider.dart';
 
 class SignupAuthenticationScreen extends ConsumerStatefulWidget {
   static String get routeName => 'signupAuthentication';
+
   const SignupAuthenticationScreen({super.key});
 
   @override
-  _SignupAuthenticationScreenState createState() => _SignupAuthenticationScreenState();
+  _SignupAuthenticationScreenState createState() =>
+      _SignupAuthenticationScreenState();
 }
 
-class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticationScreen> {
+class _SignupAuthenticationScreenState
+    extends ConsumerState<SignupAuthenticationScreen> {
   final _formKey = GlobalKey<FormState>();
   final _scrollController = ScrollController();
-  final _emailKey = GlobalKey();
-  final _verifyKey = GlobalKey();
   final schoolController = TextEditingController();
   final schoolEmailController = TextEditingController();
   final verifyNumController = TextEditingController();
   final emailFocus = FocusNode();
   final verifyFocus = FocusNode();
-  List<String> searchResults = [];
   bool isDropdownOpen = false;
   bool isEmailSent = false;
 
@@ -72,7 +75,7 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
       );
       return false;
     }
-    
+
     // 이메일 형식 검사
     if (!RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+').hasMatch(email)) {
       CustomSnackBar.show(
@@ -139,12 +142,12 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
     return true;
   }
 
-  void _showErrorSnackBar() {
+  void _showErrorSnackBar(String message) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     CustomSnackBar.show(
       context: context,
-      message: '인증 번호가 불일치합니다. 다시 시도해 주세요.',
+      message: message,
       imagePath: 'assets/image/x1.svg',
       bottomOffset: bottomInset > 0 ? bottomInset + 40.h : null,
     );
@@ -156,21 +159,22 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
         isEmailSent = true;
         FocusScope.of(context).unfocus();
       });
+      ref.read(signupProvider.notifier).sendEmailVerification(email: schoolEmailController.text, university: schoolController.text);
       verifyNumController.clear();
       ref.read(timerProvider.notifier).startTimer();
       CustomSnackBar.show(
-        context: context,
-        message: '인증 메일이 전송되었습니다.',
-        imagePath: 'assets/image/authentication_check.svg'
-      );
+          context: context,
+          message: '인증 메일이 전송되었습니다.',
+          imagePath: 'assets/image/authentication_check.svg');
     }
   }
 
   bool get isFormValid {
     return schoolController.text.isNotEmpty &&
-           schoolEmailController.text.isNotEmpty &&
-           RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+').hasMatch(schoolEmailController.text) &&
-           verifyNumController.text.length == 6;
+        schoolEmailController.text.isNotEmpty &&
+        RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+')
+            .hasMatch(schoolEmailController.text) &&
+        verifyNumController.text.length == 6;
   }
 
   @override
@@ -188,7 +192,7 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
     schoolController.removeListener(_onFormChanged);
     schoolEmailController.removeListener(_onFormChanged);
     verifyNumController.removeListener(_onFormChanged);
-    
+
     schoolController.dispose();
     schoolEmailController.dispose();
     verifyNumController.dispose();
@@ -219,7 +223,8 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
               },
               child: SingleChildScrollView(
                 controller: _scrollController,
-                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Form(
                   key: _formKey,
                   child: Container(
@@ -229,7 +234,7 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         20.verticalSpace,
-                        Text('대학생 인증을 해주세요', style: AppTextStyles.heading1,),
+                        Text('대학생 인증을 해주세요', style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR),),
                         40.verticalSpace,
                         _buildSchoolField(),
                         24.verticalSpace,
@@ -237,27 +242,31 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
                         24.verticalSpace,
                         _buildVerifyField(),
                         4.verticalSpace,
-                        if(isEmailSent == true)
+                        if (isEmailSent == true)
                           Row(
                             children: [
                               Text(
                                 '인증 번호를 받지 못하셨나요?',
-                                style: AppTextStyles.caption2.copyWith(color: GRAY800_COLOR),
+                                style: AppTextStyles.caption2
+                                    .copyWith(color: GRAY800_COLOR),
                               ),
                               6.horizontalSpace,
                               GestureDetector(
-                                onTap: isEmailSent && !ref.watch(timerProvider).isActive
-                                  ? _sendVerificationEmail
-                                  : null,
+                                onTap: isEmailSent &&
+                                        !ref.watch(timerProvider).isActive
+                                    ? _sendVerificationEmail
+                                    : null,
                                 child: Text(
                                   '다시보내기',
                                   style: AppTextStyles.caption2.copyWith(
-                                    color: (isEmailSent && !ref.watch(timerProvider).isActive)
-                                      ? ERROR_TEXT_COLOR
-                                      : GRAY400_COLOR,
-                                    decoration: (isEmailSent && !ref.watch(timerProvider).isActive)
-                                      ? TextDecoration.underline
-                                      : null,
+                                    color: (isEmailSent &&
+                                            !ref.watch(timerProvider).isActive)
+                                        ? ERROR_TEXT_COLOR
+                                        : GRAY400_COLOR,
+                                    decoration: (isEmailSent &&
+                                            !ref.watch(timerProvider).isActive)
+                                        ? TextDecoration.underline
+                                        : null,
                                     decorationColor: ERROR_TEXT_COLOR,
                                     decorationStyle: TextDecorationStyle.solid,
                                     decorationThickness: 0.07 * 12.sp,
@@ -278,18 +287,31 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
             foregroundColor: isFormValid ? WHITE100_COLOR : GRAY800_COLOR,
             text: '다음',
             textStyle: AppTextStyles.title,
-            onTap: () {
+            onTap: () async {
               if (!_validateSchool()) return;
               if (!_validateEmail()) return;
               if (!_validateVerificationCode()) return;
-
               if (_formKey.currentState!.validate()) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => SignupPhoneVerifyScreen(),
-                  ),
-                );
-                ref.read(timerProvider.notifier).resetTimer();
+                try {
+                  final response = await ref.read(signupProvider.notifier).verifyEmailCode(
+                      email: schoolEmailController.text,
+                      university: schoolController.text,
+                      code: verifyNumController.text
+                  );
+
+                  if (response.success) {
+                    // 인증 성공
+                    ref.read(signupProvider.notifier).setEmailUniversity(schoolEmailController.text, schoolController.text);
+                    ref.read(timerProvider.notifier).resetTimer();
+                    context.goNamed(SignupPhoneVerifyScreen.routeName);
+                  } else {
+                    // 인증 실패
+                    _showErrorSnackBar(response.message);
+                  }
+                } catch (e) {
+                  // 에러 발생
+                  _showErrorSnackBar('인증에 실패했습니다.');
+                }
               }
             },
           ),
@@ -347,7 +369,10 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
                           isDropdownOpen = false;
                         });
                       },
-                      icon: SvgPicture.asset('assets/image/signupDelete.svg', fit: BoxFit.cover,),
+                      icon: SvgPicture.asset(
+                        'assets/image/signupDelete.svg',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ],
                 ),
@@ -358,7 +383,8 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
                 children: [
                   8.verticalSpace,
                   Container(
-                    height: (_schools.length * 56.h) + ((_schools.length - 1) * 1.h),
+                    height: (_schools.length * 56.h) +
+                        ((_schools.length - 1) * 1.h),
                     decoration: BoxDecoration(
                       color: WHITE100_COLOR,
                       borderRadius: BorderRadius.all(Radius.circular(10)).r,
@@ -410,7 +436,6 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
 
   Widget _buildEmailField() {
     return CustomSignupField(
-      key: _emailKey,
       controller: schoolEmailController,
       focusNode: emailFocus,
       hintText: '학교 이메일을 입력해주세요',
@@ -420,7 +445,7 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
       // TODO: 피그마 104
       width: 108.w,
       onPressed: schoolEmailController.clear,
-      onTap: (){
+      onTap: () {
         isEmailSent ? null : _sendVerificationEmail();
       },
       buttonBackground: isEmailSent ? GRAY100_COLOR : BLUE100_COLOR,
@@ -432,7 +457,6 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
     final timerState = ref.watch(timerProvider);
 
     return CustomSignupField(
-      key: _verifyKey,
       controller: verifyNumController,
       focusNode: verifyFocus,
       hintText: '인증번호를 입력해주세요',
@@ -443,7 +467,7 @@ class _SignupAuthenticationScreenState extends ConsumerState<SignupAuthenticatio
       onPressed: verifyNumController.clear,
       onTap: () {
         if (_validateVerificationCode()) {
-          _showErrorSnackBar();
+          _showErrorSnackBar('인증에 실패하였습니다.');
         }
       },
       timer: timerState.isActive,

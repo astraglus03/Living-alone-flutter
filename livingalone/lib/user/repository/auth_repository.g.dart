@@ -52,31 +52,45 @@ class _AuthRepository implements AuthRepository {
   }
 
   @override
-  Future<UserModel> register({required SignUpRequest request}) async {
+  Future<void> register({
+    required String request,
+    File? profileImage,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(request.toJson());
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<UserModel>(Options(
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'request',
+      request,
+    ));
+    if (profileImage != null) {
+      _data.files.add(MapEntry(
+        'profileImage',
+        MultipartFile.fromFileSync(
+          profileImage.path,
+          filename: profileImage.path.split(Platform.pathSeparator).last,
+        ),
+      ));
+    }
+    await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
+      contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/register',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = UserModel.fromJson(_result.data!);
-    return value;
+        .compose(
+          _dio.options,
+          '/register',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
@@ -111,6 +125,7 @@ class _AuthRepository implements AuthRepository {
   @override
   Future<VerificationResponse> verifyEmailCode({
     required String email,
+    required String university,
     required String code,
   }) async {
     const _extra = <String, dynamic>{};
@@ -118,6 +133,7 @@ class _AuthRepository implements AuthRepository {
     final _headers = <String, dynamic>{};
     final _data = {
       'email': email,
+      'university': university,
       'code': code,
     };
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -142,7 +158,7 @@ class _AuthRepository implements AuthRepository {
   }
 
   @override
-  Future<VerificationResponse> sendPhoneVerification({
+  Future<PhoneVerificationRequest> sendPhoneVerification({
     required String phoneNumber,
     required String carrier,
   }) async {
@@ -154,7 +170,7 @@ class _AuthRepository implements AuthRepository {
       'carrier': carrier,
     };
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<VerificationResponse>(Options(
+        _setStreamType<PhoneVerificationRequest>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -170,13 +186,14 @@ class _AuthRepository implements AuthRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = VerificationResponse.fromJson(_result.data!);
+    final value = PhoneVerificationRequest.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<VerificationResponse> verifyPhoneCode({
     required String phoneNumber,
+    required String carrier,
     required String code,
   }) async {
     const _extra = <String, dynamic>{};
@@ -184,6 +201,7 @@ class _AuthRepository implements AuthRepository {
     final _headers = <String, dynamic>{};
     final _data = {
       'phoneNumber': phoneNumber,
+      'carrier': carrier,
       'code': code,
     };
     final _result = await _dio.fetch<Map<String, dynamic>>(

@@ -53,25 +53,25 @@ class MyApp extends ConsumerWidget {
         builder: (_, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            // child: MaterialApp(
-            //   theme: ThemeData(
-            //     fontFamily: 'SUIT',
-            //   ),
-            //   debugShowCheckedModeBanner: false,
-            //   // home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
-            //   // home: WriteCommunityPostScreen(communityId: '1'),
-            //   // home: NeighborDetailScreen(postId: '1'),
-            //   home: SplashScreen()
-            //   // home: AddTicketHandoverScreen2()
-            // ),
-            child: MaterialApp.router(
+            child: MaterialApp(
               theme: ThemeData(
                 fontFamily: 'SUIT',
               ),
               debugShowCheckedModeBanner: false,
-              routerConfig: router,
-              title: 'Living Alone',
+              // home: LivingDetailScreen(postType: PostType.ticket, postId: '10',),
+              // home: WriteCommunityPostScreen(communityId: '1'),
+              // home: NeighborDetailScreen(postId: '1'),
+              home: RootTab()
+              // home: AddTicketHandoverScreen2()
             ),
+            // child: MaterialApp.router(
+            //   theme: ThemeData(
+            //     fontFamily: 'SUIT',
+            //   ),
+            //   debugShowCheckedModeBanner: false,
+            //   routerConfig: router,
+            //   title: 'Living Alone',
+            // ),
           );
         });
   }

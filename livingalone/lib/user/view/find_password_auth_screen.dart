@@ -126,7 +126,6 @@ class _FindPasswordAuthScreenState extends ConsumerState<FindPasswordAuthScreen>
                 controller: scrollController,
                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Container(
-                  height: MediaQuery.of(context).size.height,
                   margin: EdgeInsets.symmetric(horizontal: 24).r,
                   child: Column(
                     children: [

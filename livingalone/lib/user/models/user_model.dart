@@ -19,20 +19,22 @@ class UserModelLoading extends UserModelBase {}
 class UserModel extends UserModelBase {
   final String? id;
   final String email;
-  final String? nickname;
-  final String? phoneNumber;
+  final String nickname;
+  final String phoneNumber;
   final String? profileImage;
-  final bool? isVerified;
-  final String? university;
+  final bool isVerified;
+  final String university;
+  final bool serviceAlarm;
 
   UserModel({
     this.id,
     required this.email,
-    this.nickname,
-    this.phoneNumber,
+    required this.nickname,
+    required this.phoneNumber,
     this.profileImage,
-    this.isVerified,
-    this.university,
+    required this.isVerified,
+    required this.university,
+    required this.serviceAlarm,
   });
 
   UserModel copyWith({
@@ -43,6 +45,7 @@ class UserModel extends UserModelBase {
     String? profileImage,
     bool? isVerified,
     String? university,
+    bool? serviceAlarm,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -52,6 +55,7 @@ class UserModel extends UserModelBase {
       profileImage: profileImage ?? this.profileImage,
       isVerified: isVerified ?? this.isVerified,
       university: university ?? this.university,
+      serviceAlarm: serviceAlarm ?? this.serviceAlarm,
     );
   }
 

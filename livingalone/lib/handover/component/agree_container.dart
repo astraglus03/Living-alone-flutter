@@ -8,11 +8,14 @@ class AgreeContainer extends StatelessWidget {
   final String text;
   final bool isSelected;
   final VoidCallback onTap;
+  Color? lineColor;
 
-  const AgreeContainer({
+  AgreeContainer({
+    super.key,
     required this.text,
     required this.isSelected,
     required this.onTap,
+    this.lineColor = BLUE400_COLOR,
   });
 
   @override
@@ -27,7 +30,7 @@ class AgreeContainer extends StatelessWidget {
           color: isSelected ? BLUE100_COLOR : GRAY100_COLOR,
           borderRadius: BorderRadius.all(Radius.circular(12)).w,
           border: Border.all(
-            color: isSelected ? BLUE400_COLOR : GRAY200_COLOR,
+            color: isSelected ? lineColor! : GRAY200_COLOR,
             width: 1,
           ),
         ),

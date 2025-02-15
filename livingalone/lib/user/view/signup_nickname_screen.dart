@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/common/view/root_tab.dart';
+import 'package:livingalone/common/view_models/go_router.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
@@ -10,22 +14,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import 'package:livingalone/user/view/signup_complete_screen.dart';
+import 'package:livingalone/user/view_models/signup_provider.dart';
 
-class SignupNicknameScreen extends StatefulWidget {
+class SignupNicknameScreen extends ConsumerStatefulWidget {
   static String get routeName => 'signupNickname';
 
   const SignupNicknameScreen({super.key});
 
   @override
-  State<SignupNicknameScreen> createState() => _SignupNicknameScreenState();
+  ConsumerState<SignupNicknameScreen> createState() => _SignupNicknameScreenState();
 }
 
-class _SignupNicknameScreenState extends State<SignupNicknameScreen> {
+class _SignupNicknameScreenState extends ConsumerState<SignupNicknameScreen> {
   final TextEditingController controller = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
-  final _nicknameKey = GlobalKey();
   bool isNicknameValid = false;
   bool isDuplicateChecked = false;
   String? errorMessage;
@@ -168,7 +171,7 @@ class _SignupNicknameScreenState extends State<SignupNicknameScreen> {
     return true;
   }
 
-  void checkDuplicate() {
+  void checkDuplicate() async {
     if (controller.text.isEmpty) {
       setState(() {
         errorMessage = '닉네임을 입력해주세요';
@@ -184,30 +187,23 @@ class _SignupNicknameScreenState extends State<SignupNicknameScreen> {
       return;
     }
 
-    final nickname = 'duplicate';
-    if(value == nickname){
+    final resp = await ref.read(signupProvider.notifier).checkNicknameAvailability(nickname: controller.text);
+
+    if(resp){
       setState(() {
-        errorMessage = '이미 사용중인 닉네임 입니다';
-        isNicknameValid = false;
-        isDuplicateChecked = false;
+        errorMessage = '사용 가능한 닉네임입니다';
+        isDuplicateChecked = true;
+        isNicknameValid = true;
+        FocusScope.of(context).unfocus();
       });
-      return;
+    }else{
+        setState(() {
+          errorMessage = '이미 사용중인 닉네임 입니다';
+          isNicknameValid = false;
+          isDuplicateChecked = false;
+        });
+        return;
     }
-
-    setState(() {
-      errorMessage = '사용 가능한 닉네임입니다';
-      isDuplicateChecked = true;
-      isNicknameValid = true;
-      FocusScope.of(context).unfocus();
-    });
-  }
-
-  void _scrollToField() {
-    Future.delayed(Duration(milliseconds: 300), () {
-      final bottom = MediaQuery.of(context).viewInsets.bottom;
-      scrollController.animateTo(bottom,
-          duration: Duration(milliseconds: 300), curve: Curves.easeIn);
-    });
   }
 
   @override
@@ -227,7 +223,6 @@ class _SignupNicknameScreenState extends State<SignupNicknameScreen> {
                 controller: scrollController,
                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Container(
-                  height: MediaQuery.of(context).size.height-250,
                   padding: EdgeInsets.symmetric(horizontal: 24.0.w),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -279,7 +274,11 @@ class _SignupNicknameScreenState extends State<SignupNicknameScreen> {
             textStyle: AppTextStyles.title,
             onTap: () {
               if (_validateAll()) {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SignupCompleteScreen()));
+                ref.read(signupProvider.notifier).register(
+                  nickName: controller.text,
+                  image: _selectedImage
+                );
+                context.goNamed(RootTab.routeName);
               }
             },
           ),

@@ -10,7 +10,7 @@ class CustomTermsItem extends StatelessWidget {
   final String title;
   final VoidCallback? onAgreeChanged;
 
-  const CustomTermsItem({
+   CustomTermsItem({
     required this.isSelected,
     required this.onIconTap,
     required this.title,
@@ -27,11 +27,9 @@ class CustomTermsItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected ? BLUE100_COLOR : GRAY100_COLOR,
         borderRadius: BorderRadius.all(Radius.circular(12)).w,
-        border: Border(
-          bottom: BorderSide(
+        border: Border.all(
             color: isSelected ? BLUE200_COLOR : GRAY200_COLOR,
             width: 1,
-          ),
         ),
       ),
       child: Row(

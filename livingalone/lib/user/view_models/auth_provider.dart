@@ -12,6 +12,7 @@ import 'package:livingalone/user/view/signup_authentication_screen.dart';
 import 'package:livingalone/user/view/signup_nickname_screen.dart';
 import 'package:livingalone/user/view/signup_phone_verify_screen.dart';
 import 'package:livingalone/user/view/signup_setting_password_screen.dart';
+import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
 import 'package:livingalone/user/view/signup_terms_screen.dart';
 import 'package:livingalone/user/view_models/user_me_provider.dart';
 
@@ -48,6 +49,11 @@ class AuthProvider extends ChangeNotifier {
       name: SignupTermsScreen.routeName,
       builder: (_, __) => SignupTermsScreen(),
     ),
+    // GoRoute(
+    //   path: '/termsDetail',
+    //   name: SignupTermsDetailScreen.routeName,
+    //   builder: (_, state) => SignupTermsDetailScreen(onRead: ),
+    // ),
     GoRoute(
       path: '/authentication',
       name: SignupAuthenticationScreen.routeName,
@@ -135,6 +141,7 @@ class AuthProvider extends ChangeNotifier {
       final allowedPaths = [
         '/login',
         '/terms',
+        '/termsDetail'
         '/authentication',
         '/phone',
         '/password',

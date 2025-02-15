@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/user/component/custom_bottom_button.dart';
-import 'package:livingalone/user/component/custom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/user/component/custom_snackbar.dart';
 import 'package:livingalone/user/view/signup_setting_password_screen.dart';
+import 'package:livingalone/user/view_models/signup_provider.dart';
 import 'package:livingalone/user/view_models/timer_provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -23,8 +24,6 @@ class SignupPhoneVerifyScreen extends ConsumerStatefulWidget {
 class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScreen> {
   final _formKey = GlobalKey<FormState>();
   final _scrollController = ScrollController();
-  final _phoneKey = GlobalKey();
-  final _verifyKey = GlobalKey();
   final phoneController = TextEditingController();
   final verifyNumController = TextEditingController();
   final phoneFocus = FocusNode();
@@ -112,11 +111,11 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
     return true;
   }
 
-  void _showErrorSnackBar() {
+  void _showErrorSnackBar(String message) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     CustomSnackBar.show(
       context: context,
-      message: '인증 번호가 불일치합니다. 다시 시도해 주세요.',
+      message: message,
       imagePath: 'assets/image/x1.svg',
       bottomOffset: bottomInset > 0 ? bottomInset + 40.h : null,
     );
@@ -128,6 +127,7 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
         isPhoneSent = true;
         FocusScope.of(context).unfocus();
       });
+      ref.read(signupProvider.notifier).sendPhoneVerification(phoneNumber: phoneController.text, carrier: carrierController.text);
       verifyNumController.clear();
       ref.read(timerProvider.notifier).startTimer();
       CustomSnackBar.show(
@@ -183,7 +183,7 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         20.verticalSpace,
-                        Text('휴대폰 인증을 해주세요', style: AppTextStyles.heading1,),
+                        Text('휴대폰 인증을 해주세요', style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR)),
                         40.verticalSpace,
                         _buildCarrierField(),
                         24.verticalSpace,
@@ -232,18 +232,32 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
             foregroundColor: isFormValid ? WHITE100_COLOR : GRAY800_COLOR,
             text: '다음',
             textStyle: AppTextStyles.title,
-            onTap: () {
+            onTap: () async {
               if (!_validateCarrier()) return;
               if (!_validatePhone()) return;
               if (!_validateVerificationCode()) return;
 
               if (_formKey.currentState!.validate()) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => SignupSettingPasswordScreen(),
-                  ),
-                );
-                ref.read(timerProvider.notifier).resetTimer();
+                try {
+                  final response = await ref.read(signupProvider.notifier).verifyPhoneCode(
+                      phoneNumber: phoneController.text,
+                      carrier: carrierController.text,
+                      code: verifyNumController.text
+                  );
+
+                  if (response.success) {
+                    // 인증 성공
+                    ref.read(signupProvider.notifier).setPhoneNumberCarrier(phoneController.text);
+                    ref.read(timerProvider.notifier).resetTimer();
+                    context.goNamed(SignupSettingPasswordScreen.routeName);
+                  } else {
+                    // 인증 실패
+                    _showErrorSnackBar(response.message);
+                  }
+                } catch (e) {
+                  // 에러 발생
+                  _showErrorSnackBar('인증에 실패했습니다.');
+                }
               }
             },
           ),
@@ -254,7 +268,6 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
 
   Widget _buildPhoneField() {
     return CustomSignupField(
-      key: _phoneKey,
       controller: phoneController,
       focusNode: phoneFocus,
       hintText: '휴대폰 번호를 입력해주세요',
@@ -275,7 +288,6 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
     final timerState = ref.watch(timerProvider);
 
     return CustomSignupField(
-      key: _verifyKey,
       controller: verifyNumController,
       focusNode: verifyFocus,
       hintText: '인증번호를 입력해주세요',
@@ -285,7 +297,7 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
       onPressed: verifyNumController.clear,
       onTap: () {
         if (_validateVerificationCode()) {
-          _showErrorSnackBar();
+          _showErrorSnackBar('인증 번호가 불일치합니다. 다시 시도해 주세요.');
         }
       },
       timer: timerState.isActive,

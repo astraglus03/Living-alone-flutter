@@ -13,8 +13,10 @@ SignUpRequest _$SignUpRequestFromJson(Map<String, dynamic> json) =>
       nickname: json['nickname'] as String,
       phoneNumber: json['phoneNumber'] as String,
       university: json['university'] as String,
+      termsAgreed: json['termsAgreed'] as bool,
+      privacyAgreed: json['privacyAgreed'] as bool,
+      alarmAgreed: json['alarmAgreed'] as bool?,
       id: json['id'] as String?,
-      profileImage: json['profileImage'] as String?,
     );
 
 Map<String, dynamic> _$SignUpRequestToJson(SignUpRequest instance) =>
@@ -25,5 +27,7 @@ Map<String, dynamic> _$SignUpRequestToJson(SignUpRequest instance) =>
       'nickname': instance.nickname,
       'phoneNumber': instance.phoneNumber,
       'university': instance.university,
-      'profileImage': instance.profileImage,
+      'termsAgreed': instance.termsAgreed,
+      'privacyAgreed': instance.privacyAgreed,
+      'alarmAgreed': instance.alarmAgreed,
     };
