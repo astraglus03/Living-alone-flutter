@@ -8,11 +8,6 @@ import 'package:livingalone/mypage/repository/handover_history_repository.dart';
 //   return HandoverHistoryRepository(dio);
 // });
 
-// Repository Provider
-final handoverHistoryRepositoryProvider = Provider<HandoverHistoryRepository>((ref) {
-  return HandoverHistoryRepository();
-});
-
 // Main State Provider
 final handoverHistoryProvider = StateNotifierProvider<HandoverHistoryNotifier, AsyncValue<List<HandoverHistoryModel>>>((ref) {
   final repository = ref.watch(handoverHistoryRepositoryProvider);

@@ -4,7 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
-import 'package:livingalone/mypage/view_models/change_password_provider.dart';
+import 'package:livingalone/user/models/user_model.dart';
+import 'package:livingalone/user/view_models/user_me_provider.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
@@ -18,6 +19,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -27,17 +30,50 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     super.dispose();
   }
 
+  Future<void> _changePassword() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      await ref.read(userMeProvider.notifier).changePassword(
+        currentPassword: _currentPasswordController.text,
+        newPassword: _newPasswordController.text,
+      );
+
+      // 성공 시 화면 닫기
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('비밀번호가 성공적으로 변경되었습니다')),
+        );
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      // 오류 처리
+      setState(() {
+        _errorMessage = e.toString();
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(changePasswordProvider);
-
     return DefaultLayout(
       title: '비밀번호 변경',
       child: Column(
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: (){
+              onTap: () {
                 FocusScope.of(context).unfocus();
               },
               child: SingleChildScrollView(
@@ -49,6 +85,30 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       20.verticalSpace,
+                      if (_errorMessage != null) ...[
+                        Container(
+                          padding: EdgeInsets.all(12.w),
+                          decoration: BoxDecoration(
+                            // color: ERROR_LIGHT_COLOR,
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.error_outline, color: ERROR_TEXT_COLOR),
+                              8.horizontalSpace,
+                              Expanded(
+                                child: Text(
+                                  _errorMessage!,
+                                  style: AppTextStyles.body2.copyWith(
+                                    color: ERROR_TEXT_COLOR,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        16.verticalSpace,
+                      ],
                       Text(
                         '현재 비밀번호',
                         style: AppTextStyles.body1.copyWith(
@@ -59,6 +119,12 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                       _buildPasswordField(
                         controller: _currentPasswordController,
                         hintText: '현재 비밀번호 입력',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '현재 비밀번호를 입력해주세요';
+                          }
+                          return null;
+                        },
                       ),
                       24.verticalSpace,
                       Text(
@@ -71,6 +137,18 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                       _buildPasswordField(
                         controller: _newPasswordController,
                         hintText: '6자 이상 입력(영문+숫자)',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '새 비밀번호를 입력해주세요';
+                          }
+                          if (value.length < 6) {
+                            return '비밀번호는 6자 이상이어야 합니다';
+                          }
+                          if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)').hasMatch(value)) {
+                            return '영문과 숫자를 모두 포함해야 합니다';
+                          }
+                          return null;
+                        },
                       ),
                       24.verticalSpace,
                       Text(
@@ -83,6 +161,15 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                       _buildPasswordField(
                         controller: _confirmPasswordController,
                         hintText: '새 비밀번호 확인',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '비밀번호 확인을 입력해주세요';
+                          }
+                          if (value != _newPasswordController.text) {
+                            return '비밀번호가 일치하지 않습니다';
+                          }
+                          return null;
+                        },
                       ),
                     ],
                   ),
@@ -96,16 +183,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
               width: MediaQuery.of(context).size.width,
               height: 50.h,
               child: ElevatedButton(
-                onPressed: state.isLoading
-                    ? null
-                    : () {
-                  if (_formKey.currentState!.validate()) {
-                    ref.read(changePasswordProvider.notifier).changePassword(
-                      currentPassword: _currentPasswordController.text,
-                      newPassword: _newPasswordController.text,
-                    );
-                  }
-                },
+                onPressed: _isLoading ? null : _changePassword,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: BLUE400_COLOR,
                   shape: RoundedRectangleBorder(
@@ -113,14 +191,14 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   ),
                   shadowColor: Colors.transparent,
                 ),
-                child: state.isLoading
+                child: _isLoading
                     ? CircularProgressIndicator(color: Colors.white)
                     : Text(
-                  '변경하기',
-                  style: AppTextStyles.title.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
+                        '변경하기',
+                        style: AppTextStyles.title.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ),
@@ -132,6 +210,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   Widget _buildPasswordField({
     required TextEditingController controller,
     required String hintText,
+    required String? Function(String?) validator,
   }) {
     return TextFormField(
       controller: controller,
@@ -153,30 +232,20 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
           borderRadius: BorderRadius.circular(8.r),
           borderSide: BorderSide(color: BLUE400_COLOR),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: ERROR_TEXT_COLOR),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: ERROR_TEXT_COLOR),
+        ),
         contentPadding: EdgeInsets.symmetric(
           horizontal: 16.w,
           vertical: 12.h,
         ),
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return '비밀번호를 입력해주세요.';
-        }
-        if (controller == _newPasswordController) {
-          if (value.length < 6) {
-            return '비밀번호는 6자 이상이어야 합니다.';
-          }
-          if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)').hasMatch(value)) {
-            return '영문과 숫자를 모두 포함해야 합니다.';
-          }
-        }
-        if (controller == _confirmPasswordController) {
-          if (value != _newPasswordController.text) {
-            return '비밀번호가 일치하지 않습니다.';
-          }
-        }
-        return null;
-      },
+      validator: validator,
     );
   }
 }

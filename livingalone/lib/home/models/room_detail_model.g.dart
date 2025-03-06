@@ -28,6 +28,7 @@ RoomDetailModel _$RoomDetailModelFromJson(Map<String, dynamic> json) =>
       conditions: (json['conditions'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      isFavorite: json['isFavorite'] as bool? ?? false,
       likes: (json['likes'] as num).toInt(),
       comments: (json['comments'] as num).toInt(),
       chatRooms: (json['chatRooms'] as num).toInt(),
@@ -71,6 +72,7 @@ Map<String, dynamic> _$RoomDetailModelToJson(RoomDetailModel instance) =>
       'comments': instance.comments,
       'chatRooms': instance.chatRooms,
       'createdAt': instance.createdAt.toIso8601String(),
+      'isFavorite': instance.isFavorite,
       'additionalImages': instance.additionalImages,
       'authorProfileUrl': instance.authorProfileUrl,
       'authorName': instance.authorName,

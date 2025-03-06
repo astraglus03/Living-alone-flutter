@@ -6,13 +6,35 @@ import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/mypage/view/change_password_screen.dart';
 import 'package:livingalone/mypage/view_models/mypage_provider.dart';
+import 'package:livingalone/user/models/user_model.dart';
+import 'package:livingalone/user/view_models/user_me_provider.dart';
 
 class AccountManagementScreen extends ConsumerWidget {
   const AccountManagementScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(myPageProvider);
+    final profile = ref.watch(userMeProvider);
+
+    if (profile is UserModelLoading) {
+      return const DefaultLayout(
+        title: '우리집 설정',
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (profile is UserModelError) {
+      return DefaultLayout(
+        title: '우리집 설정',
+        child: Center(
+          child: Text('우리집을 불러올 수 없습니다: ${profile.message}'),
+        ),
+      );
+    }
+
+    final user = profile as UserModel;
 
     return DefaultLayout(
       title: '계정 관리',
@@ -22,12 +44,12 @@ class AccountManagementScreen extends ConsumerWidget {
           children: [
             _buildInfoItem(
               label: '이메일',
-              value: state.profile!.email,
+              value: user.email,
               isEditable: false,
             ),
             _buildInfoItem(
               label: '휴대폰 번호',
-              value: state.profile!.phoneNumber,
+              value: user.phoneNumber,
               isEditable: false,
             ),
             InkWell(

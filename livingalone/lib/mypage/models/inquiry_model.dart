@@ -2,8 +2,20 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'inquiry_model.g.dart';
 
+abstract class InquiryModelBase{}
+
+class InquiryModelError extends InquiryModelBase {
+  final String message;
+
+  InquiryModelError({
+    required this.message,
+  });
+}
+
+class InquiryModelLoading extends InquiryModelBase {}
+
 @JsonSerializable()
-class InquiryModel {
+class InquiryModel extends InquiryModelBase{
   final String id;
   final String category;
   final String title;

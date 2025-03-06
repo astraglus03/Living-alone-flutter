@@ -6,6 +6,8 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/user/models/user_model.dart';
+import 'package:livingalone/user/view_models/user_me_provider.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:livingalone/mypage/view_models/mypage_provider.dart';
 
@@ -26,10 +28,10 @@ class _AddressSettingScreenState extends ConsumerState<AddressSettingScreen> {
   void initState() {
     super.initState();
     // 현재 주소 가져오기
-    final currentAddress = ref.read(myPageProvider).profile?.address;
-    print(currentAddress);
-    if (currentAddress != null && currentAddress.isNotEmpty) {
-      address = currentAddress;
+    final currentUser = ref.read(userMeProvider);
+
+    if(currentUser is UserModel){
+      address = currentUser.address!;
     }
   }
 
@@ -65,24 +67,35 @@ class _AddressSettingScreenState extends ConsumerState<AddressSettingScreen> {
     }
 
 
-    // 현재 주소와 동일한 경우 API 호출 없이 화면 종료
-    final currentAddress = ref.read(myPageProvider).profile?.address;
-    if (currentAddress == address) {
-      Navigator.of(context).pop();
-      return;
-    }
-
     // 주소가 변경된 경우에만 API 호출
-    ref.read(myPageProvider.notifier).updateAddress(
-      address: address,
-    );
+    ref.read(userMeProvider.notifier).updateAddress(address);
 
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final profile = ref.watch(myPageProvider).profile;
+    final profile = ref.watch(userMeProvider);
+
+    if (profile is UserModelLoading) {
+      return const DefaultLayout(
+        title: '우리집 설정',
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (profile is UserModelError) {
+      return DefaultLayout(
+        title: '우리집 설정',
+        child: Center(
+          child: Text('우리집을 불러올 수 없습니다: ${profile.message}'),
+        ),
+      );
+    }
+
+    final user = profile as UserModel;
 
     return DefaultLayout(
       title: '우리집 설정',
@@ -148,7 +161,7 @@ class _AddressSettingScreenState extends ConsumerState<AddressSettingScreen> {
                       padding: EdgeInsets.only(top: 4.h),
                       child: ShowErrorText(errorText: addressError!),
                     ),
-                  if (profile?.address != null && profile!.address!.isNotEmpty)
+                  if (user.address != null && user.address!.isNotEmpty)
                     Padding(
                       padding: EdgeInsets.only(top: 8.h),
                       child: Container(

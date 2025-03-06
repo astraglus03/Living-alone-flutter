@@ -14,6 +14,7 @@ TicketModel _$TicketModelFromJson(Map<String, dynamic> json) => TicketModel(
       ticketType: json['ticketType'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       isTransferred: json['isTransferred'] as bool,
+      isFavorite: json['isFavorite'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$TicketModelToJson(TicketModel instance) =>
@@ -25,4 +26,5 @@ Map<String, dynamic> _$TicketModelToJson(TicketModel instance) =>
       'ticketType': instance.ticketType,
       'createdAt': instance.createdAt.toIso8601String(),
       'isTransferred': instance.isTransferred,
+      'isFavorite': instance.isFavorite,
     };
