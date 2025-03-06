@@ -6,27 +6,29 @@ class CustomAgreeButton extends StatelessWidget {
   final Color activeColor;
   final Color inactiveColor;
   final double strokeWidth;
+  final bool isSmall;
 
   const CustomAgreeButton({
     Key? key,
     required this.isActive,
     this.activeColor = const Color(0xFFD1D9E2),
     this.inactiveColor = const Color(0xFFE0E0E0),
-    this.strokeWidth = 2.0, // 체크 굵기
+    this.strokeWidth = 2.0,
+    this.isSmall = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 24.w,
-      height: 24.h,
+      width: isSmall ? 17.w : 24.w,
+      height: isSmall ? 17.h : 24.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isActive ? activeColor : inactiveColor,
       ),
       child: Center(
         child: CustomPaint(
-          size: const Size(16, 16),
+          size: Size(isSmall ? 12 : 16, isSmall ? 12 : 16),
           painter: CheckPainter(strokeWidth: strokeWidth),
         ),
       ),

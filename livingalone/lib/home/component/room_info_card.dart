@@ -13,7 +13,7 @@ class RoomInfoCard extends StatelessWidget {
   final List<String> options;   // 옵션
   final List<String> facilities; // 시설
   final List<String> conditions; // 조건
-  final String availableDate;   // 입주가능일
+  final DateTime availableDate;   // 입주가능일
 
   const RoomInfoCard({
     required this.buildingType,
@@ -28,7 +28,15 @@ class RoomInfoCard extends StatelessWidget {
     super.key,
   });
 
-  Widget _buildInfoRow(String label, String value) {
+  Widget _buildInfoRow(String label, dynamic value,  {bool isImmediateAvailable = false}) {
+    String displayValue = '';
+
+    if (value is DateTime) {
+      displayValue = '${value.year}.${value.month.toString().padLeft(2, '0')}.${value.day.toString().padLeft(2, '0')}~';
+    } else {
+      displayValue = value.toString();
+    }
+
     return Container(
       width: 345.w,
       height: 48.h,
@@ -52,11 +60,30 @@ class RoomInfoCard extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(
-              value,
-              style: AppTextStyles.body2.copyWith(
-                color: GRAY700_COLOR,
-              ),
+            child: Row(
+              children: [
+                if (isImmediateAvailable)
+                  Container(
+                    margin: EdgeInsets.only(right: 9.w),
+                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      color: BLUE100_COLOR,
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                    child: Text(
+                      '즉시입주가능',
+                      style: AppTextStyles.caption2.copyWith(
+                        color: BLUE400_COLOR,
+                      ),
+                    ),
+                  ),
+                Text(
+                  displayValue,
+                  style: AppTextStyles.body2.copyWith(
+                    color: GRAY700_COLOR,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -119,32 +146,33 @@ class RoomInfoCard extends StatelessWidget {
                         );
                       }
 
-                      return Container(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 20.w,
-                              height: 20.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(20)).r,
-                              ),
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 20.w,
+                            height: 20.h,
+                            decoration: BoxDecoration(
+                              color: BLUE100_COLOR,
+                              borderRadius: BorderRadius.all(Radius.circular(20)).r,
+                            ),
+                            child: Center(
                               child: SvgPicture.asset(
                                 iconPaths[item]!,
-                                width: 16.w,
-                                height: 16.h,
+                                width: 14.w,
+                                height: 14.h,
                                 color: BLUE400_COLOR,
                               ),
                             ),
-                            6.horizontalSpace,
-                            Text(
-                              item,
-                              style: AppTextStyles.body2.copyWith(
-                                color: GRAY700_COLOR,
-                              ),
+                          ),
+                          6.horizontalSpace,
+                          Text(
+                            item,
+                            style: AppTextStyles.body2.copyWith(
+                              color: GRAY700_COLOR,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       );
                     }).toList(),
                   ),
@@ -175,7 +203,7 @@ class RoomInfoCard extends StatelessWidget {
           _buildListRowWithIcons('옵션', options, false),
           _buildListRowWithIcons('시설', facilities, true),
           _buildListRowWithIcons('조건', conditions, true),
-          _buildInfoRow('입주가능일', availableDate),
+          _buildInfoRow('입주 가능일', availableDate, isImmediateAvailable: true)
         ],
       ),
     );

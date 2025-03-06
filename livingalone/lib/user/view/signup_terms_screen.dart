@@ -2,141 +2,115 @@ import 'package:flutter/material.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/handover/component/agree_container.dart';
 import 'package:livingalone/user/component/custom_agree_button.dart';
+import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/component/custom_button.dart';
 import 'package:livingalone/user/view/signup_authentication_screen.dart';
 import 'package:livingalone/user/view/signup_terms_detail_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:livingalone/user/component/custom_terms_item.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/user/view_models/signup_provider.dart';
 
-class SignupTermsScreen extends StatefulWidget {
+class SignupTermsScreen extends ConsumerStatefulWidget {
   static String get routeName => 'terms';
 
   const SignupTermsScreen({super.key});
 
   @override
-  State<SignupTermsScreen> createState() => _SignupTermsScreenState();
+  ConsumerState<SignupTermsScreen> createState() => _SignupTermsScreenState();
 }
 
-class _SignupTermsScreenState extends State<SignupTermsScreen> {
-  bool isAllAgreedSelected = false;
-  bool firstAgreedSelected = false;
-
-  void _toggleAllAgreed() {
-    setState(() {
-      isAllAgreedSelected = !isAllAgreedSelected;
-      firstAgreedSelected = isAllAgreedSelected;
-    });
-  }
-
-  void _toggleFirstAgreed() {
-    setState(() {
-      firstAgreedSelected = !firstAgreedSelected;
-      isAllAgreedSelected = !isAllAgreedSelected;
-    });
+class _SignupTermsScreenState extends ConsumerState<SignupTermsScreen> {
+  void _navigateToTermsDetail(bool isFirst) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SignupTermsDetailScreen(
+          isFirstTerms: isFirst,
+          onAgree: (agreed) {
+            if (isFirst) {
+              ref.read(signupProvider.notifier).setPrivacyAgreement(agreed);
+            } else {
+              ref.read(signupProvider.notifier).setTermsAgreement(agreed);
+            }
+            setState(() {});
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final signupState = ref.watch(signupProvider.notifier);
+    final termsAgreed = signupState.isTermsAgreed;
+    final privacyAgreed = signupState.isPrivacyAgreed;
+    final alarmAgreed = signupState.isAlarmAgreed;
+
     return DefaultLayout(
       title: '이용동의',
       showBackButton: false,
       currentStep: 1,
       totalSteps: 4,
-      child: Stack(
+      backgroundColor: WHITE100_COLOR,
+      child: Column(
         children: [
-          Container(
-            // width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            margin: EdgeInsets.fromLTRB(24, 48, 0, 0).r,
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: _toggleAllAgreed,
-                  child: Container(
-                    width: 345.w,
-                    height: 56.h,
-                    padding: REdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: isAllAgreedSelected ? BLUE100_COLOR : GRAY100_COLOR,
-                      borderRadius: BorderRadius.all(Radius.circular(12)).w,
-                      border: Border(
-                        bottom: BorderSide(
-                          color: isAllAgreedSelected ? BLUE200_COLOR : GRAY200_COLOR,
-                          width: 1,
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CustomAgreeButton(isActive: isAllAgreedSelected, activeColor: BLUE400_COLOR, inactiveColor: GRAY400_COLOR),
-                        12.horizontalSpace,
-                        Text(
-                          '전체 동의하기',
-                          style: AppTextStyles.subtitle,
-                        ),
-                      ],
-                    ),
+          Expanded(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              margin: EdgeInsets.fromLTRB(24, 48, 24, 0).r,
+              child: Column(
+                children: [
+                  CustomTermsItem(
+                    isSelected: privacyAgreed,
+                    onIconTap: () => _navigateToTermsDetail(true),
+                    title: '[필수]개인정보 수집 및 이용 동의',
+                    onAgreeChanged: () {
+                      ref.read(signupProvider.notifier).setPrivacyAgreement(!privacyAgreed);
+                      setState(() {});
+                    },
                   ),
-                ),
-                GestureDetector(
-                  onTap: _toggleFirstAgreed,
-                  child: Container(
-                    width: 345.w,
-                    height: 56.h,
-                    // padding: EdgeInsets.all(12),
-                    padding: REdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12)).w
-                    ),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 264.w,
-                          height: 24.h,
-                          child: Row(
-                            children: [
-                              CustomAgreeButton(isActive: isAllAgreedSelected && firstAgreedSelected, activeColor: BLUE400_COLOR, inactiveColor: GRAY400_COLOR),
-                              12.horizontalSpace,
-                              Text(
-                                '[필수]개인정보 수집 및 이용 동의',
-                                style: AppTextStyles.subtitle,
-                              ),
-                            ],
-                          ),
-                        ),
-                        8.horizontalSpace,
-                        IconButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (_) => SignupTermsDetailScreen()));
-                          },
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(
-                            minWidth: 24,
-                            minHeight: 24,
-                            maxWidth: 24,
-                            maxHeight: 24,
-                          ).w,
-                          icon: Icon(Icons.keyboard_arrow_right, size: 24,color: GRAY300_COLOR,)
-                        ),
-                      ],
-                    ),
+                  10.verticalSpace,
+                  CustomTermsItem(
+                    isSelected: termsAgreed,
+                    onIconTap: () => _navigateToTermsDetail(false),
+                    title: '[필수]서비스 이용약관',
+                    onAgreeChanged: () {
+                      ref.read(signupProvider.notifier).setTermsAgreement(!termsAgreed);
+                      setState(() {});
+                    },
                   ),
-                ),
-              ],
+                  10.verticalSpace,
+                  AgreeContainer(
+                    text: '[선택] 서비스 알림 수신 동의',
+                    isSelected: alarmAgreed,
+                    lineColor: BLUE200_COLOR,
+                    onTap: () {
+                      ref.read(signupProvider.notifier).setAlarmAgreement(!alarmAgreed);
+                      setState(() {});
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-          CustomButton(
+          CustomBottomButton(
+            appbarBorder: false,
             backgroundColor: BLUE400_COLOR,
             foregroundColor: WHITE100_COLOR,
             disabledBackgroundColor: GRAY200_COLOR,
             disabledForegroundColor: GRAY800_COLOR,
             text: '다음',
             textStyle: AppTextStyles.title,
-            isEnabled: isAllAgreedSelected,
+            isEnabled: signupState.isAllTermsAgreed,
             onTap: () {
-              // TODO: 나중에 go router 적용할 것. 임시로 넣어둠.
-              Navigator.of(context).push(MaterialPageRoute(builder: (_) => SignupAuthenticationScreen()));
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => SignupAuthenticationScreen(),
+                ),
+              );
             },
           ),
         ],
@@ -144,4 +118,3 @@ class _SignupTermsScreenState extends State<SignupTermsScreen> {
     );
   }
 }
-

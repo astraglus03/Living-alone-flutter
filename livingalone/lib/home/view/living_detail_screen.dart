@@ -1,9 +1,12 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:livingalone/common/component/colored_image.dart';
 import 'package:livingalone/common/component/colored_image_fill.dart';
 import 'package:livingalone/common/component/common_divider.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
+import 'package:livingalone/common/enum/post_type.dart';
+import 'package:livingalone/common/enum/room_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/common/utils/data_utils.dart';
@@ -11,22 +14,33 @@ import 'package:livingalone/home/component/comments_section.dart';
 import 'package:livingalone/home/component/facilities_card.dart';
 import 'package:livingalone/home/component/info_detail_card.dart';
 import 'package:livingalone/home/component/location_info_card.dart';
-import 'package:livingalone/home/component/post_type.dart';
-import 'package:livingalone/home/component/rent_info_card.dart';
+import 'package:livingalone/home/component/rent_room_card.dart';
+import 'package:livingalone/home/component/rent_use_card.dart';
 import 'package:livingalone/home/component/room_info_card.dart';
 import 'package:livingalone/home/component/stat_item.dart';
 import 'package:livingalone/home/component/ticket_info_card.dart';
 import 'package:livingalone/home/models/comment_model.dart';
+import 'package:livingalone/post_modify/view/edit_room_post_screen.dart';
 import 'package:livingalone/home/view_models/living_detail_screen_provider.dart';
+import 'package:livingalone/post_modify/view/edit_ticket_post_screen.dart';
+import 'package:livingalone/report/report_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:livingalone/home/view_models/comments_provider.dart';
+import 'package:livingalone/home/view_models/like_provider.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:livingalone/common/component/options_menu.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 class LivingDetailScreen extends ConsumerStatefulWidget {
   final PostType postType;
+  final String postId;
 
   const LivingDetailScreen({
     required this.postType,
+    required this.postId,
     super.key,
   });
 
@@ -34,8 +48,8 @@ class LivingDetailScreen extends ConsumerStatefulWidget {
   ConsumerState<LivingDetailScreen> createState() => _LivingDetailScreenState();
 }
 
-class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with SingleTickerProviderStateMixin {
-  bool isLikeActive = false;
+class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen>
+    with SingleTickerProviderStateMixin {
   bool showTabBar = false;
   final PageController pController = PageController();
   final ScrollController scrollController = ScrollController();
@@ -65,158 +79,250 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
     '댓글',
   ];
 
-
-
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
-    scrollController.addListener(_onScroll);
+    scrollController.addListener(() {
+      ref
+          .read(LivingDetailScreenProvider.notifier)
+          .updateTabBarVisibility(scrollController.offset);
+      ref.read(LivingDetailScreenProvider.notifier).updateCurrentSection(
+          scrollController, _tabController, widget.postType);
+    });
     // 초기 댓글 데이터 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 더미데이터
       final initialComments = widget.postType == PostType.room
-        ? <CommentModel>[
-        CommentModel(
-          username: '서은',
-          content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
-          time: '2024.12.15 16:12',
-          replies: [
-            CommentModel(
-              username: '고얌미123424123',
-              content: '네! 체크해보겠습니다',
-              time: '2024.12.15 16:15',
-              isAuthor: true,
-            ),
-          ],
-        ),
-        CommentModel(
-          username: '건동',
-          content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
-          time: '2024.12.15 16:17',
-        ),
-      ]  // 명시적으로 타입 지정
-        : <CommentModel>[
-            CommentModel(
-              username: '서은',
-              content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
-              time: '2024.12.15 16:12',
-              replies: [
-                CommentModel(
-                  username: '고얌미',
-                  content: '네! 체크해보겠습니다',
-                  time: '2024.12.15 16:15',
-                  isAuthor: true,
-                ),
-              ],
-            ),
-            CommentModel(
-              username: '건동',
-              content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
-              time: '2024.12.15 16:17',
-            ),
-          ];
-      ref.read(LivingDetailScreenProvider.notifier).setComments(initialComments);
+          ? <CommentModel>[
+              CommentModel(
+                username: '서은',
+                content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
+                time: '2024.12.15 16:12',
+                replies: [
+                  CommentModel(
+                    username: '고얌미123424123',
+                    content: '네! 체크해보겠습니다',
+                    time: '2024.12.15 16:15',
+                    isAuthor: true,
+                  ),
+                ],
+              ),
+              CommentModel(
+                username: '건동',
+                content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
+                time: '2024.12.15 16:17',
+              ),
+            ] // 명시적으로 타입 지정
+          : <CommentModel>[
+              CommentModel(
+                username: '서은',
+                content: '내일은 집을 보고, 18일 수요일에 가능한\n예약 있나요?',
+                time: '2024.12.15 16:12',
+                replies: [
+                  CommentModel(
+                    username: '고얌미',
+                    content: '네! 체크해보겠습니다',
+                    time: '2024.12.15 16:15',
+                    isAuthor: true,
+                  ),
+                ],
+              ),
+              CommentModel(
+                username: '건동',
+                content: '주말 쯤 사진 더 보고 싶은데 추가해 주실 수 있나요? 아니면 채팅으로 부탁드립니다.',
+                time: '2024.12.15 16:17',
+              ),
+            ];
+      ref
+          .read(LivingDetailScreenProvider.notifier)
+          .setComments(initialComments);
     });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    scrollController.removeListener(_onScroll);
     scrollController.dispose();
     super.dispose();
   }
 
-  void _onScroll() {
-    if (!mounted) return;
-
-    ref.read(LivingDetailScreenProvider.notifier).updateTabBarVisibility(scrollController.offset);
-    // 스크롤 위치에 따른 현재 섹션 업데이트
-    ref.read(LivingDetailScreenProvider.notifier).updateCurrentSection(scrollController, _tabController, widget.postType);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(LivingDetailScreenProvider);
     return DefaultLayout(
       title: '',
       appbarBorder: false,
-      actions:IconButton(
-        onPressed: (){},
+      actions: IconButton(
+        onPressed: () => _showOptionsMenu(context),
         icon: Icon(Icons.more_horiz_rounded),
       ),
       child: Stack(
         children: [
-          SingleChildScrollView(
+          CustomScrollView(
             controller: scrollController,
-            child: Column(
-              children: [
-                _buildImageSlider(),
-                _buildUserInfo(),
-                24.verticalSpace,
-                widget.postType == PostType.room
-                    ? _buildRoomContent()
-                    : _buildTicketContent(),
-                100.verticalSpace,
-              ],
-            ),
-          ),
-          Consumer(
-            builder: (context, ref, child) {
-              final state = ref.watch(LivingDetailScreenProvider);
-              return Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: AnimatedOpacity(
-                  opacity: state.tabBarOpacity,
-                  duration: Duration(milliseconds: 200),
-                  child: Container(
-                    height: 48.h,
-                    decoration: BoxDecoration(
-                      color: WHITE100_COLOR.withOpacity(state.tabBarOpacity),
-                      border: Border(
-                        bottom: BorderSide(
-                          color: GRAY200_COLOR.withOpacity(state.tabBarOpacity),
-                          width: 1,
+            slivers: [
+              if (state.tabBarOpacity > 0.6)
+                SliverPersistentHeader(
+                  pinned: true,
+                  floating: true,
+                  delegate: _TabBarPersistentHeader(
+                    tabBar: AnimatedOpacity(
+                      opacity: state.tabBarOpacity,
+                      duration: Duration(milliseconds: 200),
+                      child: Container(
+                        height: 48.h,
+                        decoration: BoxDecoration(
+                          color:
+                              WHITE100_COLOR.withOpacity(state.tabBarOpacity),
+                          border: Border(
+                            bottom: BorderSide(
+                              color: GRAY200_COLOR
+                                  .withOpacity(state.tabBarOpacity),
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        child: TabBar(
+                          controller: _tabController,
+                          isScrollable: false,
+                          labelColor: BLUE400_COLOR,
+                          unselectedLabelColor: GRAY400_COLOR,
+                          indicatorColor: BLUE400_COLOR,
+                          labelPadding: EdgeInsets.zero,
+                          labelStyle: AppTextStyles.subtitle,
+                          tabs: [
+                            _buildTab(widget.postType == PostType.room
+                                ? '방 소개'
+                                : '이용권 소개'),
+                            _buildTab(widget.postType == PostType.room
+                                ? '방 정보'
+                                : '이용권 정보'),
+                            _buildTab('위치'),
+                            _buildTab('댓글 ${state.totalCommentsCount}'),
+                          ],
+                          onTap: (index) {
+                            final title = _getTitleForIndex(index);
+                            ref
+                                .read(LivingDetailScreenProvider.notifier)
+                                .scrollToSection(title, scrollController);
+                          },
                         ),
                       ),
                     ),
-                    child: TabBar(
-                      controller: _tabController,
-                      isScrollable: false,
-                      labelColor: BLUE400_COLOR,
-                      unselectedLabelColor: GRAY400_COLOR,
-                      indicatorColor: BLUE400_COLOR,
-                      labelPadding: EdgeInsets.zero,
-                      labelStyle: AppTextStyles.subtitle,
-                      tabs: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 4,
-                          child: Tab(text: widget.postType == PostType.room ? '방 소개' : '이용권 소개'),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 4,
-                          child: Tab(text: widget.postType == PostType.room ? '방 정보' : '이용권 정보'),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 4,
-                          child: Tab(text: '위치'),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 4,
-                          child: Tab(text: '댓글 ${state.totalCommentsCount}'),
-                        ),
-                      ],
-                      onTap: (index) {
-                        final title = _getTitleForIndex(index);
-                        ref.read(LivingDetailScreenProvider.notifier)
-                            .scrollToSection(title, scrollController);
-                      },
-                    ),
                   ),
                 ),
-              );
-            },
+              SliverToBoxAdapter(child: _buildImageSlider()),
+              SliverToBoxAdapter(child: _buildUserInfo()),
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(24, 24, 24, 0).w,
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '천안시 동남구 각원사길 59-5',
+                        style: AppTextStyles.caption2
+                            .copyWith(color: GRAY600_COLOR),
+                      ),
+                      6.verticalSpace,
+                      // TODO: 그냥 모델 들어오면 일반적으로 조건없이 넣으면 됨.
+                      Text(
+                        widget.postType == PostType.room
+                            ? '안서동보아파트 101동'
+                            : '헬스장 이용권 양도',
+                        style:
+                            AppTextStyles.title.copyWith(color: GRAY800_COLOR),
+                      ),
+                      12.verticalSpace,
+                      if (widget.postType == PostType.room)
+                        RentRoomCard(
+                          rentType: RentType.monthlyRent,
+                          deposit: 500,
+                          maintenance: 5,
+                          monthlyRent: 40,
+                        )
+                      else
+                        RentUseCard(
+                          remainingCount: 7,
+                          remainingTime: 36,
+                          price: 100,
+                        ),
+                      16.verticalSpace,
+                      _buildStats(),
+                    ],
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                key: ref.read(LivingDetailScreenProvider).sectionKeys[
+                    widget.postType == PostType.room ? '방 소개' : '이용권 소개'],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24.h),
+                  child: InfoDetailCard(
+                    title: widget.postType == PostType.room ? '방 소개' : '이용권 소개',
+                    // TODO: 그냥 모델 들어오면 일반적으로 조건없이 넣으면 됨.
+                    introText: widget.postType == PostType.room
+                        ? '방학 동안 자리를 비우게 되어 단기 임대합니다.\n1월 1일부터 2월 28일까지 두 달간 깨끗하게 사용하실 분을 구합니다.\n궁금한 점이 있으시면 편하게 채팅 주세요!'
+                        : '방학 동안 본가에 갈 것 같아 남은 미야짐 헬스 PT 7회권 양도합니다.\n관심 있으신 분은 연락 주세요!',
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(child: CommonDivider()),
+              SliverToBoxAdapter(
+                key: ref.read(LivingDetailScreenProvider).sectionKeys[
+                    widget.postType == PostType.room ? '방 정보' : '이용권 정보'],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24.h),
+                  child: widget.postType == PostType.room
+                      ? RoomInfoCard(
+                          buildingType: '아파트',
+                          propertyType: '단기임대',
+                          rentType: '월세',
+                          area: '33.06m²',
+                          floor: '7층/10층',
+                          options: ['에어컨', '세탁기', '냉장고', '전자레인지, 붙박이장'],
+                          facilities: ['엘리베이터', '주차장', 'CCTV', '복층'],
+                          conditions: ['반려동물 가능'],
+                          availableDate: DateTime.now(),
+                        )
+                      : TicketInfoCard(
+                          ticketType: '헬스장 회원권',
+                          remainingCount: '7회',
+                          transferFee: '5,000원',
+                          availableDate: '2024.01.01 ~ 2024.02.28',
+                        ),
+                ),
+              ),
+              SliverToBoxAdapter(child: CommonDivider()),
+              SliverToBoxAdapter(
+                key: ref.read(LivingDetailScreenProvider).sectionKeys['위치'],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      LocationInfoCard(
+                        address: '천안시 동남구 각원사길 59-5',
+                      ),
+                      24.verticalSpace,
+                      FacilitiesCard(
+                        facilities: ['편의점', '마트', '병원', '약국', '대중교통', '카페'],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(child: CommonDivider()),
+              SliverToBoxAdapter(
+                key: ref.read(LivingDetailScreenProvider).sectionKeys['댓글'],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24.h),
+                  child: CommentsSection(),
+                ),
+              ),
+              SliverPadding(padding: EdgeInsets.only(bottom: 100.h)),
+            ],
           ),
           _buildBottomBar(),
         ],
@@ -224,23 +330,43 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
     );
   }
 
+  Widget _buildTab(String text) {
+    return Tab(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width / 4,
+        child: Center(child: Text(text)),
+      ),
+    );
+  }
+
   Widget _buildImageSlider() {
     return Stack(
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 393.h,
-          child: PageView.builder(
-            controller: pController,
-            itemCount: imageUrls.length,
-            itemBuilder: (context, index) {
-              return Image.asset(
-                imageUrls[index],
-                width: 393.w,
-                height: 393.h,
-                fit: BoxFit.fill,
-              );
-            },
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => ImagePreviewDialog(
+                imageUrls: imageUrls,
+                initialIndex: pController.page?.round() ?? 0,
+              ),
+            );
+          },
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 393.h,
+            child: PageView.builder(
+              controller: pController,
+              itemCount: imageUrls.length,
+              itemBuilder: (context, index) {
+                return Image.asset(
+                  imageUrls[index],
+                  width: 393.w,
+                  height: 393.h,
+                  fit: BoxFit.fill,
+                );
+              },
+            ),
           ),
         ),
         Positioned(
@@ -307,148 +433,6 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
     );
   }
 
-  Widget _buildRoomContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '천안시 동남구 각원사길 59-5',
-                style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
-              ),
-              6.verticalSpace,
-              Text(
-                '안서동보아파트 101동',
-                style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
-              ),
-              12.verticalSpace,
-              RentInfoCard(
-                postType: PostType.room,
-                leftFee: 41,
-                rightFee: 9,
-              ),
-              16.verticalSpace,
-              _buildStats(),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 24.h),  // 상단 여백 추가
-          child: InfoDetailCard(
-            key: ref.read(LivingDetailScreenProvider).sectionKeys['매물 소개'],
-            title: '매물 소개',
-            introText: '방학 동안 자리를 비우게 되어 단기 임대합니다.\n1월 1일부터 2월 28일까지 두 달간 깨끗하게 사용하실 분을 구합니다.\n궁금한 점이 있으시면 편하게 채팅 주세요!',
-          ),
-        ),
-        24.verticalSpace,
-        CommonDivider(),
-        24.verticalSpace,
-        RoomInfoCard(
-          key: ref.read(LivingDetailScreenProvider).sectionKeys['방 정보'],
-          buildingType: '아파트',
-          propertyType: '단기임대',
-          rentType: '월세',
-          area: '33.06m²',
-          floor: '7층/10층',
-          options: ['에어컨', '세탁기', '냉장고', '전자레인지, 붙박이장'],
-          facilities: ['엘리베이터', '주차장', 'CCTV', '복층'],
-          conditions: ['반려동물 가능', '즉시입주 가능'],
-          availableDate: '즉시 입주',
-        ),
-        24.verticalSpace,
-        CommonDivider(),
-        24.verticalSpace,
-        LocationInfoCard(
-          key: ref.read(LivingDetailScreenProvider).sectionKeys['위치'],
-          address: '천안시 동남구 각원사길 59-5',
-        ),
-        24.verticalSpace,
-        const FacilitiesCard(
-          facilities: ['편의점', '마트', '병원', '약국', '대중교통' , '카페'],
-        ),
-        24.verticalSpace,
-        CommonDivider(),
-        24.verticalSpace,
-        CommentsSection(
-          key: ref.read(LivingDetailScreenProvider).sectionKeys['댓글'],
-        ),
-        100.verticalSpace,
-      ],
-    );
-  }
-
-  Widget _buildTicketContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '천안시 동남구 각원사길 59-5',
-                style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
-              ),
-              6.verticalSpace,
-              Text(
-                '헬스장 이용권 양도',
-                style: AppTextStyles.title.copyWith(color: GRAY800_COLOR),
-              ),
-              12.verticalSpace,
-              RentInfoCard(
-                postType: PostType.ticket,
-                leftFee: 7,
-                rightFee: 65,
-              ),
-              16.verticalSpace,
-              _buildStats(),
-            ],
-          ),
-        ),
-        24.verticalSpace,
-        InfoDetailCard(
-          key: ref.read(LivingDetailScreenProvider).sectionKeys['이용권 소개'],
-          title: '이용권 소개',
-          introText: '방학 동안 본가에 갈 것 같아 남은 미야짐 헬스 PT 7회권 양도합니다.\n 관심 있으신 분은 연락 주세요!',
-        ),
-        24.verticalSpace,
-        CommonDivider(),
-        24.verticalSpace,
-
-        TicketInfoCard(
-          key: ref.read(LivingDetailScreenProvider).sectionKeys['이용권 정보'],
-          ticketType: '헬스장 회원권',
-          remainingCount: '7회',
-          transferFee: '5,000원',
-          availableDate: '2024.01.01 ~ 2024.02.28',
-        ),
-        24.verticalSpace,
-        CommonDivider(),
-        24.verticalSpace,
-        LocationInfoCard(
-          key: ref.read(LivingDetailScreenProvider).sectionKeys['위치'],
-          address: '천안시 동남구 각원사길 59-5',
-        ),
-        24.verticalSpace,
-        const FacilitiesCard(
-          facilities: ['편의점', '마트', '병원', '약국', '대중교통' , '카페'],
-        ),
-        24.verticalSpace,
-        CommonDivider(),
-        24.verticalSpace,
-        CommentsSection(
-          key: ref.read(LivingDetailScreenProvider).sectionKeys['댓글'],
-        ),
-        100.verticalSpace,
-      ],
-    );
-  }
-
   Widget _buildStats() {
     return SizedBox(
       key: statsKey,
@@ -493,11 +477,8 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
         child: Row(
           children: [
             _buildIconButton(
-              isLikeActive: isLikeActive,
               onPressed: () {
-                setState(() {
-                  isLikeActive = !isLikeActive;
-                });
+                ref.read(likeProvider.notifier).toggleLike(widget.postId);
               },
             ),
             8.horizontalSpace,
@@ -511,7 +492,6 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
   }
 
   Widget _buildIconButton({
-    required bool isLikeActive,
     required VoidCallback onPressed,
   }) {
     return Container(
@@ -525,8 +505,16 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
-        icon: ColoredImageFill(isActive: isLikeActive),
-        onPressed: onPressed,
+        icon: Consumer(
+          builder: (context, ref, child) {
+            final likeState = ref.watch(likeProvider);
+            final isLiked = likeState.likedPosts[widget.postId] ?? false;
+            return ColoredImageFill(isActive: isLiked);
+          },
+        ),
+        onPressed: () {
+          ref.read(likeProvider.notifier).toggleLike(widget.postId);
+        },
       ),
     );
   }
@@ -585,7 +573,7 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
   String _getTitleForIndex(int index) {
     switch (index) {
       case 0:
-        return widget.postType == PostType.room ? '매물 소개' : '이용권 소개';
+        return widget.postType == PostType.room ? '방 소개' : '이용권 소개';
       case 1:
         return widget.postType == PostType.room ? '방 정보' : '이용권 정보';
       case 2:
@@ -595,5 +583,155 @@ class _LivingDetailScreenState extends ConsumerState<LivingDetailScreen> with Si
       default:
         return '';
     }
+  }
+
+  void _showOptionsMenu(BuildContext context) {
+    const bool isMyPost = true; // TODO: 실제 게시물 소유자 체크 로직 필요
+    final List<OptionMenuItem> options = isMyPost
+        ? [
+            OptionMenuItem(
+              text: '양도 완료',
+              icon: 'assets/image/nothingCheck.svg',
+              onTap: () {
+                // Navigator.of(context).push(MaterialPageRoute(
+                //   builder: (_) => EditRoomPostScreen(),
+                //   settings: RouteSettings(name: "EditRoomPage"),
+                // ));
+              },
+            ),
+            OptionMenuItem(
+              text: '게시글 수정',
+              icon: 'assets/icons/edit.svg',
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => EditRoomPostScreen(),
+                  settings: RouteSettings(name: "EditRoomPage"),
+                ));
+              },
+            ),
+            OptionMenuItem(
+              text: '게시글 숨기기',
+              icon: 'assets/icons/hide.svg',
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => ReportScreen(),
+                ));
+              },
+            ),
+            OptionMenuItem(
+              text: 'URL 공유하기',
+              icon: 'assets/icons/share_nocolor.svg',
+              onTap: () {
+                DataUtils.sharePost(
+                  title: '[모양] 자취방 양도 게시물 공유하기',
+                  price: '41만원',
+                  location: '천안시 동남구 각원사길 59-5',
+                );
+              },
+            ),
+            OptionMenuItem(
+              text: '게시글 삭제',
+              icon: 'assets/icons/delete.svg',
+              onTap: () {},
+            ),
+          ]
+        : [
+            OptionMenuItem(
+              text: 'URL 공유하기',
+              icon: 'assets/icons/share_nocolor.svg',
+              onTap: () {
+                DataUtils.sharePost(
+                  title: '[모양] 자취방 양도 게시물 공유하기',
+                  price: '41만원',
+                  location: '천안시 동남구 각원사길 59-5',
+                );
+              },
+            ),
+            OptionMenuItem(
+              text: '신고하기',
+              icon: 'assets/icons/report.svg',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => ReportScreen()),
+                );
+              },
+            ),
+          ];
+
+    OptionsMenu.show(
+      context: context,
+      options: options,
+    );
+  }
+}
+
+class _TabBarPersistentHeader extends SliverPersistentHeaderDelegate {
+  final Widget tabBar;
+
+  _TabBarPersistentHeader({required this.tabBar});
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return tabBar;
+  }
+
+  @override
+  double get maxExtent => 48.h;
+
+  @override
+  double get minExtent => 48.h;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
+}
+
+class ImagePreviewDialog extends StatelessWidget {
+  final List<String> imageUrls;
+  final int initialIndex;
+
+  const ImagePreviewDialog({
+    Key? key,
+    required this.imageUrls,
+    required this.initialIndex,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.zero,
+      child: Stack(
+        children: [
+          PhotoViewGallery.builder(
+            scrollPhysics: const BouncingScrollPhysics(),
+            builder: (BuildContext context, int index) {
+              return PhotoViewGalleryPageOptions(
+                imageProvider: NetworkImage(imageUrls[index]),
+                initialScale: PhotoViewComputedScale.contained,
+                minScale: PhotoViewComputedScale.contained,
+                maxScale: PhotoViewComputedScale.covered * 2,
+              );
+            },
+            itemCount: imageUrls.length,
+            loadingBuilder: (context, event) => Center(
+              child: CircularProgressIndicator(),
+            ),
+            pageController: PageController(initialPage: initialIndex),
+            backgroundDecoration: BoxDecoration(color: Colors.black),
+          ),
+          Positioned(
+            top: 40.h,
+            right: 20.w,
+            child: IconButton(
+              icon: Icon(Icons.close, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

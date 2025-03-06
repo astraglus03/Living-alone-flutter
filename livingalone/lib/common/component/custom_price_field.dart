@@ -9,19 +9,25 @@ class CustomPriceField extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode? focusNode;
   final VoidCallback? onSubmitted;
+  final void Function(String)? onChanged;
   final String? Function(String?)? validator;
   final double? width;
   final Color? texFieldBackgroundColor;
   final String? units;
+  final TextInputType? keyboardType;
 
   const CustomPriceField({
     required this.label,
     required this.controller,
     this.focusNode,
     this.onSubmitted,
+    this.onChanged,
     this.validator,
-    super.key, this.width, this.texFieldBackgroundColor,
+    super.key,
+    this.width,
+    this.texFieldBackgroundColor,
     this.units,
+    this.keyboardType,
   });
 
   @override
@@ -52,12 +58,15 @@ class CustomPriceField extends StatelessWidget {
                 child: TextFormField(
                   controller: controller,
                   focusNode: focusNode,
-                  keyboardType: TextInputType.number,
+                  scrollPadding: EdgeInsets.only(bottom: 160.h),
+                  keyboardType: keyboardType ?? TextInputType.number,
                   textAlign: TextAlign.left,
                   style: AppTextStyles.title.copyWith(
                     color: GRAY800_COLOR,
                   ),
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
+                  inputFormatters: [
+                    if (keyboardType == null) FilteringTextInputFormatter.digitsOnly,
+                  ],
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.zero,
                     border: InputBorder.none,
@@ -68,6 +77,7 @@ class CustomPriceField extends StatelessWidget {
                   ),
                   onFieldSubmitted: (_) => onSubmitted?.call(),
                   validator: validator,
+                  onChanged: onChanged,
                 ),
               ),
               Text(

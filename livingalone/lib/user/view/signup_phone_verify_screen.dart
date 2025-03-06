@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
-import 'package:livingalone/user/component/custom_button.dart';
+import 'package:livingalone/user/component/custom_bottom_button.dart';
 import 'package:livingalone/user/component/custom_signup_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/user/component/custom_snackbar.dart';
 import 'package:livingalone/user/view/signup_setting_password_screen.dart';
+import 'package:livingalone/user/view_models/signup_provider.dart';
 import 'package:livingalone/user/view_models/timer_provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -22,8 +24,6 @@ class SignupPhoneVerifyScreen extends ConsumerStatefulWidget {
 class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScreen> {
   final _formKey = GlobalKey<FormState>();
   final _scrollController = ScrollController();
-  final _phoneKey = GlobalKey();
-  final _verifyKey = GlobalKey();
   final phoneController = TextEditingController();
   final verifyNumController = TextEditingController();
   final phoneFocus = FocusNode();
@@ -54,7 +54,7 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
     carrierController.removeListener(_onFormChanged);
     phoneController.removeListener(_onFormChanged);
     verifyNumController.removeListener(_onFormChanged);
-    
+
     carrierController.dispose();
     phoneController.dispose();
     verifyNumController.dispose();
@@ -67,19 +67,6 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
     setState(() {});
   }
 
-  void _scrollToField(GlobalKey key) {
-    Future.delayed(Duration(milliseconds: 300), () {
-      final RenderObject? renderObject = key.currentContext?.findRenderObject();
-      if (renderObject != null) {
-        Scrollable.ensureVisible(
-          key.currentContext!,
-          alignment: 0.1,
-          duration: Duration(milliseconds: 300),
-        );
-      }
-    });
-  }
-
   bool _validatePhone() {
     final phone = phoneController.text;
     if (phone.isEmpty) {
@@ -90,7 +77,7 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
       );
       return false;
     }
-    
+
     if (!RegExp(r'^010[0-9]{8}$').hasMatch(phone)) {
       CustomSnackBar.show(
         context: context,
@@ -124,11 +111,11 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
     return true;
   }
 
-  void _showErrorSnackBar() {
+  void _showErrorSnackBar(String message) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     CustomSnackBar.show(
       context: context,
-      message: '인증 번호가 불일치합니다. 다시 시도해 주세요.',
+      message: message,
       imagePath: 'assets/image/x1.svg',
       bottomOffset: bottomInset > 0 ? bottomInset + 40.h : null,
     );
@@ -138,7 +125,9 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
     if (_validatePhone()) {
       setState(() {
         isPhoneSent = true;
+        FocusScope.of(context).unfocus();
       });
+      ref.read(signupProvider.notifier).sendPhoneVerification(phoneNumber: phoneController.text, carrier: carrierController.text);
       verifyNumController.clear();
       ref.read(timerProvider.notifier).startTimer();
       CustomSnackBar.show(
@@ -175,78 +164,100 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
       currentStep: 2,
       totalSteps: 4,
       title: '회원가입',
-      child: Stack(
+      child: Column(
         children: [
-          GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: Form(
-                key: _formKey,
-                child: Container(
-                  height: MediaQuery.of(context).size.height + 200.h,
-                  padding: EdgeInsets.symmetric(horizontal: 24.w),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      20.verticalSpace,
-                      Text('휴대폰 인증을 해주세요', style: AppTextStyles.heading1,),
-                      40.verticalSpace,
-                      _buildCarrierField(),
-                      24.verticalSpace,
-                      _buildPhoneField(),
-                      24.verticalSpace,
-                      _buildVerifyField(),
-                      4.verticalSpace,
-                      Row(
-                        children: [
-                          Text(
-                            '인증 번호를 받지 못하셨나요?',
-                            style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
-                          ),
-                          6.horizontalSpace,
-                          GestureDetector(
-                            onTap: isPhoneSent && !ref.watch(timerProvider).isActive
-                              ? _sendVerificationPhone
-                              : null,
-                            child: Text(
-                              '다시보내기',
-                              style: AppTextStyles.caption2.copyWith(
-                                color: (isPhoneSent && !ref.watch(timerProvider).isActive)
-                                  ? ERROR_TEXT_COLOR
-                                  : GRAY400_COLOR,
-                                decoration: (isPhoneSent && !ref.watch(timerProvider).isActive)
-                                  ? TextDecoration.underline
-                                  : null,
-                                decorationColor: ERROR_TEXT_COLOR,
-                                decorationStyle: TextDecorationStyle.solid,
-                                decorationThickness: 0.07 * 12.sp,
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Form(
+                  key: _formKey,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        20.verticalSpace,
+                        Text('휴대폰 인증을 해주세요', style: AppTextStyles.heading1.copyWith(color: GRAY800_COLOR)),
+                        40.verticalSpace,
+                        _buildCarrierField(),
+                        24.verticalSpace,
+                        _buildPhoneField(),
+                        24.verticalSpace,
+                        _buildVerifyField(),
+                        4.verticalSpace,
+                        if(isPhoneSent == true)
+                        Row(
+                          children: [
+                            Text(
+                              '인증 번호를 받지 못하셨나요?',
+                              style: AppTextStyles.caption2.copyWith(color: GRAY600_COLOR),
+                            ),
+                            6.horizontalSpace,
+                            GestureDetector(
+                              onTap: isPhoneSent && !ref.watch(timerProvider).isActive
+                                ? _sendVerificationPhone
+                                : null,
+                              child: Text(
+                                '다시보내기',
+                                style: AppTextStyles.caption2.copyWith(
+                                  color: (isPhoneSent && !ref.watch(timerProvider).isActive)
+                                    ? ERROR_TEXT_COLOR
+                                    : GRAY400_COLOR,
+                                  decoration: (isPhoneSent && !ref.watch(timerProvider).isActive)
+                                    ? TextDecoration.underline
+                                    : null,
+                                  decorationColor: ERROR_TEXT_COLOR,
+                                  decorationStyle: TextDecorationStyle.solid,
+                                  decorationThickness: 0.07 * 12.sp,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-          CustomButton(
+          CustomBottomButton(
             backgroundColor: isFormValid ? BLUE400_COLOR : GRAY200_COLOR,
             foregroundColor: isFormValid ? WHITE100_COLOR : GRAY800_COLOR,
             text: '다음',
             textStyle: AppTextStyles.title,
-            onTap: () {
+            onTap: () async {
               if (!_validateCarrier()) return;
               if (!_validatePhone()) return;
               if (!_validateVerificationCode()) return;
-              
+
               if (_formKey.currentState!.validate()) {
-                // TODO: 다음 단계로 이동
-                Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SignupSettingPasswordScreen()));
+                try {
+                  final response = await ref.read(signupProvider.notifier).verifyPhoneCode(
+                      phoneNumber: phoneController.text,
+                      carrier: carrierController.text,
+                      code: verifyNumController.text
+                  );
+
+                  if (response.success) {
+                    // 인증 성공
+                    ref.read(signupProvider.notifier).setPhoneNumberCarrier(phoneController.text);
+                    ref.read(timerProvider.notifier).resetTimer();
+                    context.goNamed(SignupSettingPasswordScreen.routeName);
+                  } else {
+                    // 인증 실패
+                    _showErrorSnackBar(response.message);
+                  }
+                } catch (e) {
+                  // 에러 발생
+                  _showErrorSnackBar('인증에 실패했습니다.');
+                }
               }
             },
           ),
@@ -257,8 +268,6 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
 
   Widget _buildPhoneField() {
     return CustomSignupField(
-      key: _phoneKey,
-      onTextFieldTap: () => _scrollToField(_phoneKey),
       controller: phoneController,
       focusNode: phoneFocus,
       hintText: '휴대폰 번호를 입력해주세요',
@@ -270,7 +279,8 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
       onTap: () {
         isPhoneSent ? null : _sendVerificationPhone();
       },
-      buttonBackground: isPhoneSent ? GRAY200_COLOR : BLUE100_COLOR,
+      buttonBackground: isPhoneSent ? GRAY100_COLOR : BLUE100_COLOR,
+      buttonForeground: isPhoneSent ? GRAY200_COLOR : BLUE400_COLOR,
     );
   }
 
@@ -278,19 +288,16 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
     final timerState = ref.watch(timerProvider);
 
     return CustomSignupField(
-      key: _verifyKey,
-      onTextFieldTap: () => _scrollToField(_verifyKey),
       controller: verifyNumController,
       focusNode: verifyFocus,
       hintText: '인증번호를 입력해주세요',
       type: TextInputType.number,
       subTitle: '인증 번호',
-      submitButtonTitle: '확인',
       width: 52.w,
       onPressed: verifyNumController.clear,
       onTap: () {
         if (_validateVerificationCode()) {
-          _showErrorSnackBar();
+          _showErrorSnackBar('인증 번호가 불일치합니다. 다시 시도해 주세요.');
         }
       },
       timer: timerState.isActive,
@@ -328,12 +335,12 @@ class _SignupPhoneVerifyScreenState extends ConsumerState<SignupPhoneVerifyScree
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         child: Text(
-                          carrierController.text.isEmpty 
+                          carrierController.text.isEmpty
                               ? '통신사를 선택해 주세요'
                               : carrierController.text,
                           style: AppTextStyles.subtitle.copyWith(
-                            color: carrierController.text.isEmpty 
-                                ? GRAY400_COLOR 
+                            color: carrierController.text.isEmpty
+                                ? GRAY400_COLOR
                                 : GRAY800_COLOR,
                           ),
                         ),

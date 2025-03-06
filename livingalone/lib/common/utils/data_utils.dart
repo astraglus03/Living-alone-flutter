@@ -23,8 +23,6 @@ class DataUtils{
     required String location,
     String? additionalInfo,  // 추가 정보(선택)
   }) async {
-    final image = await rootBundle.load('assets/applogo/main_logo.png');
-    final buffer = image.buffer;
     // FIXME: 예시
     final url = 'https://www.naver.com';
     final String shareText = '''

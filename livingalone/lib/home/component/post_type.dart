@@ -1,4 +1,0 @@
-enum PostType {
-  room,
-  ticket,
-}

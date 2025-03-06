@@ -1,10 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/home/models/comment_model.dart';
 
-final commentsProvider = StateNotifierProvider<CommentsNotifier, List<CommentModel>>((ref) {
-  return CommentsNotifier();
-});
-
 class CommentsNotifier extends StateNotifier<List<CommentModel>> {
   CommentsNotifier() : super([]);
 
@@ -49,3 +45,7 @@ class CommentsNotifier extends StateNotifier<List<CommentModel>> {
     state = newComments;
   }
 }
+
+final commentsProvider = StateNotifierProvider<CommentsNotifier, List<CommentModel>>((ref) {
+  return CommentsNotifier();
+});

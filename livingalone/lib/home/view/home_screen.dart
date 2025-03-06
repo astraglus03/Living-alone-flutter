@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
+import 'package:livingalone/handover/view/check_room_handover_screen.dart';
+import 'package:livingalone/handover/view/check_ticket_handover_screen.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import '../../common/const/text_styles.dart';
 import '../models/room_post_model.dart';
 import '../view_models/room_post_tile.dart';
@@ -17,6 +21,7 @@ import '../models/ticket_post_model.dart';
 import '../view_models/ticket_post_provider.dart';
 import '../widget/room_post_list.dart';
 import '../widget/ticket_post_list.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   @override
@@ -24,31 +29,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  bool _isDialogVisible = false;
-
-  Widget _buildMenuItem({
-    required String path,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset("$path", colorFilter: ColorFilter.mode(BLUE400_COLOR, BlendMode.srcIn),),
-            SizedBox(width: 12),
-            Text(
-              label,
-              style: AppTextStyles.body2,
-              ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,71 +39,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return DefaultLayout(
       backgroundColor: WHITE100_COLOR,
       appbarTitleBackgroundColor: WHITE100_COLOR,
-      floatingActionButton: Stack(
-        children: [
-          if (_isDialogVisible)
-            Positioned(
-              bottom: 64, // FAB 위의 여백
-              right: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0x17000000), // 0x17 = 23/255 opacity
-                      offset: Offset(0, 6),
-                      blurRadius: 6,
-                      spreadRadius: 0,
-                    ),
-                    BoxShadow(
-                      color: Color(0x0D000000), // 0x0D = 13/255 opacity
-                      offset: Offset(0, 13),
-                      blurRadius: 8,
-                      spreadRadius: 0,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    _buildMenuItem(
-                      path: "assets/image/homemini.svg",
-                      label: '자취방 양도하기',
-                      onTap: () {
-                        // 자취방 양도하기 동작
-                        setState(() => _isDialogVisible = false);
-                      },
-                    ),
-                    Divider(height: 1, color: Colors.grey[200]),
-                    _buildMenuItem(
-                      path: "assets/image/ticket.svg",
-                      label: '이용권 양도하기',
-                      onTap: () {
-                        // 이용권 양도하기 동작
-                        setState(() => _isDialogVisible = false);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: FloatingActionButton(
-              backgroundColor: _isDialogVisible ? BLUE200_COLOR : BLUE400_COLOR,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(_isDialogVisible ? Icons.close : Icons.add, color: Colors.white),
-              onPressed: () {
-                setState(() => _isDialogVisible = !_isDialogVisible);
-              },
-            ),
-          ),
-        ],
-      ),
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

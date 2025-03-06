@@ -28,51 +28,54 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final targetPadding = bottomInset > 0 ? bottomInset + 10 : 34.0;
 
-    return Positioned(
-      left: 24,
-      bottom: bottomInset > 0
-          ? bottomInset + 10  // 키보드가 올라왔을 때는 10
-          : 34,              // 키보드가 없을 때는 34
-      child: CommonButton(
-        child: ElevatedButton(
-          onPressed: isEnabled ? onTap : null,
-          // style: ElevatedButton.styleFrom(
-          //     backgroundColor: isEnabled ? backgroundColor : disabledBackgroundColor,
-          //     foregroundColor: isEnabled ? foregroundColor : disabledForegroundColor,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.all(Radius.circular(8.0)).w
-          //   ),
-          //   shadowColor: Colors.transparent,
-          // ),
-          // TODO: 자체 material때문에 반응이 느린것처럼 보임. 아래는 애니메이션 없음.
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                if (states.contains(MaterialState.disabled)) {
-                  return disabledBackgroundColor ?? backgroundColor;
-                }
-                return backgroundColor;
-              }),
-              foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                if (states.contains(MaterialState.disabled)) {
-                  return disabledForegroundColor ?? foregroundColor;
-                }
-                return foregroundColor;
-              }),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              animationDuration: Duration.zero
-          ),
-          child: Text(
-            text,
-            style: textStyle.copyWith(color: isEnabled ? foregroundColor : disabledForegroundColor),
-          ),
-        ),
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(
+        begin: bottomInset > 0 ? 34 : targetPadding,
+        end: targetPadding,
       ),
+      duration: Duration(milliseconds: bottomInset > 0 ? 100 : 300), // 올라갈 때 100ms, 내려올 때 300ms
+      curve: bottomInset > 0 ? Curves.easeOut : Curves.easeInOut,
+      builder: (context, value, child) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 24,
+            right: 24,
+            bottom: value,
+          ),
+          child: CommonButton(
+            child: ElevatedButton(
+              onPressed: isEnabled ? onTap : null,
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                    if (states.contains(MaterialState.disabled)) {
+                      return disabledBackgroundColor ?? backgroundColor;
+                    }
+                    return backgroundColor;
+                  }),
+                  foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                    if (states.contains(MaterialState.disabled)) {
+                      return disabledForegroundColor ?? foregroundColor;
+                    }
+                    return foregroundColor;
+                  }),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  animationDuration: Duration.zero
+              ),
+              child: Text(
+                text,
+                style: textStyle.copyWith(color: isEnabled ? foregroundColor : disabledForegroundColor),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
