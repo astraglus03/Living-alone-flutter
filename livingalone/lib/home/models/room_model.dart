@@ -25,6 +25,7 @@ class RoomModel {
   final int comments;                     // 전체 댓글 수 (대댓글 포함)
   final int chatRooms;                    // 활성화된 채팅방 수
   final DateTime createdAt;               // 게시물 작성 시간
+  final bool isFavorite;                  // 현재 사용자가 좋아요 했는지 여부
 
   RoomModel({
     required this.id,
@@ -46,9 +47,57 @@ class RoomModel {
     required this.comments,
     required this.chatRooms,
     required this.createdAt,
+    this.isFavorite = false,
   });
 
   factory RoomModel.fromJson(Map<String, dynamic> json) => _$RoomModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$RoomModelToJson(this);
+  
+  // 객체의 일부 필드만 업데이트하여 새 객체를 생성하는 메서드
+  RoomModel copyWith({
+    String? id,
+    String? postType,
+    String? thumbnailUrl,
+    String? title,
+    bool? isTransferred,
+    String? location,
+    String? buildingType,
+    String? propertyType,
+    String? rentType,
+    int? deposit,
+    int? maintenance,
+    int? monthlyRent,
+    List<String>? options,
+    List<String>? facilities,
+    List<String>? conditions,
+    int? likes,
+    int? comments,
+    int? chatRooms,
+    DateTime? createdAt,
+    bool? isFavorite,
+  }) {
+    return RoomModel(
+      id: id ?? this.id,
+      postType: postType ?? this.postType,
+      thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
+      title: title ?? this.title,
+      isTransferred: isTransferred ?? this.isTransferred,
+      location: location ?? this.location,
+      buildingType: buildingType ?? this.buildingType,
+      propertyType: propertyType ?? this.propertyType,
+      rentType: rentType ?? this.rentType,
+      deposit: deposit ?? this.deposit,
+      maintenance: maintenance ?? this.maintenance,
+      monthlyRent: monthlyRent ?? this.monthlyRent,
+      options: options ?? this.options,
+      facilities: facilities ?? this.facilities,
+      conditions: conditions ?? this.conditions,
+      likes: likes ?? this.likes,
+      comments: comments ?? this.comments,
+      chatRooms: chatRooms ?? this.chatRooms,
+      createdAt: createdAt ?? this.createdAt,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 } 

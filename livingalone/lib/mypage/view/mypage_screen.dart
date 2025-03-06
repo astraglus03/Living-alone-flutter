@@ -18,6 +18,8 @@ import 'package:livingalone/mypage/view/notice_list_screen.dart';
 import 'package:livingalone/mypage/view/notification_screen.dart';
 import 'package:livingalone/mypage/view/terms_screen.dart';
 import 'package:livingalone/mypage/view_models/mypage_provider.dart';
+import 'package:livingalone/user/models/user_model.dart';
+import 'package:livingalone/user/view_models/user_me_provider.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class MyPageScreen extends ConsumerWidget {
@@ -25,13 +27,27 @@ class MyPageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(myPageProvider);
+    final userState = ref.watch(userMeProvider);
 
-    if(state.isLoading){
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    // if (userState is UserModelLoading) {
+    //   return DefaultLayout(
+    //     title: '',
+    //     child: Center(
+    //       child: CircularProgressIndicator(),
+    //     ),
+    //   );
+    // }
+    //
+    // if (userState is UserModelError) {
+    //   return DefaultLayout(
+    //     title: '',
+    //     child: Center(
+    //       child: Text('프로필을 불러올 수 없습니다: ${userState.message}'),
+    //     ),
+    //   );
+    // }
+    //
+    // final state = userState as UserModel;
 
     return DefaultLayout(
       title: '',
@@ -42,6 +58,7 @@ class MyPageScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 프로필 섹션
+            if(userState is UserModel)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Column(
@@ -50,14 +67,14 @@ class MyPageScreen extends ConsumerWidget {
                     children: [
                       CircleAvatar(
                         radius: 32.r,
-                        backgroundImage: NetworkImage(state.profile!.profileImage!)
+                        backgroundImage: NetworkImage(userState.profileImage!)
                       ),
                       20.horizontalSpace,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            state.profile!.nickname,
+                            userState.nickname,
                             style: AppTextStyles.subtitle.copyWith(
                               color: GRAY800_COLOR,
                             ),
@@ -188,6 +205,7 @@ class MyPageScreen extends ConsumerWidget {
                   title: '로그아웃 하시겠어요?',
                   content: '저장된 정보는 유지되며, 다시 로그인하면 이어서 이용할 수 있습니다.',
                   confirmText: '로그아웃',
+                  onConfirm: ref.read(userMeProvider.notifier).logout
                 );
               },
             ),
@@ -198,7 +216,8 @@ class MyPageScreen extends ConsumerWidget {
                   context: context,
                   title: '정말 탈퇴하시겠어요?',
                   content: '계정이 삭제되면 작성한 게시글, 댓글 등 모든 데이터가 영구적으로 삭제됩니다.',
-                  confirmText: '탈퇴하기'
+                  confirmText: '탈퇴하기',
+                  onConfirm: ref.read(userMeProvider.notifier).withdrawal,
                 );
               },
             ),

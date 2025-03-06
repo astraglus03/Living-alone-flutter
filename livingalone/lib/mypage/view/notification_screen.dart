@@ -7,12 +7,33 @@ import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/mypage/enum/notification_settings.dart';
-import 'package:livingalone/mypage/view_models/notification_provider.dart';
+import 'package:livingalone/user/models/user_model.dart';
+import 'package:livingalone/user/view_models/user_me_provider.dart';
 
 class NotificationScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profile = ref.watch(notificationSettingsProvider);
+    final profile = ref.watch(userMeProvider);
+
+    if (profile is UserModelLoading) {
+      return const DefaultLayout(
+        title: '알림 설정',
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (profile is UserModelError) {
+      return DefaultLayout(
+        title: '알림 설정',
+        child: Center(
+          child: Text('내정보를 불러올 수 없습니다: ${profile.message}'),
+        ),
+      );
+    }
+
+    final user = profile as UserModel;
 
     return DefaultLayout(
       title: '알림 설정',
@@ -24,51 +45,52 @@ class NotificationScreen extends ConsumerWidget {
             _buildNotificationItem(
               context: context,
               type: NotificationType.all,
-              isEnabled: profile.pushNotificationEnabled,
+              isEnabled: user.serviceAlarm,
               onChanged: (value) {
-                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.all);
+                // ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.all);
+                ref.read(userMeProvider.notifier).updateNotificationSettings(alarm: !user.serviceAlarm);
               },
             ),
-            _buildNotificationItem(
-              context: context,
-              type: NotificationType.chat,
-              isEnabled: profile.chatNotificationEnabled,
-              onChanged: (value) {
-                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.chat);
-              },
-            ),
-            _buildNotificationItem(
-              context: context,
-              type: NotificationType.neighborhoodPost,
-              isEnabled: profile.neighborNotificationEnabled,
-              onChanged: (value) {
-                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.neighborhoodPost);
-              },
-            ),
-            _buildNotificationItem(
-              context: context,
-              type: NotificationType.comment,
-              isEnabled: profile.handoverNotificationEnabled,
-              onChanged: (value) {
-                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.comment);
-              },
-            ),
-            _buildNotificationItem(
-              context: context,
-              type: NotificationType.community,
-              isEnabled: profile.communityNotificationEnabled,
-              onChanged: (value) {
-                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.community);
-              },
-            ),
-            _buildNotificationItem(
-              context: context,
-              type: NotificationType.official,
-              isEnabled: profile.noticeNotificationEnabled,
-              onChanged: (value) {
-                ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.official);
-              },
-            ),
+            // _buildNotificationItem(
+            //   context: context,
+            //   type: NotificationType.chat,
+            //   isEnabled: profile.chatNotificationEnabled,
+            //   onChanged: (value) {
+            //     ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.chat);
+            //   },
+            // ),
+            // _buildNotificationItem(
+            //   context: context,
+            //   type: NotificationType.neighborhoodPost,
+            //   isEnabled: profile.neighborNotificationEnabled,
+            //   onChanged: (value) {
+            //     ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.neighborhoodPost);
+            //   },
+            // ),
+            // _buildNotificationItem(
+            //   context: context,
+            //   type: NotificationType.comment,
+            //   isEnabled: profile.handoverNotificationEnabled,
+            //   onChanged: (value) {
+            //     ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.comment);
+            //   },
+            // ),
+            // _buildNotificationItem(
+            //   context: context,
+            //   type: NotificationType.community,
+            //   isEnabled: profile.communityNotificationEnabled,
+            //   onChanged: (value) {
+            //     ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.community);
+            //   },
+            // ),
+            // _buildNotificationItem(
+            //   context: context,
+            //   type: NotificationType.official,
+            //   isEnabled: profile.noticeNotificationEnabled,
+            //   onChanged: (value) {
+            //     ref.read(notificationSettingsProvider.notifier).toggleNotification(NotificationType.official);
+            //   },
+            // ),
           ],
         ),
       ),

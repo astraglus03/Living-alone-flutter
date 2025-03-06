@@ -31,6 +31,7 @@ RoomModel _$RoomModelFromJson(Map<String, dynamic> json) => RoomModel(
       comments: (json['comments'] as num).toInt(),
       chatRooms: (json['chatRooms'] as num).toInt(),
       createdAt: DateTime.parse(json['createdAt'] as String),
+      isFavorite: json['isFavorite'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$RoomModelToJson(RoomModel instance) => <String, dynamic>{
@@ -53,4 +54,5 @@ Map<String, dynamic> _$RoomModelToJson(RoomModel instance) => <String, dynamic>{
       'comments': instance.comments,
       'chatRooms': instance.chatRooms,
       'createdAt': instance.createdAt.toIso8601String(),
+      'isFavorite': instance.isFavorite,
     };

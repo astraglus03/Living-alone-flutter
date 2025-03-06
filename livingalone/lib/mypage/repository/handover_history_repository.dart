@@ -1,6 +1,11 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/common/enum/post_type.dart';
 import 'package:livingalone/common/enum/room_enums.dart';
 import 'package:livingalone/mypage/models/handover_history_model.dart';
+
+final handoverHistoryRepositoryProvider = Provider<HandoverHistoryRepository>((ref) {
+  return HandoverHistoryRepository();
+});
 
 // TODO: API 연동 시 사용할 코드
 // import 'package:dio/dio.dart';
@@ -26,6 +31,8 @@ import 'package:livingalone/mypage/models/handover_history_model.dart';
 //     @Path('id') String itemId,
 //   );
 // }
+
+
 
 class HandoverHistoryRepository {
   Future<List<HandoverHistoryModel>> getHandoverHistory({String? type}) async {

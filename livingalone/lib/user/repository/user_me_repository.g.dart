@@ -70,6 +70,30 @@ class _UserMeRepository implements UserMeRepository {
   }
 
   @override
+  Future<void> withdrawal() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/withdrawal',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
   Future<UserModel> updateProfile({required Map<String, dynamic> body}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -84,7 +108,7 @@ class _UserMeRepository implements UserMeRepository {
     )
             .compose(
               _dio.options,
-              '/me',
+              '/profile',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -95,6 +119,31 @@ class _UserMeRepository implements UserMeRepository {
             ))));
     final value = UserModel.fromJson(_result.data!);
     return value;
+  }
+
+  @override
+  Future<void> changePassword({required Map<String, dynamic> body}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/password',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
@@ -244,6 +293,119 @@ class _UserMeRepository implements UserMeRepository {
             .compose(
               _dio.options,
               '/me/password',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = UserModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<NicknameCheckResponse> checkNickname(
+      {required String nickname}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'nickname': nickname};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<NicknameCheckResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/check-nickname',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = NicknameCheckResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<UserModel> updateNotificationSettings(
+      {required Map<String, dynamic> body}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserModel>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/notifications',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = UserModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<UserModel> updateLanguage({required Map<String, dynamic> body}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserModel>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/language',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = UserModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<UserModel> updateAddress({required Map<String, dynamic> body}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserModel>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/address',
               queryParameters: queryParameters,
               data: _data,
             )

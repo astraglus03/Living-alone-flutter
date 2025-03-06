@@ -3,9 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livingalone/mypage/models/notice_model.dart';
 import 'package:livingalone/mypage/repository/notice_repository.dart';
 
-
-
-
 final noticeProvider = StateNotifierProvider<NoticeNotifier, NoticeState>((ref) {
   // final repository = ref.watch(noticeRepositoryProvider);  // API 연동 시 사용
   final repository = DummyNoticeRepository();  // 더미 데이터 사용

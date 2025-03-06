@@ -15,6 +15,7 @@ TicketDetailModel _$TicketDetailModelFromJson(Map<String, dynamic> json) =>
       ticketType: json['ticketType'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       isTransferred: json['isTransferred'] as bool,
+      isFavorite: json['isFavorite'] as bool? ?? false,
       handoverPrice: (json['handoverPrice'] as num).toInt(),
       additionalImages: (json['additionalImages'] as List<dynamic>)
           .map((e) => e as String)
@@ -40,6 +41,7 @@ Map<String, dynamic> _$TicketDetailModelToJson(TicketDetailModel instance) =>
       'ticketType': instance.ticketType,
       'createdAt': instance.createdAt.toIso8601String(),
       'isTransferred': instance.isTransferred,
+      'isFavorite': instance.isFavorite,
       'handoverPrice': instance.handoverPrice,
       'additionalImages': instance.additionalImages,
       'authorProfileUrl': instance.authorProfileUrl,

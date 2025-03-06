@@ -25,6 +25,8 @@ class UserModel extends UserModelBase {
   final bool isVerified;
   final String university;
   final bool serviceAlarm;
+  final String? address;
+  final String? language;
 
   UserModel({
     this.id,
@@ -35,6 +37,8 @@ class UserModel extends UserModelBase {
     required this.isVerified,
     required this.university,
     required this.serviceAlarm,
+    this.address,
+    this.language
   });
 
   UserModel copyWith({
@@ -46,6 +50,8 @@ class UserModel extends UserModelBase {
     bool? isVerified,
     String? university,
     bool? serviceAlarm,
+    String? address,
+    String? language
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -56,9 +62,13 @@ class UserModel extends UserModelBase {
       isVerified: isVerified ?? this.isVerified,
       university: university ?? this.university,
       serviceAlarm: serviceAlarm ?? this.serviceAlarm,
+      address: address ?? this.address,
+      language: language ?? this.language,
     );
   }
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }

@@ -6,13 +6,35 @@ import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/mypage/view/language_detail_screen.dart';
 import 'package:livingalone/mypage/view_models/mypage_provider.dart';
+import 'package:livingalone/user/models/user_model.dart';
+import 'package:livingalone/user/view_models/user_me_provider.dart';
 
 class LanguageScreen extends ConsumerWidget {
   const LanguageScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(myPageProvider);
+    final userState = ref.watch(userMeProvider);
+
+    if (userState is UserModelLoading) {
+      return DefaultLayout(
+        title: '언어 설정',
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (userState is UserModelError) {
+      return DefaultLayout(
+        title: '언어 설정',
+        child: Center(
+          child: Text('설정을 불러올 수 없습니다: ${userState.message}'),
+        ),
+      );
+    }
+
+    final state = userState as UserModel;
 
     return DefaultLayout(
       title: '언어 설정',
@@ -30,7 +52,7 @@ class LanguageScreen extends ConsumerWidget {
                 ),
               ),
               trailing: Text(
-                state.profile!.language,
+                state.language!,
                 style: AppTextStyles.body2.copyWith(
                   color: GRAY600_COLOR,
                 ),

@@ -6,7 +6,8 @@ import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/enum/language_enums.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:livingalone/mypage/view_models/mypage_provider.dart';
+import 'package:livingalone/user/models/user_model.dart';
+import 'package:livingalone/user/view_models/user_me_provider.dart';
 
 class LanguageDetailScreen extends ConsumerStatefulWidget {
   const LanguageDetailScreen({Key? key}) : super(key: key);
@@ -21,14 +22,38 @@ class _LanguageDetailScreenState extends ConsumerState<LanguageDetailScreen> {
   @override
   void initState() {
     super.initState();
-    // 초기값 설정
-    selectedLanguage = ref.read(myPageProvider).profile!.language;
+    
+    // 유저 정보에서 초기 언어 설정값 가져오기
+    final userState = ref.read(userMeProvider);
+    if (userState is UserModel) {
+      selectedLanguage = userState.language;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentLanguage = ref.watch(myPageProvider);
+    final userState = ref.watch(userMeProvider);
 
+    if (userState is UserModelLoading) {
+      return const DefaultLayout(
+        title: '언어 설정',
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (userState is UserModelError) {
+      return DefaultLayout(
+        title: '언어 설정',
+        child: Center(
+          child: Text('설정을 불러올 수 없습니다: ${userState.message}'),
+        ),
+      );
+    }
+    
+    final userModel = userState as UserModel;
+    
     return DefaultLayout(
       title: '언어 설정',
       child: Column(
@@ -69,8 +94,9 @@ class _LanguageDetailScreenState extends ConsumerState<LanguageDetailScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   if (selectedLanguage != null && 
-                      selectedLanguage != currentLanguage.profile!.language) {
-                    ref.read(myPageProvider.notifier).updateLanguage(selectedLanguage!);
+                      selectedLanguage != userModel.language) {
+                    // 언어 설정 업데이트
+                    ref.read(userMeProvider.notifier).updateLanguage(selectedLanguage!);
                   }
                   Navigator.of(context).pop();
                 },
