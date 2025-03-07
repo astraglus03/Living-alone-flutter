@@ -17,7 +17,6 @@ import 'package:livingalone/mypage/view/neighbor_activity_screen.dart';
 import 'package:livingalone/mypage/view/notice_list_screen.dart';
 import 'package:livingalone/mypage/view/notification_screen.dart';
 import 'package:livingalone/mypage/view/terms_screen.dart';
-import 'package:livingalone/mypage/view_models/mypage_provider.dart';
 import 'package:livingalone/user/models/user_model.dart';
 import 'package:livingalone/user/view_models/user_me_provider.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';

@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:livingalone/user/models/user_model.dart';
 import 'package:livingalone/user/view_models/user_me_provider.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
-import 'package:livingalone/mypage/view_models/mypage_provider.dart';
 
 class AddressSettingScreen extends ConsumerStatefulWidget {
   const AddressSettingScreen({Key? key}) : super(key: key);

@@ -5,7 +5,6 @@ import 'package:livingalone/common/const/colors.dart';
 import 'package:livingalone/common/const/text_styles.dart';
 import 'package:livingalone/common/layout/default_layout.dart';
 import 'package:livingalone/mypage/view/change_password_screen.dart';
-import 'package:livingalone/mypage/view_models/mypage_provider.dart';
 import 'package:livingalone/user/models/user_model.dart';
 import 'package:livingalone/user/view_models/user_me_provider.dart';
 
